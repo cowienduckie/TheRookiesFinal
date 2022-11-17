@@ -58,19 +58,4 @@ public class EfContext : DbContext, IEfContext
     {
         return await base.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task InitialiseAsync()
-    {
-        try
-        {
-            if (this.Database.IsSqlServer())
-            {
-                await this.Database.MigrateAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-    }
 }

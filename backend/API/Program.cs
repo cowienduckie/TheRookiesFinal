@@ -24,9 +24,10 @@ if (app.Environment.IsDevelopment())
 
     using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
     {
-        var context = scope.ServiceProvider.GetService<EfContext>();
+        var initializer = scope.ServiceProvider.GetRequiredService<EfContextInitializer>();
 
-        await context.Database.MigrateAsync();
+        await initializer.InitialiseAsync();
+        await initializer.SeedAsync();
     }
 }
 

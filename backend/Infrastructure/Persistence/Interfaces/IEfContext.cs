@@ -2,5 +2,5 @@
 
 public interface IEfContext
 {
-    Task InitialiseAsync();
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
