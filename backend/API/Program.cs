@@ -2,6 +2,7 @@ using API.Extensions;
 using Application;
 using Infrastructure;
 using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,13 +22,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    // TODO: Fix Initializer block
-    //using (var scope = app.Services.CreateScope())
-    //{
-    //    var initializer = scope.ServiceProvider.GetRequiredService<EfContextInitializer>();
-    //    await initializer.InitialiseAsync();
-    //    await initializer.SeedAsync();
-    //}
+    using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+    {
+        var context = scope.ServiceProvider.GetService<EfContext>();
+
+        await context.Database.MigrateAsync();
+    }
 }
 
 app.UseHealthChecks("/health");

@@ -1,12 +1,13 @@
 ﻿using System.Reflection;
 using Domain.Entities.Departments;
 using Infrastructure.Persistence.Interceptors;
+using Infrastructure.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Persistence;
 
-public class EfContext : DbContext
+public class EfContext : DbContext, IEfContext
 {
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
@@ -56,5 +57,20 @@ public class EfContext : DbContext
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task InitialiseAsync()
+    {
+        try
+        {
+            if (this.Database.IsSqlServer())
+            {
+                await this.Database.MigrateAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 }
