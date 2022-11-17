@@ -23,7 +23,7 @@ public static class ConfigureServices
             options.UseSqlServer(configuration.GetConnectionString("RookiesConnectionString"),
                 builder => builder.MigrationsAssembly(typeof(EfContext).Assembly.FullName)));
 
-        services.AddScoped(provider => provider.GetRequiredService<EfContext>());
+        services.AddScoped<IEfContext>(provider => provider.GetRequiredService<EfContext>());
 
         services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>))
             .AddScoped<IDepartmentRepository, DepartmentRepository>();

@@ -1,12 +1,13 @@
 ﻿using System.Reflection;
 using Domain.Entities.Departments;
 using Infrastructure.Persistence.Interceptors;
+using Infrastructure.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Persistence;
 
-public class EfContext : DbContext
+public class EfContext : DbContext, IEfContext
 {
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
 
