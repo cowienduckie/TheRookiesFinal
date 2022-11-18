@@ -1,14 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Models;
+using Application.DTOs.Users;
+using Application.Services.Interfaces;
+using BookLibrary.WebApi.Controllers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/authentication")]
-public class AuthenticateController : ControllerBase
+public class AuthenticationController : BaseController
 {
-    [HttpGet]
-    public IActionResult Test()
+    private readonly IUserService _userService;
+
+    public AuthenticationController(IUserService userService)
     {
-        return Ok("Ok");
+        _userService = userService;
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<ActionResult<Response<AuthenticationResponse>>> Login(
+        [FromBody] AuthenticationRequest requestModel)
+    {
+        try
+        {
+            var response = await _userService.AuthenticateAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
     }
 }

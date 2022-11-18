@@ -21,7 +21,7 @@ public static class ConfigureServices
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddDbContext<EfContext>(
-            options => options.UseSqlServer(configuration.GetConnectionString(Constants.DbConnectionStringName), 
+            options => options.UseSqlServer(configuration.GetConnectionString(Settings.DbConnectionStringName), 
             builder => builder.MigrationsAssembly(typeof(EfContext).Assembly.FullName)));
 
         services.AddScoped<IEfContext>(provider => provider.GetRequiredService<EfContext>());
