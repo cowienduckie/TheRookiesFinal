@@ -1,12 +1,22 @@
-﻿namespace Application.DTOs.Users.Authentication;
+﻿using Domain.Entities.Users;
+
+namespace Application.DTOs.Users.Authentication;
 
 public class AuthenticationResponse
 {
-    public Guid Id { get; set; }
+    public AuthenticationResponse(User user, string token)
+    {
+        Id = user.Id;
+        Username = user.Username;
+        Role = user.Role.ToString();
+        Token = token;
+    }
 
-    public string Username { get; set; } = null!;
+    public Guid Id { get; }
 
-    public string Role { get; set; } = null!;
+    public string Username { get; }
 
-    public string Token { get; set; } = null!;
+    public string Role { get; }
+
+    public string Token { get; }
 }

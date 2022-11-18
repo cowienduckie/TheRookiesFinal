@@ -28,13 +28,8 @@ public class UserService : BaseService, IUserService
             return new Response<AuthenticationResponse>(false, ErrorMessages.LoginFailed);
         }
 
-        var authenticationResponse = new AuthenticationResponse
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Role = user.Role.ToString(),
-            Token = JwtHelper.GenerateJwtToken(user)
-        };
+        var token = JwtHelper.GenerateJwtToken(user);
+        var authenticationResponse = new AuthenticationResponse(user, token);
 
         return new Response<AuthenticationResponse>(true, authenticationResponse);
     }
@@ -50,13 +45,22 @@ public class UserService : BaseService, IUserService
             return new Response<GetUserResponse>(false);
         }
 
-        var getUserResponse = new GetUserResponse
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Role = user.Role.ToString()
-        };
+        var getUserResponse = new GetUserResponse(user);
 
         return new Response<GetUserResponse>(true, getUserResponse);
+    }
+
+    public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return new UserInternalModel(user);
     }
 }

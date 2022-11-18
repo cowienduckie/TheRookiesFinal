@@ -1,8 +1,7 @@
-﻿using Application.Common.Models;
+﻿using API.Attributes;
+using Application.Common.Models;
 using Application.DTOs.Users.Authentication;
 using Application.Services.Interfaces;
-using BookLibrary.WebApi.Controllers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;

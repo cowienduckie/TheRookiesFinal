@@ -25,6 +25,8 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Middlewares\" />
+    <Folder Include="Attributes\" />
   </ItemGroup>
 
   <ItemGroup>

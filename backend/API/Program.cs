@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Middlewares;
 using Application;
 using Infrastructure;
 using Infrastructure.Persistence;
@@ -41,6 +42,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("CorsPolicy");
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

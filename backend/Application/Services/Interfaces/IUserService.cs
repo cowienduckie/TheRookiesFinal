@@ -8,4 +8,5 @@ public interface IUserService
 {
     Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest requestModel);
     Task<Response<GetUserResponse>> GetByIdAsync(Guid id);
+    Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id);
 }
