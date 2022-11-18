@@ -1,5 +1,5 @@
 ﻿using Application.Common.Models;
-using Application.DTOs.Users;
+using Application.DTOs.Users.Authentication;
 using Application.Services.Interfaces;
 using BookLibrary.WebApi.Controllers;
 using Microsoft.AspNetCore.Authorization;

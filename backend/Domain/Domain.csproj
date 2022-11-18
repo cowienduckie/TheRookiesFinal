@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Helpers\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <None Remove="Helpers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Entities\Users\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Base\" />
-    <Folder Include="Shared\Helpers\" />
   </ItemGroup>
 
   <ItemGroup>

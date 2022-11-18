@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
-using Application.DTOs.Users;
+using Application.DTOs.Users.Authentication;
+using Application.DTOs.Users.GetUser;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
@@ -19,11 +20,10 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u =>
-            u.Username == requestModel.Username &&
-            HashStringHelper.IsValid(requestModel.Password, u.HashedPassword));
+        var user = await userRepository.GetAsync(u => u.Username == requestModel.Username);
 
-        if (user == null)
+        if (user == null ||
+            !HashStringHelper.IsValid(requestModel.Password, user.HashedPassword))
         {
             return new Response<AuthenticationResponse>(false, ErrorMessages.LoginFailed);
         }
@@ -37,5 +37,26 @@ public class UserService : BaseService, IUserService
         };
 
         return new Response<AuthenticationResponse>(true, authenticationResponse);
+    }
+
+    public async Task<Response<GetUserResponse>> GetByIdAsync(Guid id)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            return new Response<GetUserResponse>(false);
+        }
+
+        var getUserResponse = new GetUserResponse
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Role = user.Role.ToString()
+        };
+
+        return new Response<GetUserResponse>(true, getUserResponse);
     }
 }
