@@ -70,4 +70,5 @@ public static class JwtHelper
         {
             return null;
         }
+    }
 }
