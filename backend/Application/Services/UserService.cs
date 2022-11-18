@@ -30,6 +30,14 @@ public class UserService : BaseService, IUserService
         var token = JwtHelper.GenerateJwtToken(user);
         var authenticationResponse = new AuthenticationResponse(user, token);
 
+        if (user.IsFirstTimeLogIn)
+        {
+            user.IsFirstTimeLogIn = false;
+
+            await userRepository.UpdateAsync(user);
+            await UnitOfWork.SaveChangesAsync();
+        }
+
         return new Response<AuthenticationResponse>(true, authenticationResponse);
     }
 

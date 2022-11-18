@@ -11,5 +11,5 @@ public class User : AuditableEntity<Guid>
 
     public UserRoles Role { get; set; }
 
-    public DateTime? LastLoggedIn { get; set; }
+    public bool IsFirstTimeLogIn { get; set; } = true;
 }

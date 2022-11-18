@@ -10,6 +10,7 @@ public class AuthenticationResponse
         Username = user.Username;
         Role = user.Role.ToString();
         Token = token;
+        IsFirstTimeLogin = user.IsFirstTimeLogIn;
     }
 
     public Guid Id { get; }
@@ -19,4 +20,6 @@ public class AuthenticationResponse
     public string Role { get; }
 
     public string Token { get; }
+
+    public bool IsFirstTimeLogin { get; }
 }
