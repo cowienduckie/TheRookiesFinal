@@ -1,5 +1,6 @@
 ﻿namespace Domain.Shared.Constants;
 
-public class Constants
+public static class Constants
 {
+    public const string DbConnectionStringName = "RookiesConnectionString";
 }

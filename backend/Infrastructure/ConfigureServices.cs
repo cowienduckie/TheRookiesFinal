@@ -1,5 +1,6 @@
-﻿using Domain.Entities.Departments;
+﻿using Domain.Entities.Users;
 using Domain.Interfaces;
+using Domain.Shared.Constants;
 using Infrastructure.Common.Interfaces;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
@@ -19,14 +20,14 @@ public static class ConfigureServices
     {
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
-        services.AddDbContext<EfContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("RookiesConnectionString"),
-                builder => builder.MigrationsAssembly(typeof(EfContext).Assembly.FullName)));
+        services.AddDbContext<EfContext>(
+            options => options.UseSqlServer(configuration.GetConnectionString(Constants.DbConnectionStringName), 
+            builder => builder.MigrationsAssembly(typeof(EfContext).Assembly.FullName)));
 
         services.AddScoped<IEfContext>(provider => provider.GetRequiredService<EfContext>());
 
         services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>))
-            .AddScoped<IDepartmentRepository, DepartmentRepository>();
+            .AddScoped<IUserRepository, UserRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

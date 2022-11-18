@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Departments\" />
+    <Folder Include="Entities\Users\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Base\" />
     <Folder Include="Shared\Constants\" />
-    <Folder Include="Shared\Enums\" />
+    <Folder Include="Shared\Helpers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
 
 </Project>

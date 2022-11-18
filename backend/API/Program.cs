@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
     {
         var initializer = scope.ServiceProvider.GetRequiredService<EfContextInitializer>();
 
-        await initializer.InitialiseAsync();
+        await initializer.InitializeAsync();
         await initializer.SeedAsync();
     }
 }
