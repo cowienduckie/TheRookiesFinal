@@ -1,6 +1,5 @@
 ﻿using Application.Common.Models;
 using Application.DTOs.Users.Authentication;
-using Application.DTOs.Users.GetUser;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
@@ -32,22 +31,6 @@ public class UserService : BaseService, IUserService
         var authenticationResponse = new AuthenticationResponse(user, token);
 
         return new Response<AuthenticationResponse>(true, authenticationResponse);
-    }
-
-    public async Task<Response<GetUserResponse>> GetByIdAsync(Guid id)
-    {
-        var userRepository = UnitOfWork.AsyncRepository<User>();
-
-        var user = await userRepository.GetAsync(u => u.Id == id);
-
-        if (user == null)
-        {
-            return new Response<GetUserResponse>(false);
-        }
-
-        var getUserResponse = new GetUserResponse(user);
-
-        return new Response<GetUserResponse>(true, getUserResponse);
     }
 
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
