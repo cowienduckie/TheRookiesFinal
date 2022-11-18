@@ -1,7 +1,6 @@
 ﻿using Application.Services;
 using Infrastructure.Persistence.Interfaces;
 using Moq;
-using System.Data;
 using System.Linq.Expressions;
 using Application.Common.Models;
 using Domain.Entities.Users;

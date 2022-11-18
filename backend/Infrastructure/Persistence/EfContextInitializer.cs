@@ -1,7 +1,4 @@
-﻿using Domain.Entities.Users;
-using Domain.Shared.Enums;
-using Domain.Shared.Helpers;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Persistence;
