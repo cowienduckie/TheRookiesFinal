@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Persistence;
@@ -62,5 +63,9 @@ public class EfContextInitializer
 
         //    await _context.SaveChangesAsync();
         //}
+
+        //var userdat = _context.Users.FirstOrDefault(u => u.Username == "dat");
+        //userdat.HashedPassword = HashStringHelper.HashString("123");
+        //await _context.SaveChangesAsync();
     }
 }

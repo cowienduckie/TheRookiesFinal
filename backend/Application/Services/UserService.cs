@@ -1,5 +1,6 @@
 ﻿using Application.Common.Models;
 using Application.DTOs.Users.Authentication;
+using Application.DTOs.Users.ChangePassword;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
@@ -39,6 +40,25 @@ public class UserService : BaseService, IUserService
         }
 
         return new Response<AuthenticationResponse>(true, authenticationResponse);
+    }
+
+    public async Task<Response<bool>> ChangePasswordAsync(ChangePasswordRequest requestModel)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(u => u.Username == requestModel.Username);
+
+        if (user == null || user.HashedPassword != HashStringHelper.HashString(requestModel.OldPassword))
+        {
+            return new Response<bool>(false);
+        }
+
+        user.HashedPassword = HashStringHelper.HashString(requestModel.NewPassword);
+
+        await userRepository.UpdateAsync(user);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response<bool>(true);
     }
 
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
