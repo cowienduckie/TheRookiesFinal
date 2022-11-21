@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import {
-  NORMAL_USER,
-  SUPER_USER,
+  STAFF,
+  ADMIN,
   TOKEN_KEY,
   ROLE_KEY,
 } from "../Constants/SystemConstants";
@@ -19,7 +19,7 @@ export function AuthState(props) {
   if (
     token &&
     userRole &&
-    (userRole === NORMAL_USER || userRole === SUPER_USER)
+    (userRole === STAFF || userRole === ADMIN)
   ) {
     initialState.authenticated = true;
     initialState.userRole = userRole;

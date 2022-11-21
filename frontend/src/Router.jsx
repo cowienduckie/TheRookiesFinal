@@ -78,11 +78,11 @@ const authenticationRouter = [
   {
     path: "/logout",
     element: <LogoutPage />,
-  },
+  }
 ];
 
 const layoutRouter = {
-  element: <LayoutPage />,
+  element: <MainLayout />,
   children: [
     {
       index: true,

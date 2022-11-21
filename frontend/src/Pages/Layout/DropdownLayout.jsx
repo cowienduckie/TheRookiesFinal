@@ -4,6 +4,7 @@ import "./MainLayout.css";
 import { Row, Col, Modal, Form, Button, Input, Dropdown, Space } from "antd";
 import { useState } from "react";
 import { LogOutModal } from "../../Components";
+import { LogInModal } from "../../Components/Modal/LogInModal";
 
 export function DropdownLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +24,7 @@ export function DropdownLayout() {
       key: "0",
     },
     {
-      label: <p>Login</p>,
+      label: <LogInModal />,
       key: "1",
     },
     {
