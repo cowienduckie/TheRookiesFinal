@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Tooltip, Modal, Space } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import React, { useContext, useState } from "react";
+import { LockOutlined, UserOutlined,EyeTwoTone,EyeInvisibleOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal } from "antd";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { redirect, useNavigate } from "react-router-dom";
+import { TOKEN_KEY } from "../../Constants/SystemConstants";
+import { logIn } from "../../Apis/AuthenticationApis";
 
 export function loader() {
   // TODO: Check if there is token in local storage -> Redirect to Home
@@ -14,26 +17,16 @@ export function loader() {
 export function LoginPage() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const [isSending, setIsSending] = useState(false);
-  const [loginInfo, setLoginInfo] = useState({
-    username: "",
-    password: "",
-  });
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [componentDisabled, setComponentDisabled] = useState(false);
 
   const onFinish = (values) => {
-    if (isSending) return;
-
-    setIsSending(true);
-
-    logIn(loginInfo)
+    logIn(values)
       .then((userInfo) => {
         authContext.setAuthInfo(userInfo.role, userInfo.token);
-        setIsSending(false);
         navigate("/");
       })
       .catch((error) => {
-        setIsSending(false);
         throw new Response("", {
           status: error.status,
           statusText: error.statusText,
@@ -41,24 +34,14 @@ export function LoginPage() {
       });
   };
 
-  const handleChange = (e)=>{
-    const {name , value} = e.target
-    console.log(name, value)
-  }
-
   return (
     <>
       <Modal
         title="Login"
         open={isModalOpen}
-        footer={false}
-        closeIcon={
-          <CloseOutlined
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-          />
-        }
+        footer={null}
+        closable={false}
+        wrapClassName="modal-login"
       >
         <Form
           name="normal_login"
@@ -80,7 +63,7 @@ export function LoginPage() {
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder="Username"
-              onChange={handleChange}
+              
             />
           </Form.Item>
           <Form.Item
@@ -92,31 +75,32 @@ export function LoginPage() {
               },
             ]}
           >
-            <Input
+            <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
               placeholder="Password"
-              onChange={handleChange}
+              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
             />
           </Form.Item>
-
           <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="login-form-button"
-                danger
-              >
-                Log in
-              </Button>
-              <label> </label>
-              <Button
-                className="login-form-button"
-                danger
-                onClick={()=>{setIsModalOpen(false)}}
-              >
-                Cancel
-              </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              danger
+              disabled={componentDisabled}
+            >
+              Log in
+            </Button>
+            <label> </label>
+            <Button
+              danger
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

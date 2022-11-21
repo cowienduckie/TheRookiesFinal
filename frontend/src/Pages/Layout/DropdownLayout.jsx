@@ -3,8 +3,6 @@ import React from "react";
 import "./MainLayout.css";
 import { Row, Col, Modal, Form, Button, Input, Dropdown, Space } from "antd";
 import { useState } from "react";
-import { Modals } from "../../Components";
-import { LoginPage } from "../AuthenticationPage/LoginPage";
 import { LogInModal } from "../../Components/Modal/LogInModal";
 
 export function DropdownLayout() {

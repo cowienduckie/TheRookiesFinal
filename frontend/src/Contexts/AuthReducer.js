@@ -1,7 +1,7 @@
 import {
-  NORMAL_USER,
+  STAFF,
   ROLE_KEY,
-  SUPER_USER,
+  ADMIN,
   TOKEN_KEY,
 } from "../Constants/SystemConstants";
 
@@ -14,7 +14,7 @@ const setAuthInfo = (role, token, state) => {
     authenticated: state.authenticated,
   };
 
-  if (role === SUPER_USER || role === NORMAL_USER) {
+  if (role === ADMIN || role === STAFF) {
     userInfo.userRole = role;
     userInfo.authenticated = true;
     localStorage.setItem(TOKEN_KEY, token);

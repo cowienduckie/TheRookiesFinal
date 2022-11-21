@@ -24,6 +24,8 @@ export function ChangePasswordPage() {
         open={isModalOpen}
         footer={false}
       >
+        <p>This is the first time you logged in.<br/>
+        You have to change your password to continue.</p>
         <Form
           name="basic"
           labelCol={{
