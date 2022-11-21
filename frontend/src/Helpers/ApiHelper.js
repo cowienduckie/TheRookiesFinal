@@ -16,7 +16,7 @@ export async function callApi(method, url, data = null) {
     .catch((error) => {
       throw new Response("", {
         status: error.response.status,
-        statusText: error.message,
+        statusText: error.data.message,
       });
     });
 
