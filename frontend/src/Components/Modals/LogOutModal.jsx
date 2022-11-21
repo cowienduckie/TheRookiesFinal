@@ -13,6 +13,7 @@ export function LogOutModal(props) {
     console.log("Logging out")
     authContext.clearAuthInfo();
     navigate('/login')
+    setOpen(false);
   };
 
   const showModal = () => {
