@@ -81,19 +81,61 @@ const authenticationRouter = [
   },
 ];
 
-const homeRouter = {
-  index: true,
-  element: <HomePage />,
-};
+const layoutRouter = {
+  element: <LayoutPage />,
+  children: [
+    {
+      index: true,
+      element: <HomePage />,
+    },
+    {
+      path: '/user-management',
+      element: <ManageUserPage />,
+      loader: ManageUserLoader,
+      action: ManageUserAction,
+    },
+    {
+      path: '/asset-management',
+      element: <ManageAssetPage />,
+      loader: ManageAssetLoader,
+      action: ManageAssetAction,
+    },
+    {
+      path: '/assignment-management',
+      element: <ManageAssignmentPage />,
+      loader: ManageAssignmentLoader,
+      action: ManageAssignmentAction,
+    },
+    {
+      path: '/returning-request-management',
+      element: <RequestForReturningPage />,
+      loader: RequestForReturningLoader,
+      action: RequestForReturningAction,
+    },
+    {
+      path: '/report',
+      element: <ReportPage />,
+      loader: ReportLoader,
+      action: ReportAction,
+    },
+  ],
+}
+
+const changePasswordRouter = {
+  path: '/password-change',
+  // element: <ChangePasswordModal />,
+  element: <ChangePasswordPage />,
+  errorElement: <ErrorPage />,
+}
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
-      homeRouter,
       adminRouter,
-      ...authenticationRouter ]
+      ...authenticationRouter,
+      changePasswordRouter],
   },
-]);
+])
