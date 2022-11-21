@@ -9,5 +9,10 @@ export {
 } from "./ChangePasswordPage";
 
 export {
+  ChangePasswordFirstTimePage,
+  loader as ChangePasswordFirstTimeLoader
+} from "./ChangePasswordFirstTimePage";
+
+export {
   LogoutPage
 } from "./LogoutPage";

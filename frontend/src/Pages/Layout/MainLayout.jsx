@@ -1,23 +1,21 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import React from "react";
 import "./MainLayout.css";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
-import { CustomModal } from "../../Components";
 
 export function MainLayout(props) {
   const location = useLocation();
-  const navigate = useNavigate();
   const { Header, Content, Footer, Sider } = Layout;
 
   const adminPages = [
-    { name: "Manage User", path: "/admin/user-management" },
-    { name: "Manage Asset", path: "/admin/asset-management" },
-    { name: "Manage Assignment", path: "/admin/assignment-management" },
+    { name: "Manage User", path: "/admin/manage-user" },
+    { name: "Manage Asset", path: "/admin/manage-asset" },
+    { name: "Manage Assignment", path: "/admin/manage-assignment" },
     {
       name: "Manage Returning",
-      path: "/admin/returning-request-management",
+      path: "/admin/manage-returning",
     },
     { name: "Report", path: "/admin/report" },
   ];
@@ -77,17 +75,6 @@ export function MainLayout(props) {
                   <Link to={page.path}>{page.name}</Link>
                 </Menu.Item>
               ))}
-
-              <Menu.Item className="menuItem" key="modal">
-                <CustomModal
-                  buttonText="Login"
-                  modalTitle="Login"
-                  onClick={() => { navigate("/login") }}
-                  onClose={() => { navigate(-1) }}
-                  location={location}>
-                  <Outlet />
-                </CustomModal>
-              </Menu.Item>
             </Menu>
           </Sider>
 
@@ -103,7 +90,7 @@ export function MainLayout(props) {
                 minHeight: 600,
               }}
             >
-              {props.children}
+              <Outlet />
             </div>
           </Content>
         </Layout>

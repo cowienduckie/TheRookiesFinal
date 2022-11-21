@@ -1,30 +1,34 @@
 import React, { useState } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input, Tooltip, Modal, Space } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal } from "antd";
 
-export function loader() {
-  // TODO: Check if there is no token in local storage -> Redirect to Home
-}
+export function loader() {}
 
-// TODO: Change password form here
 export function ChangePasswordPage() {
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const onFinish = (values) => {
     console.log("Success:", values);
   };
+  
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   return (
-    <>
-      <Modal title="Change Password" open={isModalOpen} footer={false}>
-        <p>
-          This is the first time you logged in.
-          <br />
-          You have to change your password to continue.
-        </p>
+    <Modal
+        title="Change Password"
+        open={isModalOpen}
+        onOk={handleOk}
+        closable={false}
+        footer={[]}
+      >
         <Form
           name="basic"
           labelCol={{
@@ -41,12 +45,25 @@ export function ChangePasswordPage() {
           autoComplete="off"
         >
           <Form.Item
-            label="New Password"
-            name="password"
+            label="Old Password"
+            name="oldPassword"
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: "Please input your old password!",
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+
+          <Form.Item
+            label="New Password"
+            name="newPassword"
+            rules={[
+              {
+                required: true,
+                message: "Please input your new password!",
               },
             ]}
           >
@@ -59,12 +76,15 @@ export function ChangePasswordPage() {
               span: 16,
             }}
           >
-            <Button type="primary" htmlType="submit" danger>
-              Save
+            <Button key="back" onClick={handleCancel}>
+              Return
+            </Button>
+            <label> </label>
+            <Button type="primary" danger htmlType="submit" onClick={handleOk}>
+              Submit
             </Button>
           </Form.Item>
         </Form>
       </Modal>
-    </>
   );
 }

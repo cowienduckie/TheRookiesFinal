@@ -1,136 +1,59 @@
 import { DownOutlined } from "@ant-design/icons";
 import React from "react";
 import "./MainLayout.css";
-import { Row, Col, Modal, Form, Button, Input, Dropdown, Space } from "antd";
-import { useState } from "react";
-import { LogOutModal } from "../../Components";
-import { LogInModal } from "../../Components/Modal/LogInModal";
+import { Row, Col, Dropdown, Space } from "antd";
+import { Link, useLocation } from "react-router-dom";
 
 export function DropdownLayout() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const location = useLocation();
 
   const items = [
     {
-      label: <p onClick={showModal}>Change Password</p>,
+      label: (
+        <Link to="/change-password" state={{ background: location }}>
+          Change Password
+        </Link>
+      ),
       key: "0",
     },
     {
-      label: <LogInModal />,
+      label: (
+        <Link to="/login" state={{ background: location }}>
+          Login
+        </Link>
+      ),
       key: "1",
     },
     {
-      type: "divider",
-    },
-    {
-      label: <LogOutModal />,
-      key: "3",
+      label: (
+        <Link to="/logout" state={{ background: location }}>
+          Logout
+        </Link>
+      ),
+      key: "2",
     },
   ];
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-  
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
   return (
-    <div className="dropdownLayout">
-      <Row>
-        <Col span={21}></Col>
-        <Col span={2}>
-          <Dropdown
-            menu={{
-              items,
-            }}
-            trigger={["click"]}
-          >
-            <div className="dropdown">
-              <div onClick={(e) => e.preventDefault()}>
-                <Space className="dropdownText">
-                  Login
-                  <DownOutlined />
-                </Space>
-              </div>
-            </div>
-          </Dropdown>
-        </Col>
-      </Row>
-
-      <Modal
-        title="Change Password"
-        open={isModalOpen}
-        onOk={handleOk}
-        closable={false}
-        footer={[]}
-      >
-        <Form
-          name="basic"
-          labelCol={{
-            span: 8,
+    <Row>
+      <Col span={21}></Col>
+      <Col span={2}>
+        <Dropdown
+          menu={{
+            items,
           }}
-          wrapperCol={{
-            span: 16,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
+          trigger={["click"]}
         >
-          <Form.Item
-            label="Old Password"
-            name="oldPassword"
-            rules={[
-              {
-                required: true,
-                message: "Please input your old password!",
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            label="New Password"
-            name="newPassword"
-            rules={[
-              {
-                required: true,
-                message: "Please input your new password!",
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <Button key="back" onClick={handleCancel}>
-              Return
-            </Button>
-            <label> </label>
-            <Button type="primary" danger htmlType="submit" onClick={handleOk}>
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+          <div className="dropdown">
+            <div onClick={(e) => e.preventDefault()}>
+              <Space className="dropdownText">
+                Login
+                <DownOutlined />
+              </Space>
+            </div>
+          </div>
+        </Dropdown>
+      </Col>
+    </Row>
   );
 }
