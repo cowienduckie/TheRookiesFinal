@@ -20,6 +20,7 @@ import {
   ReportAction,
   ReportLoader,
 } from './Pages'
+import { ChangePasswordPage } from './Pages/LayoutPage'
 
 const layoutRouter = {
   element: <LayoutPage />,
@@ -61,11 +62,18 @@ const layoutRouter = {
   ],
 }
 
+const changePasswordRouter = {
+  path: '/password-change',
+  // element: <ChangePasswordModal />,
+  element: <ChangePasswordPage />,
+  errorElement: <ErrorPage />,
+}
+
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
-    children: [layoutRouter],
+    children: [layoutRouter, changePasswordRouter],
   },
 ])
