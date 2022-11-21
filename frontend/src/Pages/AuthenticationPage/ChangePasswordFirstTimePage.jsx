@@ -1,9 +1,5 @@
 import { Button, Form, Input, Modal } from "antd";
 
-export function loader() {
-  // TODO: Check if there is no token in local storage -> Redirect to Home
-}
-
 export function ChangePasswordFirstTimePage() {
   const onFinish = (values) => {
     console.log("Success:", values);

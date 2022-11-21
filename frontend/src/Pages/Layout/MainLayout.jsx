@@ -5,7 +5,7 @@ import "./MainLayout.css";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
 
-export function MainLayout(props) {
+export function MainLayout() {
   const location = useLocation();
   const { Header, Content, Footer, Sider } = Layout;
 

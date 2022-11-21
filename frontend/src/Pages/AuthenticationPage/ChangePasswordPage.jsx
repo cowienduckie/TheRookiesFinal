@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Input, Modal } from "antd";
 
-export function loader() {}
-
 export function ChangePasswordPage() {
   const [isModalOpen, setIsModalOpen] = useState(true);
 

@@ -7,15 +7,8 @@ import {
 } from "@ant-design/icons";
 import { Button, Form, Input, Modal } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
-import { redirect, useNavigate } from "react-router-dom";
-import { TOKEN_KEY } from "../../Constants/SystemConstants";
+import { useNavigate } from "react-router-dom";
 import { logIn } from "../../Apis/AuthenticationApis";
-
-export function loader() {
-  if (localStorage.getItem(TOKEN_KEY) != null) {
-    return redirect("/");
-  }
-}
 
 export function LoginPage() {
   const authContext = useContext(AuthContext);

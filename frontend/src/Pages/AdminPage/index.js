@@ -1,27 +1,11 @@
-export { loader as AdminPageLoader, AdminPage } from "./AdminPage";
+export { AdminPage } from "./AdminPage";
 
-export {
-  ManageUserPage,
-  ManageUserAction,
-  ManageUserLoader,
-} from "./ManageUserPage";
+export { ManageUserPage } from "./ManageUserPage";
 
-export {
-  ManageAssetPage,
-  ManageAssetAction,
-  ManageAssetLoader,
-} from "./ManageAssetPage";
+export { ManageAssetPage } from "./ManageAssetPage";
 
-export {
-  ManageAssignmentPage,
-  ManageAssignmentAction,
-  ManageAssignmentLoader,
-} from "./ManageAssignmentPage";
+export { ManageAssignmentPage } from "./ManageAssignmentPage";
 
-export { ReportPage, ReportAction, ReportLoader } from "./ReportPage";
+export { ReportPage } from "./ReportPage";
 
-export {
-  ManageRequestForReturningPage,
-  ManageRequestForReturningLoader,
-  ManageRequestForReturningAction
-} from "./ManageRequestForReturningPage";
+export { ManageRequestForReturningPage } from "./ManageRequestForReturningPage";

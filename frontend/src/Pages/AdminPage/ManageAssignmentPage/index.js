@@ -1,5 +1,1 @@
-export {
-  ManageAssignmentPage,
-  loader as ManageAssignmentLoader,
-  action as ManageAssignmentAction,
-} from "./ManageAssignmentPage";
+export { ManageAssignmentPage } from "./ManageAssignmentPage";
