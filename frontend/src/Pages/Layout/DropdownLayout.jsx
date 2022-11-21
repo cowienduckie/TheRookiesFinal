@@ -3,7 +3,7 @@ import React from "react";
 import "./MainLayout.css";
 import { Row, Col, Modal, Form, Button, Input, Dropdown, Space } from "antd";
 import { useState } from "react";
-import { Modals } from "../../Components";
+import { LogOutModal } from "../../Components";
 
 export function DropdownLayout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,7 +30,7 @@ export function DropdownLayout() {
       type: "divider",
     },
     {
-      label: <Modals />,
+      label: <LogOutModal />,
       key: "3",
     },
   ];
