@@ -8,5 +8,5 @@ public interface IUserService
 {
     Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest requestModel);
     Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id);
-    Task<Response<bool>> ChangePasswordAsync(ChangePasswordRequest requestModel);
+    Task<bool> ChangePasswordAsync(ChangePasswordRequest requestModel);
 }

@@ -8,27 +8,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/changepassword")]
+    [Route("api/accounts")]
     [ApiController]
-    public class ChangePasswordController : BaseController
+    public class AccountsController : BaseController
     {
         private readonly IUserService _userService;
 
-        public ChangePasswordController(IUserService userService)
+        public AccountsController(IUserService userService)
         {
             _userService = userService;
         }
 
-
-        [HttpPost]
+        [Route("password")]
+        [HttpPut]
         [Authorize]
-        public async Task<ActionResult<Response<bool>>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
+        public async Task<ActionResult<bool>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
         {
             try
             {
                 var response = await _userService.ChangePasswordAsync(requestModel);
 
-                if (!response.IsSuccess)
+                if (!response)
                 {
                     return BadRequest(response);
                 }
