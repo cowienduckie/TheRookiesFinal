@@ -1,25 +1,28 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { Layout, Menu } from 'antd'
-import React from 'react'
-import './LayoutPage.css'
-import nashLogo from '../../Components/Logo/nashLogo.jpg'
-import { DropdownLayout } from './DropdownLayout'
-import { useEffect, useState } from 'react'
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { Layout, Menu } from "antd";
+import React from "react";
+import "./MainLayout.css";
+import nashLogo from "../../Components/Logo/nashLogo.jpg";
+import { DropdownLayout } from "./DropdownLayout";
+import { useEffect, useState } from "react";
 
-const { Header, Content, Footer, Sider } = Layout
+export function MainLayout() {
+  const location = useLocation();
 
-export function LayoutPage() {
-  let location = useLocation()
-  const [current, setCurrent] = useState(location.pathname)
+  const { Header, Content, Footer, Sider } = Layout;
+
+  const [current, setCurrent] = useState(location.pathname);
+
   useEffect(() => {
     if (location) {
       if (current !== location.pathname) {
-        setCurrent(location.pathname)
+        setCurrent(location.pathname);
       }
     }
-  }, [location, current])
+  }, [location, current]);
+
   function handleClick(e) {
-    setCurrent(e.key)
+    setCurrent(e.key);
   }
 
   return (
@@ -29,12 +32,10 @@ export function LayoutPage() {
           className="header"
           style={{
             padding: 0,
-            backgroundColor: 'red',
+            backgroundColor: "red",
           }}
         >
-          <div>
-            <DropdownLayout />
-          </div>
+          <DropdownLayout />
         </Header>
         <Layout className="LayoutContent">
           <Sider
@@ -43,10 +44,10 @@ export function LayoutPage() {
             collapsedWidth="0"
             theme="light"
             onBreakpoint={(broken) => {
-              console.log(broken)
+              console.log(broken);
             }}
             onCollapse={(collapsed, type) => {
-              console.log(collapsed, type)
+              console.log(collapsed, type);
             }}
           >
             <div className="divLogo">
@@ -66,31 +67,31 @@ export function LayoutPage() {
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>
               </Menu.Item>
-              <Menu.Item className="menuItem" key="/user-management">
-                <Link to="/user-management">Manage User</Link>
+              <Menu.Item className="menuItem" key="/admin/user-management">
+                <Link to="/admin/user-management">Manage User</Link>
               </Menu.Item>
-              <Menu.Item className="menuItem" key="/asset-management">
-                <Link to="/asset-management">Manage Asset</Link>
+              <Menu.Item className="menuItem" key="/admin/asset-management">
+                <Link to="/admin/asset-management">Manage Asset</Link>
               </Menu.Item>
-              <Menu.Item className="menuItem" key="/assignment-management">
-                <Link to="/assignment-management">Manage Assignment</Link>
+              <Menu.Item className="menuItem" key="/admin/assignment-management">
+                <Link to="/admin/assignment-management">Manage Assignment</Link>
               </Menu.Item>
               <Menu.Item
                 className="menuItem"
-                key="/returning-request-management"
+                key="/admin/returning-request-management"
               >
-                <Link to="/returning-request-management">
+                <Link to="/admin/returning-request-management">
                   Request for Returning
                 </Link>
               </Menu.Item>
-              <Menu.Item className="menuItem" key="/report">
-                <Link to="/report">Report</Link>
+              <Menu.Item className="menuItem" key="/admin/report">
+                <Link to="/admin/report">Report</Link>
               </Menu.Item>
             </Menu>
           </Sider>
           <Content
             style={{
-              margin: '24px 16px 0',
+              margin: "24px 16px 0",
             }}
           >
             <div
@@ -108,13 +109,13 @@ export function LayoutPage() {
         <Footer
           className="footerLayout"
           style={{
-            backgroundColor: 'red',
-            color: 'white',
+            backgroundColor: "red",
+            color: "white",
           }}
         >
           NashTech2022 Part of Nash Squared.
         </Footer>
       </Layout>
     </div>
-  )
+  );
 }

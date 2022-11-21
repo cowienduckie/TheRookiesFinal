@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { Tooltip, Modal } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export function Modals(props) {
+export function LogOutModal(props) { 
   const authContext = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const onLogOut = () => {
+    console.log("Logging out")
     authContext.clearAuthInfo();
+    navigate('/login')
   };
 
   const showModal = () => {
@@ -29,7 +32,7 @@ export function Modals(props) {
       <Modal
         title="Are you sure"
         open={open}
-        onOk= {<Link as={NavLink} to="/" onClick={onLogOut} />}
+        onOk={onLogOut}
         onCancel={handleCancel}
       >
         <p>Do you want to log out?</p>

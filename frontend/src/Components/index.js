@@ -1,1 +1,1 @@
-export { Modals } from "./Modal";
+export { LogOutModal } from "./Modals/LogOutModal";

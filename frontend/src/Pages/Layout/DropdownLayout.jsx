@@ -1,46 +1,47 @@
-import { DownOutlined } from '@ant-design/icons'
-import React from 'react'
-import './LayoutPage.css'
-import { Row, Col, Modal, Form, Button, Input, Dropdown, Space  } from 'antd'
-import { useState } from 'react'
-import { Modals } from '../../Components'
+import { DownOutlined } from "@ant-design/icons";
+import React from "react";
+import "./MainLayout.css";
+import { Row, Col, Modal, Form, Button, Input, Dropdown, Space } from "antd";
+import { useState } from "react";
+import { LogOutModal } from "../../Components";
 
 export function DropdownLayout() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
   const handleOk = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
   const handleCancel = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const items = [
     {
       label: <p onClick={showModal}>Change Password</p>,
-      key: '0',
+      key: "0",
     },
     {
       label: <p>Login</p>,
-      key: '1',
+      key: "1",
     },
     {
-      type: 'divider',
+      type: "divider",
     },
     {
-      label: <Modals />,
-      key: '3',
+      label: <LogOutModal />,
+      key: "3",
     },
-  ]
+  ];
 
   const onFinish = (values) => {
-    console.log('Success:', values)
-  }
+    console.log("Success:", values);
+  };
+  
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo)
-  }
+    console.log("Failed:", errorInfo);
+  };
 
   return (
     <div className="dropdownLayout">
@@ -51,7 +52,7 @@ export function DropdownLayout() {
             menu={{
               items,
             }}
-            trigger={['click']}
+            trigger={["click"]}
           >
             <div className="dropdown">
               <div onClick={(e) => e.preventDefault()}>
@@ -93,7 +94,7 @@ export function DropdownLayout() {
             rules={[
               {
                 required: true,
-                message: 'Please input your old password!',
+                message: "Please input your old password!",
               },
             ]}
           >
@@ -106,7 +107,7 @@ export function DropdownLayout() {
             rules={[
               {
                 required: true,
-                message: 'Please input your new password!',
+                message: "Please input your new password!",
               },
             ]}
           >
@@ -130,5 +131,5 @@ export function DropdownLayout() {
         </Form>
       </Modal>
     </div>
-  )
+  );
 }
