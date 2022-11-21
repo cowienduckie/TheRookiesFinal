@@ -4,26 +4,14 @@ import React from "react";
 import "./MainLayout.css";
 import nashLogo from "../../Components/Logo/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export function MainLayout() {
   const location = useLocation();
 
-  const { Header, Content, Footer, Sider } = Layout;
+  const { Header, Content, Sider } = Layout;
 
-  const [current, setCurrent] = useState(location.pathname);
-
-  useEffect(() => {
-    if (location) {
-      if (current !== location.pathname) {
-        setCurrent(location.pathname);
-      }
-    }
-  }, [location, current]);
-
-  function handleClick(e) {
-    setCurrent(e.key);
-  }
+  const [current, ] = useState(location.pathname);
 
   return (
     <div>
@@ -62,7 +50,7 @@ export function MainLayout() {
               theme="light"
               mode="inline"
               defaultSelectedKeys={[current]}
-              onClick={handleClick}
+              selectedKeys={current.pathname}
             >
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>
@@ -105,16 +93,6 @@ export function MainLayout() {
             </div>
           </Content>
         </Layout>
-
-        <Footer
-          className="footerLayout"
-          style={{
-            backgroundColor: "red",
-            color: "white",
-          }}
-        >
-          NashTech2022 Part of Nash Squared.
-        </Footer>
       </Layout>
     </div>
   );
