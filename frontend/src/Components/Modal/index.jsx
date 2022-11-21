@@ -9,6 +9,7 @@ export function Modals(props) {
   const [open, setOpen] = useState(false);
 
   const onLogOut = () => {
+    console.log("logging out")
     authContext.clearAuthInfo();
   };
 

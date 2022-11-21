@@ -1,5 +1,5 @@
-import { createBrowserRouter } from 'react-router-dom'
-import App from './App'
+import { createBrowserRouter } from "react-router-dom";
+import App from "./App";
 import {
   ManageAssetPage,
   ManageAssetAction,
@@ -9,63 +9,98 @@ import {
   ManageUserPage,
   ErrorPage,
   HomePage,
-  LayoutPage,
   ManageAssignmentPage,
   ManageAssignmentAction,
   ManageAssignmentLoader,
-  RequestForReturningPage,
-  RequestForReturningAction,
-  RequestForReturningLoader,
+  ManageRequestForReturningPage,
+  ManageRequestForReturningAction,
+  ManageRequestForReturningLoader,
   ReportPage,
   ReportAction,
   ReportLoader,
-} from './Pages'
+  AdminPage,
+  AdminPageLoader,
+  LoginPage,
+  LoginPageLoader,
+  LogoutPage,
+  ChangePasswordPage,
+  ChangePasswordPageLoader,
+  MainLayout,
+} from "./Pages";
 
-const layoutRouter = {
-  element: <LayoutPage />,
+const adminRouter = {
+  element: <AdminPage />,
+  loader: AdminPageLoader,
   children: [
     {
-      index: true,
-      element: <HomePage />,
-    },
-    {
-      path: '/user-management',
+      path: "/admin/user-management",
       element: <ManageUserPage />,
       loader: ManageUserLoader,
       action: ManageUserAction,
     },
     {
-      path: '/asset-management',
+      path: "/admin/asset-management",
       element: <ManageAssetPage />,
       loader: ManageAssetLoader,
       action: ManageAssetAction,
     },
     {
-      path: '/assignment-management',
+      path: "/admin/assignment-management",
       element: <ManageAssignmentPage />,
       loader: ManageAssignmentLoader,
       action: ManageAssignmentAction,
     },
     {
-      path: '/returning-request-management',
-      element: <RequestForReturningPage />,
-      loader: RequestForReturningLoader,
-      action: RequestForReturningAction,
+      path: "/admin/returning-request-management",
+      element: <ManageRequestForReturningPage />,
+      loader: ManageRequestForReturningLoader,
+      action: ManageRequestForReturningAction,
     },
     {
-      path: '/report',
+      path: "/admin/report",
       element: <ReportPage />,
       loader: ReportLoader,
       action: ReportAction,
     },
   ],
-}
+};
+
+const authenticationRouter = [
+  {
+    path: "/login",
+    element: <LoginPage />,
+    loader: LoginPageLoader
+  },
+  {
+    path: "/change-password",
+    element: <ChangePasswordPage />,
+    loader: ChangePasswordPageLoader
+  },
+  {
+    path: "/logout",
+    element: <LogoutPage />,
+  }
+];
+
+const layoutRouter = {
+  element: <MainLayout />,
+  children: [
+    {
+      index: true,
+      element: <HomePage />,
+    },
+    adminRouter,
+    ...authenticationRouter
+  ],
+};
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-    children: [layoutRouter],
+    children: [
+      layoutRouter      
+    ],
   },
-])
+]);
