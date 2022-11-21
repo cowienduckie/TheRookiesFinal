@@ -1,10 +1,13 @@
 import { Outlet } from "react-router-dom";
 import { AuthState } from "./Contexts/AuthState";
+import { MainLayout } from "./Pages";
 
 function App() {
-  return(
+  return (
     <AuthState>
-      <Outlet />
+      <MainLayout>
+        <Outlet />
+      </MainLayout>
     </AuthState>
   );
 }

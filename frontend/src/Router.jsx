@@ -25,7 +25,6 @@ import {
   LogoutPage,
   ChangePasswordPage,
   ChangePasswordPageLoader,
-  MainLayout,
 } from "./Pages";
 
 const adminRouter = {
@@ -69,29 +68,22 @@ const authenticationRouter = [
   {
     path: "/login",
     element: <LoginPage />,
-    loader: LoginPageLoader
+    loader: LoginPageLoader,
   },
   {
     path: "/change-password",
     element: <ChangePasswordPage />,
-    loader: ChangePasswordPageLoader
+    loader: ChangePasswordPageLoader,
   },
   {
     path: "/logout",
     element: <LogoutPage />,
-  }
+  },
 ];
 
-const layoutRouter = {
-  element: <MainLayout />,
-  children: [
-    {
-      index: true,
-      element: <HomePage />,
-    },
-    adminRouter,
-    ...authenticationRouter
-  ],
+const homeRouter = {
+  index: true,
+  element: <HomePage />,
 };
 
 export const router = createBrowserRouter([
@@ -100,7 +92,8 @@ export const router = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
-      layoutRouter      
-    ],
+      homeRouter,
+      adminRouter,
+      ...authenticationRouter ]
   },
 ]);

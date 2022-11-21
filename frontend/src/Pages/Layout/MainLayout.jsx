@@ -1,29 +1,28 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import React from "react";
 import "./MainLayout.css";
-import nashLogo from "../../Components/Logo/nashLogo.jpg";
+import nashLogo from "../../Assets/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
-import { useEffect, useState } from "react";
+import { CustomModal } from "../../Components";
 
-export function MainLayout() {
+export function MainLayout(props) {
   const location = useLocation();
-
+  const navigate = useNavigate();
   const { Header, Content, Footer, Sider } = Layout;
 
-  const [current, setCurrent] = useState(location.pathname);
+  const adminPages = [
+    { name: "Manage User", path: "/admin/user-management" },
+    { name: "Manage Asset", path: "/admin/asset-management" },
+    { name: "Manage Assignment", path: "/admin/assignment-management" },
+    {
+      name: "Manage Returning",
+      path: "/admin/returning-request-management",
+    },
+    { name: "Report", path: "/admin/report" },
+  ];
 
-  useEffect(() => {
-    if (location) {
-      if (current !== location.pathname) {
-        setCurrent(location.pathname);
-      }
-    }
-  }, [location, current]);
-
-  function handleClick(e) {
-    setCurrent(e.key);
-  }
+  const staffPages = [];
 
   return (
     <div>
@@ -61,34 +60,37 @@ export function MainLayout() {
               className="menuSider"
               theme="light"
               mode="inline"
-              defaultSelectedKeys={[current]}
-              onClick={handleClick}
+              selectedKeys={location.pathname}
             >
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>
               </Menu.Item>
-              <Menu.Item className="menuItem" key="/user-management">
-                <Link to="/user-management">Manage User</Link>
-              </Menu.Item>
-              <Menu.Item className="menuItem" key="/asset-management">
-                <Link to="/asset-management">Manage Asset</Link>
-              </Menu.Item>
-              <Menu.Item className="menuItem" key="/assignment-management">
-                <Link to="/assignment-management">Manage Assignment</Link>
-              </Menu.Item>
-              <Menu.Item
-                className="menuItem"
-                key="/returning-request-management"
-              >
-                <Link to="/returning-request-management">
-                  Request for Returning
-                </Link>
-              </Menu.Item>
-              <Menu.Item className="menuItem" key="/report">
-                <Link to="/report">Report</Link>
+
+              {adminPages.map((page) => (
+                <Menu.Item className="menuItem" key={page.path}>
+                  <Link to={page.path}>{page.name}</Link>
+                </Menu.Item>
+              ))}
+
+              {staffPages.map((page) => (
+                <Menu.Item className="menuItem" key={page.path}>
+                  <Link to={page.path}>{page.name}</Link>
+                </Menu.Item>
+              ))}
+
+              <Menu.Item className="menuItem" key="modal">
+                <CustomModal
+                  buttonText="Login"
+                  modalTitle="Login"
+                  onClick={() => { navigate("/login") }}
+                  onClose={() => { navigate(-1) }}
+                  location={location}>
+                  <Outlet />
+                </CustomModal>
               </Menu.Item>
             </Menu>
           </Sider>
+
           <Content
             style={{
               margin: "24px 16px 0",
@@ -101,7 +103,7 @@ export function MainLayout() {
                 minHeight: 600,
               }}
             >
-              <Outlet />
+              {props.children}
             </div>
           </Content>
         </Layout>

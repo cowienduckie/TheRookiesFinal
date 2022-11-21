@@ -1,2 +1,2 @@
 export { Modals } from "./Modal";
-export { Modal } from "./Modal/Modal";
+export { CustomModal } from "./Modal/CustomModal";
