@@ -7,7 +7,6 @@ namespace Application.DTOs.Users.ChangePassword
         [Required]
         public Guid Id { get; set; }
 
-        [Required]
         public string OldPassword { get; set; } = null!;
 
         [Required]

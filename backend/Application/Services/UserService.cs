@@ -48,9 +48,15 @@ public class UserService : BaseService, IUserService
 
         var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
 
-        if (user == null || user.HashedPassword != HashStringHelper.HashString(requestModel.OldPassword))
+        if (user == null || user.HashedPassword != HashStringHelper.HashString(requestModel.OldPassword)
+            || user.HashedPassword == HashStringHelper.HashString(requestModel.NewPassword))
         {
             return false;
+        }
+
+        if (!user.IsFirstTimeLogIn)
+        {
+            user.IsFirstTimeLogIn = true;
         }
 
         user.HashedPassword = HashStringHelper.HashString(requestModel.NewPassword);
