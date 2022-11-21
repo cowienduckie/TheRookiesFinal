@@ -19,13 +19,12 @@ export function ChangePasswordPage() {
   };
   return (
     <>
-      <Modal
-        title="Change Password"
-        open={isModalOpen}
-        footer={false}
-      >
-        <p>This is the first time you logged in.<br/>
-        You have to change your password to continue.</p>
+      <Modal title="Change Password" open={isModalOpen} footer={false}>
+        <p>
+          This is the first time you logged in.
+          <br />
+          You have to change your password to continue.
+        </p>
         <Form
           name="basic"
           labelCol={{
@@ -60,7 +59,7 @@ export function ChangePasswordPage() {
               span: 16,
             }}
           >
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" danger>
               Save
             </Button>
           </Form.Item>

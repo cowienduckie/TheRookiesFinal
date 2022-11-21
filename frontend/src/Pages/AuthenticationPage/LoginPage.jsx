@@ -1,5 +1,10 @@
 import React, { useContext, useState } from "react";
-import { LockOutlined, UserOutlined,EyeTwoTone,EyeInvisibleOutlined } from "@ant-design/icons";
+import {
+  LockOutlined,
+  UserOutlined,
+  EyeTwoTone,
+  EyeInvisibleOutlined,
+} from "@ant-design/icons";
 import { Button, Form, Input, Modal } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { redirect, useNavigate } from "react-router-dom";
@@ -24,7 +29,12 @@ export function LoginPage() {
     logIn(values)
       .then((userInfo) => {
         authContext.setAuthInfo(userInfo.role, userInfo.token);
-        navigate("/");
+        console.log(userInfo);
+        if (userInfo.isFirstTimeLogin===false) {
+          navigate("/change-password")
+        }else{
+          navigate("/");
+        }
       })
       .catch((error) => {
         throw new Response("", {
@@ -63,7 +73,6 @@ export function LoginPage() {
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder="Username"
-              
             />
           </Form.Item>
           <Form.Item
@@ -79,7 +88,9 @@ export function LoginPage() {
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
               placeholder="Password"
-              iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
             />
           </Form.Item>
           <Form.Item>
