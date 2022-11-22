@@ -38,7 +38,10 @@ function App() {
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
         <Route path="/change-password" element={<ChangePasswordPage />} />
-        <Route path="/change-password-first-time" element={<ChangePasswordFirstTimePage />} />
+        <Route
+          path="/change-password-first-time"
+          element={<ChangePasswordFirstTimePage />}
+        />
         <Route path="/logout" element={<LogoutPage />} />
       </Route>
     </Routes>

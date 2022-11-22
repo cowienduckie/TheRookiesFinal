@@ -41,7 +41,7 @@ export function MainLayout() {
           style={{
             padding: 0,
             backgroundColor: "crimson",
-            minHeight: 65
+            minHeight: 65,
           }}
         >
           <DropdownLayout />
@@ -66,11 +66,7 @@ export function MainLayout() {
               <h4 className="title"> Online Asset Management</h4>
             </div>
 
-            <Menu
-              theme="light"
-              mode="inline"
-              selectedKeys={location.pathname}
-            >
+            <Menu theme="light" mode="inline" selectedKeys={location.pathname}>
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>
               </Menu.Item>

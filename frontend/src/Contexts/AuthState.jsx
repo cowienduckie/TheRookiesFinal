@@ -13,7 +13,7 @@ export function AuthState(props) {
   const initialState = {
     authenticated: false,
     userRole: null,
-    username: null
+    username: null,
   };
   const token = localStorage.getItem(TOKEN_KEY);
   const userRole = localStorage.getItem(ROLE_KEY);
@@ -33,7 +33,12 @@ export function AuthState(props) {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const setAuthInfo = (username, userRole, token) => {
-    dispatch({ type: SET_AUTH, username: username, userRole: userRole, token: token });
+    dispatch({
+      type: SET_AUTH,
+      username: username,
+      userRole: userRole,
+      token: token,
+    });
   };
 
   const clearAuthInfo = () => {

@@ -2,6 +2,14 @@ import { Button, Form, Input, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../Apis/Accounts";
 import { TOKEN_KEY } from "../../Constants/SystemConstants";
+import {
+  PASSWORD_REQUIRED,
+  PASSWORD_AT_LEAST_ONE_DIGIT,
+  PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
+  PASSWORD_AT_LEAST_ONE_LOWERCASE,
+  PASSWORD_AT_LEAST_ONE_UPPERCASE,
+  PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+} from "../../Constants/ErrorMessages";
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
@@ -10,7 +18,7 @@ export function ChangePasswordFirstTimePage() {
     console.log(values);
     console.log(localStorage.getItem(TOKEN_KEY));
 
-    await changePassword({...values});
+    await changePassword({ ...values });
 
     navigate("/");
   };
@@ -47,7 +55,28 @@ export function ChangePasswordFirstTimePage() {
           rules={[
             {
               required: true,
-              message: "Please input your password!",
+              message: PASSWORD_REQUIRED,
+            },
+            {
+              pattern: /^(?=.*[0-9])[A-Za-z0-9!*_@#$%^&+= ]*$/,
+              message: PASSWORD_AT_LEAST_ONE_DIGIT,
+            },
+            {
+              pattern: /^(?=.*[a-z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
+              message: PASSWORD_AT_LEAST_ONE_LOWERCASE,
+            },
+            {
+              pattern: /^(?=.*[A-Z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
+              message: PASSWORD_AT_LEAST_ONE_UPPERCASE,
+            },
+            {
+              pattern: /^(?=.*[!*_@#$%^&+= ]).*$/,
+              message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
+            },
+            {
+              min: 8,
+              max: 16,
+              message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
             },
           ]}
         >

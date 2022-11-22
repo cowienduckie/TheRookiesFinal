@@ -13,7 +13,7 @@ const setAuthInfo = (username, role, token, state) => {
   const userInfo = {
     userRole: state.userRole,
     authenticated: state.authenticated,
-    username: state.username
+    username: state.username,
   };
 
   if (role === ADMIN || role === STAFF) {
@@ -29,7 +29,7 @@ const setAuthInfo = (username, role, token, state) => {
     ...state,
     userRole: userInfo.userRole,
     authenticated: userInfo.authenticated,
-    username: userInfo.username
+    username: userInfo.username,
   };
 };
 
@@ -37,7 +37,7 @@ const clearAuthInfo = (state) => {
   const userInfo = {
     userRole: state.userRole,
     authenticated: state.authenticated,
-    username: state.username
+    username: state.username,
   };
 
   userInfo.userRole = null;
@@ -51,7 +51,7 @@ const clearAuthInfo = (state) => {
     ...state,
     userRole: userInfo.userRole,
     authenticated: userInfo.authenticated,
-    username: userInfo.username
+    username: userInfo.username,
   };
 };
 

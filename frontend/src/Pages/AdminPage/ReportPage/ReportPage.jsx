@@ -3,5 +3,5 @@ export function ReportPage() {
     <>
       <h1>Report Page</h1>
     </>
-  )
+  );
 }

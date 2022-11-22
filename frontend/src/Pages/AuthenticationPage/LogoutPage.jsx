@@ -33,7 +33,9 @@ export function LogoutPage() {
             <Button type="primary" onClick={onLogOut} danger>
               Log Out
             </Button>
-            <Button onClick={handleCancel} danger>Cancel</Button>
+            <Button onClick={handleCancel} danger>
+              Cancel
+            </Button>
           </>
         }
       >

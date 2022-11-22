@@ -44,11 +44,9 @@ export function DropdownLayout() {
             </div>
           </Dropdown>
         ) : (
-          <div className="dropdown">
-            <Link to="/login" state={{ background: location }}>
-              Login
-            </Link>
-          </div>
+          <Link to="/login" state={{ background: location }}>
+            Login
+          </Link>
         )}
       </Col>
     </Row>

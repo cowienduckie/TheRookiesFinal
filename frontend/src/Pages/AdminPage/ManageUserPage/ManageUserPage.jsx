@@ -3,5 +3,5 @@ export function ManageUserPage() {
     <>
       <h1>User Management Page</h1>
     </>
-  )
+  );
 }

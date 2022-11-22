@@ -20,10 +20,14 @@ export function LoginPage() {
   const onFinish = (values) => {
     logIn(values)
       .then((userInfo) => {
-        authContext.setAuthInfo(userInfo.username, userInfo.role, userInfo.token);
+        authContext.setAuthInfo(
+          userInfo.username,
+          userInfo.role,
+          userInfo.token
+        );
 
         if (userInfo.isFirstTimeLogin) {
-          navigate("/")
+          navigate("/");
           navigate("/change-password-first-time");
         } else {
           navigate("/");
