@@ -9,6 +9,7 @@ import { Button, Form, Input, Modal } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../Apis/AuthenticationApis";
+import { USERNAME_REQUIRED } from "../../Constants/ErrorMessages";
 
 export function LoginPage() {
   const authContext = useContext(AuthContext);
@@ -54,7 +55,7 @@ export function LoginPage() {
           rules={[
             {
               required: true,
-              message: "Please input your Username!",
+              message: USERNAME_REQUIRED,
             },
           ]}
         >

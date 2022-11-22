@@ -39,9 +39,7 @@ export function DropdownLayout() {
       <Col span={21}></Col>
       <Col span={2}>
         <Dropdown
-          menu={{
-            items,
-          }}
+          menu={{items}}
           trigger={["click"]}
         >
           <div className="dropdown">

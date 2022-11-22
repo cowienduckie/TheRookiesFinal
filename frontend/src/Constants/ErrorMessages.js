@@ -1,0 +1,1 @@
+export const USERNAME_REQUIRED = "Please input your Username!";

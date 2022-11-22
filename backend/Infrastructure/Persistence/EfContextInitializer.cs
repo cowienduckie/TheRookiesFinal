@@ -1,4 +1,6 @@
-﻿using Domain.Shared.Helpers;
+﻿using Domain.Entities.Users;
+using Domain.Shared.Enums;
+using Domain.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
