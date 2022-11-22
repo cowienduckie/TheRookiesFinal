@@ -1,38 +1,38 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { Layout, Menu } from 'antd'
-import React, { useContext } from 'react'
-import './MainLayout.css'
-import nashLogo from '../../Assets/nashLogo.jpg'
-import { DropdownLayout } from './DropdownLayout'
-import { AuthContext } from '../../Contexts/AuthContext'
-import { ADMIN, STAFF } from '../../Constants/SystemConstants'
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { Layout, Menu } from "antd";
+import React, { useContext } from "react";
+import "./MainLayout.css";
+import nashLogo from "../../Assets/nashLogo.jpg";
+import { DropdownLayout } from "./DropdownLayout";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { ADMIN, STAFF } from "../../Constants/SystemConstants";
 
 export function MainLayout() {
-  const location = useLocation()
-  const authContext = useContext(AuthContext)
-  const { Header, Content, Footer, Sider } = Layout
+  const location = useLocation();
+  const authContext = useContext(AuthContext);
+  const { Header, Content, Sider } = Layout;
 
   const adminPages = [
-    { name: 'Manage User', path: '/admin/manage-user' },
-    { name: 'Manage Asset', path: '/admin/manage-asset' },
-    { name: 'Manage Assignment', path: '/admin/manage-assignment' },
+    { name: "Manage User", path: "/admin/manage-user" },
+    { name: "Manage Asset", path: "/admin/manage-asset" },
+    { name: "Manage Assignment", path: "/admin/manage-assignment" },
     {
-      name: 'Manage Returning',
-      path: '/admin/manage-returning',
+      name: "Manage Returning",
+      path: "/admin/manage-returning",
     },
-    { name: 'Report', path: '/admin/report' },
-  ]
+    { name: "Report", path: "/admin/report" },
+  ];
 
-  const staffPages = []
+  const staffPages = [];
 
   return (
     <div>
       <Layout>
         <Header
-          className="header"
           style={{
             padding: 0,
-            backgroundColor: 'red',
+            backgroundColor: "crimson",
+            minHeight: 65
           }}
         >
           <DropdownLayout />
@@ -44,10 +44,10 @@ export function MainLayout() {
             collapsedWidth="0"
             theme="light"
             onBreakpoint={(broken) => {
-              console.log(broken)
+              console.log(broken);
             }}
             onCollapse={(collapsed, type) => {
-              console.log(collapsed, type)
+              console.log(collapsed, type);
             }}
           >
             <div className="divLogo">
@@ -58,7 +58,6 @@ export function MainLayout() {
             </div>
 
             <Menu
-              className="menuSider"
               theme="light"
               mode="inline"
               selectedKeys={location.pathname}
@@ -87,7 +86,7 @@ export function MainLayout() {
 
           <Content
             style={{
-              margin: '24px 16px 0',
+              margin: "24px 16px 0",
             }}
           >
             <div
@@ -105,13 +104,13 @@ export function MainLayout() {
         <Footer
           className="footerLayout"
           style={{
-            backgroundColor: 'red',
-            color: 'white',
+            backgroundColor: "red",
+            color: "white",
           }}
         >
           NashTech2022 Part of Nash Squared.
         </Footer>
       </Layout>
     </div>
-  )
+  );
 }

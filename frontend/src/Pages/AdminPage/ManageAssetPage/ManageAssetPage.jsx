@@ -3,5 +3,5 @@ export function ManageAssetPage() {
     <>
       <h1>Managing Asset Page</h1>
     </>
-  )
+  );
 }

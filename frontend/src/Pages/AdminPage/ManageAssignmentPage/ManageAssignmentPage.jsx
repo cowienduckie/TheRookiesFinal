@@ -3,5 +3,5 @@ export function ManageAssignmentPage() {
     <>
       <h1>Managing Assignment Page</h1>
     </>
-  )
+  );
 }
