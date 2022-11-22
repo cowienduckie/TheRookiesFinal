@@ -1,4 +1,6 @@
-﻿using Domain.Shared.Helpers;
+﻿using Domain.Entities.Users;
+using Domain.Shared.Enums;
+using Domain.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -45,27 +47,24 @@ public class EfContextInitializer
 
     private async Task TrySeedAsync()
     {
-        //if (!_context.Users.Any())
-        //{
-        //    _context.Users.Add(new User
-        //    {
-        //        Username = "admin",
-        //        HashedPassword = HashStringHelper.HashString("admin"),
-        //        Role = UserRoles.Admin
-        //    });
+        if (!_context.Users.Any())
+        {
+            _context.Users.Add(new User
+            {
+                Username = "admin",
+                HashedPassword = HashStringHelper.HashString("admin"),
+                Role = UserRoles.Admin
+            });
 
-        //    _context.Users.Add(new User
-        //    {
-        //        Username = "staff",
-        //        HashedPassword = HashStringHelper.HashString("staff"),
-        //        Role = UserRoles.Staff
-        //    });
+            _context.Users.Add(new User
+            {
+                Username = "staff",
+                HashedPassword = HashStringHelper.HashString("staff"),
+                Role = UserRoles.Staff
+            });
 
-        //    await _context.SaveChangesAsync();
-        //}
+            await _context.SaveChangesAsync();
+        }
 
-        //var userdat = _context.Users.FirstOrDefault(u => u.Username == "dat");
-        //userdat.HashedPassword = HashStringHelper.HashString("123");
-        //await _context.SaveChangesAsync();
     }
 }
