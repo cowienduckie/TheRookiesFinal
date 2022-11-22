@@ -11,6 +11,12 @@ import {
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
 } from "../../Constants/ErrorMessages";
 
+const titleStyles = {
+  paddingLeft: "40px",
+  color: "#eb1416",
+  fontWeight: "700",
+};
+
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
 
@@ -28,7 +34,13 @@ export function ChangePasswordFirstTimePage() {
   };
 
   return (
-    <Modal title="Change Password" open={true} closable={false} footer={false}>
+    <Modal
+      title={<p style={titleStyles}>Change Password</p>}
+      open={true}
+      closable={false}
+      footer={false}
+      bodyStyle={{ padding: "0 40px" }}
+    >
       <p>
         This is the first time you logged in.
         <br />
@@ -36,12 +48,6 @@ export function ChangePasswordFirstTimePage() {
       </p>
       <Form
         name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
         initialValues={{
           remember: true,
         }}
@@ -82,12 +88,7 @@ export function ChangePasswordFirstTimePage() {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
+        <Form.Item style={{ textAlign: "right" }}>
           <Button type="primary" htmlType="submit" danger>
             Save
           </Button>

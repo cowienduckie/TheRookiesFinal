@@ -47,8 +47,8 @@ public class EfContextInitializer
 
     private async Task TrySeedAsync()
     {
-        //if (!_context.Users.Any())
-        //{
+        // if (!_context.Users.Any())
+        // {
         //    _context.Users.Add(new User
         //    {
         //        Username = "admin",
@@ -64,10 +64,10 @@ public class EfContextInitializer
         //    });
 
         //    await _context.SaveChangesAsync();
-        //}
+        // }
 
-        //var userdat = _context.Users.FirstOrDefault(u => u.Username == "dat");
-        //userdat.HashedPassword = HashStringHelper.HashString("123");
-        //await _context.SaveChangesAsync();
+        // var userdat = _context.Users.FirstOrDefault(u => u.Username == "dat");
+        // userdat.HashedPassword = HashStringHelper.HashString("123");
+        // await _context.SaveChangesAsync();
     }
 }
