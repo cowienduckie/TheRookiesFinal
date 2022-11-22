@@ -26,12 +26,12 @@ namespace API.Controllers
 
                 var response = await _userService.ChangePasswordAsync(requestModel);
 
-                if (!response)
+                if (!response.IsSuccess)
                 {
-                    return BadRequest();
+                    return BadRequest(response);
                 }
 
-                return Ok();
+                return Ok(response);
             }
             catch (Exception exception)
             {
