@@ -7,6 +7,7 @@ namespace Infrastructure.Persistence;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly EfContext _dbContext;
+
     public UnitOfWork(EfContext dbContext)
     {
         _dbContext = dbContext;
