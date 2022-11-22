@@ -11,12 +11,12 @@ export async function callApi(method, url, data = null) {
     data: data,
   })
     .then((result) => {
-      response = result.data;
+      response = result.data.data;
     })
     .catch((error) => {
       throw new Response("", {
         status: error.response.status,
-        statusText: error.message,
+        statusText: error.response.message,
       });
     });
 

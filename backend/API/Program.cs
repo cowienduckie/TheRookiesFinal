@@ -1,19 +1,19 @@
 using API.Extensions;
+using API.Middlewares;
 using Application;
 using Infrastructure;
 using Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddWebUiServices();
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddWebUiServices();
 
 var app = builder.Build();
 
@@ -26,7 +26,7 @@ if (app.Environment.IsDevelopment())
     {
         var initializer = scope.ServiceProvider.GetRequiredService<EfContextInitializer>();
 
-        await initializer.InitialiseAsync();
+        await initializer.InitializeAsync();
         await initializer.SeedAsync();
     }
 }
@@ -40,6 +40,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCors("CorsPolicy");
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

@@ -1,1 +1,0 @@
-export {ChangePasswordModal} from './Modals/ChangePasswordModal'

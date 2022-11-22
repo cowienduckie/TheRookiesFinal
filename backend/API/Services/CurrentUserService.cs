@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using Application.Common.Models;
+using Domain.Shared.Constants;
 using Infrastructure.Common.Interfaces;
 
 namespace API.Services;
@@ -12,5 +13,9 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+    public string? UserId => ((UserInternalModel?) _httpContextAccessor
+        .HttpContext
+        ?.Items[Settings.CurrentUserContextKey])
+        ?.Id
+        .ToString();
 }
