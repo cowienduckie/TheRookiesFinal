@@ -13,9 +13,9 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? UserId => ((UserInternalModel?) _httpContextAccessor
-        .HttpContext
-        ?.Items[Settings.CurrentUserContextKey])
-        ?.Id
-        .ToString();
+    public string? UserId => (_httpContextAccessor
+                                .HttpContext
+                                ?.Items[Settings.CurrentUserContextKey] as UserInternalModel)
+                                ?.Id
+                                .ToString();
 }
