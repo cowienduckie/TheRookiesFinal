@@ -1,7 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import React, { useContext, useEffect } from "react";
-import "./MainLayout.css";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
 import { AuthContext } from "../../Contexts/AuthContext";
@@ -13,11 +12,10 @@ export function MainLayout() {
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
-    if (!authContext.authenticated)
-    {
+    if (!authContext.authenticated) {
       navigate("/login");
     }
-  })
+  });
 
   const { Header, Content, Sider } = Layout;
 
@@ -36,37 +34,27 @@ export function MainLayout() {
 
   return (
     <div>
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            backgroundColor: "crimson",
-            minHeight: 65,
-          }}
-        >
+      <Layout className="min-h-screen">
+        <Header className="py-0 px-10 bg-red-700 min-h-fit flex flex-row justify-end">
           <DropdownLayout />
         </Header>
-        <Layout className="LayoutContent">
+        <Layout className="min-w-full">
           <Sider
-            className="siderLayout"
-            breakpoint="lg"
+            className="bg-white min-w-min p-5"
+            width="15%"
+            breakpoint="xl"
             collapsedWidth="0"
             theme="light"
-            onBreakpoint={(broken) => {
-              console.log(broken);
-            }}
-            onCollapse={(collapsed, type) => {
-              console.log(collapsed, type);
-            }}
           >
-            <div className="divLogo">
-              <img alt="logoNashTech" src={nashLogo} className="logo"></img>
-            </div>
-            <div>
-              <h4 className="title"> Online Asset Management</h4>
-            </div>
-
-            <Menu theme="light" mode="inline" selectedKeys={location.pathname}>
+            <img className="m-auto mt-5 w-3/4" src={nashLogo} alt="Nash-Logo" />
+            <h1 className="text-red-600 font-bold text-xl text-center mb-8">
+              Online Asset Management
+            </h1>
+            <Menu
+              theme="light"
+              mode="vertical"
+              selectedKeys={location.pathname}
+            >
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>
               </Menu.Item>
@@ -89,20 +77,8 @@ export function MainLayout() {
             </Menu>
           </Sider>
 
-          <Content
-            style={{
-              margin: "24px 16px 0",
-            }}
-          >
-            <div
-              className="site-layout-background"
-              style={{
-                padding: 24,
-                minHeight: 600,
-              }}
-            >
-              <Outlet />
-            </div>
+          <Content className="bg-white min-h-full p-10">
+            <Outlet />
           </Content>
         </Layout>
       </Layout>

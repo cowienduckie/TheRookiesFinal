@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Divider, Form, Input, Modal } from "antd";
 import { changePassword } from "../../Apis/Accounts";
-import { TOKEN_KEY } from "../../Constants/SystemConstants";
 import { AuthContext } from "../../Contexts/AuthContext";
 import {
   PASSWORD_REQUIRED,
