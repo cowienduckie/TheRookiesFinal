@@ -36,22 +36,32 @@ public class UserService : BaseService, IUserService
 
     public async Task<bool> ChangePasswordAsync(ChangePasswordRequest requestModel)
     {
-        var userRepository = UnitOfWork.AsyncRepository<User>();
-
-        var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
-
-        if (user == null || user.HashedPassword != HashStringHelper.HashString(requestModel.OldPassword)
-            || user.HashedPassword == HashStringHelper.HashString(requestModel.NewPassword))
+        if (requestModel.Id == null)
         {
             return false;
         }
 
-        if (!user.IsFirstTimeLogIn)
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
+
+        if (user == null)
         {
-            user.IsFirstTimeLogIn = true;
+            return false;
+        }
+
+        if (!user.IsFirstTimeLogIn &&
+            !HashStringHelper.IsValid(requestModel.OldPassword, user.HashedPassword))
+        {
+            return false;
         }
 
         user.HashedPassword = HashStringHelper.HashString(requestModel.NewPassword);
+
+        if (user.IsFirstTimeLogIn)
+        {
+            user.IsFirstTimeLogIn = false;
+        }
 
         await userRepository.UpdateAsync(user);
         await UnitOfWork.SaveChangesAsync();

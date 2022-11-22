@@ -1,15 +1,13 @@
 ﻿using API.Attributes;
-using Application.Common.Models;
-using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
 using Application.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [Route("api/accounts")]
     [ApiController]
+    [Authorize]
     public class AccountsController : BaseController
     {
         private readonly IUserService _userService;
@@ -19,21 +17,21 @@ namespace API.Controllers
             _userService = userService;
         }
 
-        [Route("password")]
-        [HttpPut]
-        [Authorize]
-        public async Task<ActionResult<bool>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
+        [HttpPut("password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest requestModel)
         {
             try
             {
+                requestModel.Id = CurrentUser?.Id;
+
                 var response = await _userService.ChangePasswordAsync(requestModel);
 
                 if (!response)
                 {
-                    return BadRequest(response);
+                    return BadRequest();
                 }
 
-                return Ok(response);
+                return Ok();
             }
             catch (Exception exception)
             {

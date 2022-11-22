@@ -4,10 +4,9 @@ namespace Application.DTOs.Users.ChangePassword
 {
     public class ChangePasswordRequest
     {
-        [Required]
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
-        public string OldPassword { get; set; } = null!;
+        public string OldPassword { get; set; } = string.Empty;
 
         [Required]
         public string NewPassword { get; set; } = null!;
