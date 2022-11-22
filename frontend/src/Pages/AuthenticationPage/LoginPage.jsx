@@ -5,7 +5,7 @@ import {
   EyeTwoTone,
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../Apis/AuthenticationApis";
@@ -14,7 +14,7 @@ import { USERNAME_REQUIRED } from "../../Constants/ErrorMessages";
 export function LoginPage() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(true);
+
   const [componentDisabled, setComponentDisabled] = useState(false);
 
   const onFinish = (values) => {
@@ -37,20 +37,8 @@ export function LoginPage() {
       });
   };
 
-  const handleOnClose = () => {
-    navigate("/");
-    setIsModalOpen(false);
-  };
-
   return (
-    <Modal
-      title="Login"
-      open={isModalOpen}
-      footer={null}
-      onCancel={handleOnClose}
-      wrapClassName="modal-login"
-    >
-      <Form onFinish={onFinish}>
+    <Form onFinish={onFinish}>
         <Form.Item
           name="username"
           rules={[
@@ -92,11 +80,7 @@ export function LoginPage() {
           >
             Log in
           </Button>
-          <Button danger onClick={handleOnClose}>
-            Cancel
-          </Button>
         </Form.Item>
       </Form>
-    </Modal>
   );
 }

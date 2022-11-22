@@ -1,6 +1,6 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./MainLayout.css";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
@@ -9,7 +9,16 @@ import { ADMIN, STAFF } from "../../Constants/SystemConstants";
 
 export function MainLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!authContext.authenticated)
+    {
+      navigate("/login");
+    }
+  })
+
   const { Header, Content, Sider } = Layout;
 
   const adminPages = [
@@ -100,16 +109,6 @@ export function MainLayout() {
             </div>
           </Content>
         </Layout>
-
-        <Footer
-          className="footerLayout"
-          style={{
-            backgroundColor: "red",
-            color: "white",
-          }}
-        >
-          NashTech2022 Part of Nash Squared.
-        </Footer>
       </Layout>
     </div>
   );

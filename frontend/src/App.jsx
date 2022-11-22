@@ -20,7 +20,8 @@ function App() {
   const background = location.state && location.state.background;
 
   const mainRoutes = (
-    <Routes location={background || location}>
+    <Routes location={background || location}>      
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<MainLayout />}>
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
@@ -36,7 +37,6 @@ function App() {
           />
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/change-password" element={<ChangePasswordPage />} />
         <Route path="/change-password-first-time" element={<ChangePasswordFirstTimePage />} />
         <Route path="/logout" element={<LogoutPage />} />
@@ -46,7 +46,6 @@ function App() {
 
   const modalRoutes = (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
       <Route path="/change-password" element={<ChangePasswordPage />} />      
       <Route path="/change-password-first-time" element={<ChangePasswordFirstTimePage />} />
       <Route path="/logout" element={<LogoutPage />} />
