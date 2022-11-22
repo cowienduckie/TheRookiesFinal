@@ -10,7 +10,7 @@ import { ADMIN, STAFF } from "../../Constants/SystemConstants";
 export function MainLayout() {
   const location = useLocation();
   const authContext = useContext(AuthContext);
-  const { Header, Content, Footer, Sider } = Layout;
+  const { Header, Content, Sider } = Layout;
 
   const adminPages = [
     { name: "Manage User", path: "/admin/manage-user" },
@@ -29,10 +29,10 @@ export function MainLayout() {
     <div>
       <Layout>
         <Header
-          className="header"
           style={{
             padding: 0,
-            backgroundColor: "red",
+            backgroundColor: "crimson",
+            minHeight: 65
           }}
         >
           <DropdownLayout />
@@ -58,7 +58,6 @@ export function MainLayout() {
             </div>
 
             <Menu
-              className="menuSider"
               theme="light"
               mode="inline"
               selectedKeys={location.pathname}
