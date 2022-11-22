@@ -1,17 +1,29 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import "./MainLayout.css";
-import nashLogo from "../../Components/Logo/nashLogo.jpg";
+import nashLogo from "../../Assets/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
-import { useState } from "react";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { ADMIN, STAFF } from "../../Constants/SystemConstants";
 
 export function MainLayout() {
   const location = useLocation();
+  const authContext = useContext(AuthContext);
+  const { Header, Content, Footer, Sider } = Layout;
 
-  const { Header, Content, Sider } = Layout;
+  const adminPages = [
+    { name: "Manage User", path: "/admin/manage-user" },
+    { name: "Manage Asset", path: "/admin/manage-asset" },
+    { name: "Manage Assignment", path: "/admin/manage-assignment" },
+    {
+      name: "Manage Returning",
+      path: "/admin/manage-returning",
+    },
+    { name: "Report", path: "/admin/report" },
+  ];
 
-  const [current, ] = useState(location.pathname);
+  const staffPages = [];
 
   return (
     <div>
@@ -49,34 +61,30 @@ export function MainLayout() {
               className="menuSider"
               theme="light"
               mode="inline"
-              defaultSelectedKeys={[current]}
-              selectedKeys={current.pathname}
+              selectedKeys={location.pathname}
             >
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>
               </Menu.Item>
-              <Menu.Item className="menuItem" key="/admin/user-management">
-                <Link to="/admin/user-management">Manage User</Link>
-              </Menu.Item>
-              <Menu.Item className="menuItem" key="/admin/asset-management">
-                <Link to="/admin/asset-management">Manage Asset</Link>
-              </Menu.Item>
-              <Menu.Item className="menuItem" key="/admin/assignment-management">
-                <Link to="/admin/assignment-management">Manage Assignment</Link>
-              </Menu.Item>
-              <Menu.Item
-                className="menuItem"
-                key="/admin/returning-request-management"
-              >
-                <Link to="/admin/returning-request-management">
-                  Request for Returning
-                </Link>
-              </Menu.Item>
-              <Menu.Item className="menuItem" key="/admin/report">
-                <Link to="/admin/report">Report</Link>
-              </Menu.Item>
+
+              {authContext.authenticated &&
+                authContext.userRole === ADMIN &&
+                adminPages.map((page) => (
+                  <Menu.Item className="menuItem" key={page.path}>
+                    <Link to={page.path}>{page.name}</Link>
+                  </Menu.Item>
+                ))}
+
+              {authContext.authenticated &&
+                authContext.userRole === STAFF &&
+                staffPages.map((page) => (
+                  <Menu.Item className="menuItem" key={page.path}>
+                    <Link to={page.path}>{page.name}</Link>
+                  </Menu.Item>
+                ))}
             </Menu>
           </Sider>
+
           <Content
             style={{
               margin: "24px 16px 0",
@@ -93,6 +101,16 @@ export function MainLayout() {
             </div>
           </Content>
         </Layout>
+
+        <Footer
+          className="footerLayout"
+          style={{
+            backgroundColor: "red",
+            color: "white",
+          }}
+        >
+          NashTech2022 Part of Nash Squared.
+        </Footer>
       </Layout>
     </div>
   );
