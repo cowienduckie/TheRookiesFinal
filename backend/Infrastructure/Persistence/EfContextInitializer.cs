@@ -44,23 +44,5 @@ public class EfContextInitializer
 
     private async Task TrySeedAsync()
     {
-        //if (!_context.Users.Any())
-        //{
-        //    _context.Users.Add(new User
-        //    {
-        //        Username = "admin",
-        //        HashedPassword = HashStringHelper.HashString("admin"),
-        //        Role = UserRoles.Admin
-        //    });
-
-        //    _context.Users.Add(new User
-        //    {
-        //        Username = "staff",
-        //        HashedPassword = HashStringHelper.HashString("staff"),
-        //        Role = UserRoles.Staff
-        //    });
-
-        //    await _context.SaveChangesAsync();
-        //}
     }
 }
