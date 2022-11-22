@@ -17,4 +17,5 @@ export {
   LoginPage,
   ChangePasswordPage,
   LogoutPage,
+  ChangePasswordFirstTimePage
 } from "./AuthenticationPage";

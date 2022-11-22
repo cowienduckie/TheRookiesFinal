@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { AuthState } from "./Contexts/AuthState";
 import {
   AdminPage,
+  ChangePasswordFirstTimePage,
   ChangePasswordPage,
   HomePage,
   LoginPage,
@@ -37,6 +38,7 @@ function App() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/change-password" element={<ChangePasswordPage />} />
+        <Route path="/change-password-first-time" element={<ChangePasswordFirstTimePage />} />
         <Route path="/logout" element={<LogoutPage />} />
       </Route>
     </Routes>
@@ -45,7 +47,8 @@ function App() {
   const modalRoutes = (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/change-password" element={<ChangePasswordPage />} />
+      <Route path="/change-password" element={<ChangePasswordPage />} />      
+      <Route path="/change-password-first-time" element={<ChangePasswordFirstTimePage />} />
       <Route path="/logout" element={<LogoutPage />} />
     </Routes>
   );

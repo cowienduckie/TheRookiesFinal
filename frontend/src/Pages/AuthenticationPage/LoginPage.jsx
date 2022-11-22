@@ -22,8 +22,9 @@ export function LoginPage() {
       .then((userInfo) => {
         authContext.setAuthInfo(userInfo.role, userInfo.token);
 
-        if (userInfo.isFirstTimeLogin === false) {
-          navigate("/change-password");
+        if (userInfo.isFirstTimeLogin) {
+          navigate("/")
+          navigate("/change-password-first-time");
         } else {
           navigate("/");
         }
@@ -37,7 +38,7 @@ export function LoginPage() {
   };
 
   const handleOnClose = () => {
-    navigate(-1);
+    navigate("/");
     setIsModalOpen(false);
   };
 

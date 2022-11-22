@@ -1,8 +1,18 @@
 import { Button, Form, Input, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+import { changePassword } from "../../Apis/Accounts";
+import { TOKEN_KEY } from "../../Constants/SystemConstants";
 
 export function ChangePasswordFirstTimePage() {
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const navigate = useNavigate();
+
+  const onFinish = async (values) => {
+    console.log(values);
+    console.log(localStorage.getItem(TOKEN_KEY));
+
+    await changePassword({...values});
+
+    navigate("/");
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -10,7 +20,7 @@ export function ChangePasswordFirstTimePage() {
   };
 
   return (
-    <Modal title="Change Password" open={true} footer={false}>
+    <Modal title="Change Password" open={true} closable={false} footer={false}>
       <p>
         This is the first time you logged in.
         <br />
@@ -33,7 +43,7 @@ export function ChangePasswordFirstTimePage() {
       >
         <Form.Item
           label="New Password"
-          name="password"
+          name="newPassword"
           rules={[
             {
               required: true,
