@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Divider, Form, Input, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../Apis/Accounts";
 import { TOKEN_KEY } from "../../Constants/SystemConstants";
@@ -11,50 +11,24 @@ import {
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
 } from "../../Constants/ErrorMessages";
 
-const titleStyles = {
-  paddingLeft: "40px",
-  color: "#eb1416",
-  fontWeight: "700",
-};
-
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
 
-  const onFinish = async (values) => {
-    console.log(values);
-    console.log(localStorage.getItem(TOKEN_KEY));
+  const [form] = Form.useForm();
 
+  const onFinish = async (values) => {
     await changePassword({ ...values });
 
     navigate("/");
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
   return (
-    <Modal
-      title={<p style={titleStyles}>Change Password</p>}
-      open={true}
-      closable={false}
-      footer={false}
-      bodyStyle={{ padding: "0 40px" }}
-    >
-      <p>
-        This is the first time you logged in.
-        <br />
-        You have to change your password to continue.
-      </p>
-      <Form
-        name="basic"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
-      >
+    <Modal open={true} closable={false} footer={false}>
+      <h1 className="text-2xl text-red-600 font-bold mb-5">Change Password</h1>
+      <Divider />
+      <p className="mb-2">This is the first time you logged in.</p>
+      <p className="mb-6">You have to change your password to continue.</p>
+      <Form form={form} onFinish={onFinish} autoComplete="off">
         <Form.Item
           label="New Password"
           name="newPassword"
@@ -88,10 +62,21 @@ export function ChangePasswordFirstTimePage() {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item style={{ textAlign: "right" }}>
-          <Button type="primary" htmlType="submit" danger>
-            Save
-          </Button>
+        <Form.Item shouldUpdate style={{ textAlign: "right" }}>
+          {() => (
+            <Button
+              type="primary"
+              htmlType="submit"
+              danger
+              disabled={
+                !form.isFieldsTouched(true) ||
+                form.getFieldsError().filter(({ errors }) => errors.length)
+                  .length > 0
+              }
+            >
+              Save
+            </Button>
+          )}
         </Form.Item>
       </Form>
     </Modal>
