@@ -1,5 +1,5 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
-import { AuthState } from './Contexts/AuthState'
+import { Route, Routes, useLocation } from "react-router-dom";
+import { AuthState } from "./Contexts/AuthState";
 import {
   AdminPage,
   ChangePasswordFirstTimePage,
@@ -13,11 +13,11 @@ import {
   ManageRequestForReturningPage,
   ManageUserPage,
   ReportPage,
-} from './Pages'
+} from "./Pages";
 
 function App() {
-  const location = useLocation()
-  const background = location.state && location.state.background
+  const location = useLocation();
+  const background = location.state && location.state.background;
 
   const mainRoutes = (
     <Routes location={background || location}>
@@ -45,7 +45,7 @@ function App() {
         <Route path="/logout" element={<LogoutPage />} />
       </Route>
     </Routes>
-  )
+  );
 
   const modalRoutes = (
     <Routes>
@@ -57,14 +57,14 @@ function App() {
       />
       <Route path="/logout" element={<LogoutPage />} />
     </Routes>
-  )
+  );
 
   return (
     <AuthState>
       {mainRoutes}
       {background && modalRoutes}
     </AuthState>
-  )
+  );
 }
 
-export default App
+export default App;

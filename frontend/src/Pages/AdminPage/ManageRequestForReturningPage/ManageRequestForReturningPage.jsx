@@ -3,5 +3,5 @@ export function ManageRequestForReturningPage() {
     <>
       <h1>Returning Request Page</h1>
     </>
-  )
+  );
 }

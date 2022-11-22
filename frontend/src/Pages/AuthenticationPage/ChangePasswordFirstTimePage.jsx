@@ -1,7 +1,7 @@
-import { Button, Form, Input, Modal } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { changePassword } from '../../Apis/Accounts'
-import { TOKEN_KEY } from '../../Constants/SystemConstants'
+import { Button, Form, Input, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+import { changePassword } from "../../Apis/Accounts";
+import { TOKEN_KEY } from "../../Constants/SystemConstants";
 import {
   PASSWORD_REQUIRED,
   PASSWORD_AT_LEAST_ONE_DIGIT,
@@ -9,23 +9,23 @@ import {
   PASSWORD_AT_LEAST_ONE_LOWERCASE,
   PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
-} from '../../Constants/ErrorMessages'
+} from "../../Constants/ErrorMessages";
 
 export function ChangePasswordFirstTimePage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    console.log(values)
-    console.log(localStorage.getItem(TOKEN_KEY))
+    console.log(values);
+    console.log(localStorage.getItem(TOKEN_KEY));
 
-    await changePassword({ ...values })
+    await changePassword({ ...values });
 
-    navigate('/')
-  }
+    navigate("/");
+  };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo)
-  }
+    console.log("Failed:", errorInfo);
+  };
 
   return (
     <Modal title="Change Password" open={true} closable={false} footer={false}>
@@ -94,5 +94,5 @@ export function ChangePasswordFirstTimePage() {
         </Form.Item>
       </Form>
     </Modal>
-  )
+  );
 }

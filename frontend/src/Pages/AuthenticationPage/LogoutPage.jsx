@@ -1,27 +1,27 @@
-import React, { useState } from 'react'
-import { Modal, Button } from 'antd'
-import { AuthContext } from '../../Contexts/AuthContext'
-import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from "react";
+import { Modal, Button } from "antd";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function LogoutPage() {
-  const authContext = useContext(AuthContext)
-  const [open, setOpen] = useState(true)
-  const navigate = useNavigate()
+  const authContext = useContext(AuthContext);
+  const [open, setOpen] = useState(true);
+  const navigate = useNavigate();
 
   const onLogOut = () => {
-    authContext.clearAuthInfo()
+    authContext.clearAuthInfo();
 
-    navigate('/login')
+    navigate("/login");
 
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   const handleCancel = () => {
-    navigate(-1)
+    navigate(-1);
 
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <>
@@ -42,5 +42,5 @@ export function LogoutPage() {
         <p>Do you want to log out?</p>
       </Modal>
     </>
-  )
+  );
 }

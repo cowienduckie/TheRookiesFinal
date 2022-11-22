@@ -1,21 +1,21 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from "react";
 import {
   LockOutlined,
   UserOutlined,
   EyeTwoTone,
   EyeInvisibleOutlined,
-} from '@ant-design/icons'
-import { Button, Form, Input, Modal } from 'antd'
-import { AuthContext } from '../../Contexts/AuthContext'
-import { useNavigate } from 'react-router-dom'
-import { logIn } from '../../Apis/AuthenticationApis'
-import { USERNAME_REQUIRED } from '../../Constants/ErrorMessages'
+} from "@ant-design/icons";
+import { Button, Form, Input, Modal } from "antd";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { logIn } from "../../Apis/AuthenticationApis";
+import { USERNAME_REQUIRED } from "../../Constants/ErrorMessages";
 
 export function LoginPage() {
-  const authContext = useContext(AuthContext)
-  const navigate = useNavigate()
-  const [isModalOpen, setIsModalOpen] = useState(true)
-  const [componentDisabled] = useState(false)
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [componentDisabled] = useState(false);
 
   const onFinish = (values) => {
     logIn(values)
@@ -23,28 +23,28 @@ export function LoginPage() {
         authContext.setAuthInfo(
           userInfo.username,
           userInfo.role,
-          userInfo.token,
-        )
+          userInfo.token
+        );
 
         if (userInfo.isFirstTimeLogin) {
-          navigate('/')
-          navigate('/change-password-first-time')
+          navigate("/");
+          navigate("/change-password-first-time");
         } else {
-          navigate('/')
+          navigate("/");
         }
       })
       .catch((error) => {
-        throw new Response('', {
+        throw new Response("", {
           status: error.status,
           statusText: error.statusText,
-        })
-      })
-  }
+        });
+      });
+  };
 
   const handleOnClose = () => {
-    navigate('/')
-    setIsModalOpen(false)
-  }
+    navigate("/");
+    setIsModalOpen(false);
+  };
 
   return (
     <Modal
@@ -74,7 +74,7 @@ export function LoginPage() {
           rules={[
             {
               required: true,
-              message: 'Please input your Password!',
+              message: "Please input your Password!",
             },
           ]}
         >
@@ -102,5 +102,5 @@ export function LoginPage() {
         </Form.Item>
       </Form>
     </Modal>
-  )
+  );
 }

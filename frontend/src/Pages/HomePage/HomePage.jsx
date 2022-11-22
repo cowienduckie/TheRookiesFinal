@@ -3,5 +3,5 @@ export function HomePage() {
     <>
       <h1>The Rookies App - Home Page</h1>
     </>
-  )
+  );
 }

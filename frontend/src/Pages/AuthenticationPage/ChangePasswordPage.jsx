@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, Form, Input, Modal } from 'antd'
-import { changePassword } from '../../Apis/Accounts'
-import { TOKEN_KEY } from '../../Constants/SystemConstants'
-import { AuthContext } from '../../Contexts/AuthContext'
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Form, Input, Modal } from "antd";
+import { changePassword } from "../../Apis/Accounts";
+import { TOKEN_KEY } from "../../Constants/SystemConstants";
+import { AuthContext } from "../../Contexts/AuthContext";
 import {
   PASSWORD_REQUIRED,
   PASSWORD_AT_LEAST_ONE_DIGIT,
@@ -11,54 +11,54 @@ import {
   PASSWORD_AT_LEAST_ONE_LOWERCASE,
   PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
-} from '../../Constants/ErrorMessages'
+} from "../../Constants/ErrorMessages";
 
 export function ChangePasswordPage() {
-  const authContext = useContext(AuthContext)
-  const [isModalOpen, setIsModalOpen] = useState(true)
-  const [componentDisabled] = useState(false)
-  const [modalFinished, setModalFinished] = useState(false)
-  const [status, setStatus] = useState()
-  const navigate = useNavigate()
+  const authContext = useContext(AuthContext);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [componentDisabled] = useState(false);
+  const [modalFinished, setModalFinished] = useState(false);
+  const [status, setStatus] = useState();
+  const navigate = useNavigate();
 
   const onLogOut = () => {
-    authContext.clearAuthInfo()
+    authContext.clearAuthInfo();
 
-    navigate('/login')
-  }
+    navigate("/login");
+  };
 
   const handleCancel = () => {
-    navigate('/')
-  }
+    navigate("/");
+  };
 
   const handleClose = () => {
-    setIsModalOpen(false)
-    onLogOut()
-  }
+    setIsModalOpen(false);
+    onLogOut();
+  };
 
   const handleSubmit = () => {
-    setModalFinished(true)
-  }
+    setModalFinished(true);
+  };
 
   const onFinish = async (values) => {
-    console.log(values)
-    console.log(localStorage.getItem(TOKEN_KEY))
+    console.log(values);
+    console.log(localStorage.getItem(TOKEN_KEY));
 
     await changePassword({ ...values })
       .then(() => {
-        setModalFinished(true)
+        setModalFinished(true);
       })
       .catch((error) => {
         if (error) {
-          setStatus('Fail: Invalid old password !')
-          console.log(error)
+          setStatus("Fail: Invalid old password !");
+          console.log(error);
         }
-      })
-  }
+      });
+  };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo)
-  }
+    console.log("Failed:", errorInfo);
+  };
 
   return (
     <Modal
@@ -150,7 +150,7 @@ export function ChangePasswordPage() {
               Cancel
             </Button>
           </Form.Item>
-          <p style={{ color: 'red' }}>{status}</p>
+          <p style={{ color: "red" }}>{status}</p>
         </Form>
       )}
       {modalFinished === true && (
@@ -162,5 +162,5 @@ export function ChangePasswordPage() {
         </div>
       )}
     </Modal>
-  )
+  );
 }
