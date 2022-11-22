@@ -1,12 +1,15 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import "./MainLayout.css";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import { DropdownLayout } from "./DropdownLayout";
+import { AuthContext } from "../../Contexts/AuthContext";
+import { ADMIN, STAFF } from "../../Constants/SystemConstants";
 
 export function MainLayout() {
   const location = useLocation();
+  const authContext = useContext(AuthContext);
   const { Header, Content, Footer, Sider } = Layout;
 
   const adminPages = [
@@ -64,17 +67,21 @@ export function MainLayout() {
                 <Link to="/">Home</Link>
               </Menu.Item>
 
-              {adminPages.map((page) => (
-                <Menu.Item className="menuItem" key={page.path}>
-                  <Link to={page.path}>{page.name}</Link>
-                </Menu.Item>
-              ))}
+              {authContext.authenticated &&
+                authContext.userRole === ADMIN &&
+                adminPages.map((page) => (
+                  <Menu.Item className="menuItem" key={page.path}>
+                    <Link to={page.path}>{page.name}</Link>
+                  </Menu.Item>
+                ))}
 
-              {staffPages.map((page) => (
-                <Menu.Item className="menuItem" key={page.path}>
-                  <Link to={page.path}>{page.name}</Link>
-                </Menu.Item>
-              ))}
+              {authContext.authenticated &&
+                authContext.userRole === STAFF &&
+                staffPages.map((page) => (
+                  <Menu.Item className="menuItem" key={page.path}>
+                    <Link to={page.path}>{page.name}</Link>
+                  </Menu.Item>
+                ))}
             </Menu>
           </Sider>
 
