@@ -5,17 +5,24 @@ import {
   EyeTwoTone,
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Card, Form, Input } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../Apis/AuthenticationApis";
-import { USERNAME_REQUIRED } from "../../Constants/ErrorMessages";
+import nashLogo from "../../Assets/nashLogo.jpg";
+import {
+  INCORRECT_LOGIN,
+  PASSWORD_REQUIRED,
+  USERNAME_REQUIRED,
+} from "../../Constants/ErrorMessages";
 
 export function LoginPage() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [componentDisabled, setComponentDisabled] = useState(false);
+  const [form] = Form.useForm();
+
+  const [isError, setIsError] = useState(false);
 
   const onFinish = (values) => {
     logIn(values)
@@ -27,64 +34,77 @@ export function LoginPage() {
         );
 
         if (userInfo.isFirstTimeLogin) {
-          navigate("/");
           navigate("/change-password-first-time");
         } else {
           navigate("/");
         }
       })
       .catch((error) => {
-        throw new Response("", {
-          status: error.status,
-          statusText: error.statusText,
-        });
+        setIsError(true);
       });
   };
 
   return (
-    <Form onFinish={onFinish}>
-        <Form.Item
-          name="username"
-          rules={[
-            {
-              required: true,
-              message: USERNAME_REQUIRED,
-            },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Username"
-          />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Password!",
-            },
-          ]}
-        >
-          <Input.Password
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-            iconRender={(visible) =>
-              visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-            }
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            danger
-            disabled={componentDisabled}
+    <div className="h-screen w-screen flex align-items-center bg-slate-100">
+      <Card className="m-auto w-3/12 shadow-lg">
+        <img className="w-1/2 m-auto mb-2" src={nashLogo} alt="Nash-Logo" />
+        <Form form={form} layout="vertical" size="large" onFinish={onFinish}>
+          <Form.Item
+            label="Username"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: USERNAME_REQUIRED,
+              },
+            ]}
           >
-            Log in
-          </Button>
-        </Form.Item>
-      </Form>
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Enter username"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: PASSWORD_REQUIRED,
+              },
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Enter password"
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
+            />
+          </Form.Item>
+          <span className="text-red-600 text-sm" hidden={!isError}>
+            {INCORRECT_LOGIN}
+          </span>
+          <Form.Item shouldUpdate>
+            {() => (
+              <Button
+                className="w-full mt-5"
+                type="primary"
+                htmlType="submit"
+                danger
+                disabled={
+                  !form.isFieldsTouched(true) ||
+                  form.getFieldsError().filter(({ errors }) => errors.length)
+                    .length > 0
+                }
+              >
+                LOGIN
+              </Button>
+            )}
+          </Form.Item>
+        </Form>
+      </Card>
+    </div>
   );
 }
