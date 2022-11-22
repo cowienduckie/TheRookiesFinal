@@ -5,7 +5,7 @@ import {
   EyeTwoTone,
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, Space } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../Apis/AuthenticationApis";
@@ -20,10 +20,14 @@ export function LoginPage() {
   const onFinish = (values) => {
     logIn(values)
       .then((userInfo) => {
-        authContext.setAuthInfo(userInfo.username, userInfo.role, userInfo.token);
+        authContext.setAuthInfo(
+          userInfo.username,
+          userInfo.role,
+          userInfo.token
+        );
 
         if (userInfo.isFirstTimeLogin) {
-          navigate("/")
+          navigate("/");
           navigate("/change-password-first-time");
         } else {
           navigate("/");
@@ -44,7 +48,7 @@ export function LoginPage() {
 
   return (
     <Modal
-      title="Login"
+      title={<h2 style={{ textAlign: "center" }}>Login</h2>}
       open={isModalOpen}
       footer={null}
       onCancel={handleOnClose}
@@ -83,18 +87,20 @@ export function LoginPage() {
             }
           />
         </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            danger
-            disabled={componentDisabled}
-          >
-            Log in
-          </Button>
-          <Button danger onClick={handleOnClose}>
-            Cancel
-          </Button>
+        <Form.Item style={{ textAlign: "center" }}>
+          <Space>
+            <Button
+              type="primary"
+              htmlType="submit"
+              danger
+              disabled={componentDisabled}
+            >
+              Log in
+            </Button>
+            <Button danger onClick={handleOnClose}>
+              Cancel
+            </Button>
+          </Space>
         </Form.Item>
       </Form>
     </Modal>
