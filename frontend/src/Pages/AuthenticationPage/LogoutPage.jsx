@@ -25,12 +25,7 @@ export function LogoutPage() {
 
   return (
     <>
-      <Modal
-        className="p-10"
-        open={open}
-        footer={false}
-        closable={false}
-      >
+      <Modal className="p-10" open={open} footer={false} closable={false}>
         <h1 className="text-2xl text-red-600 font-bold mb-5">Are you sure?</h1>
         <Divider />
         <p className="mb-8">Do you want to log out?</p>

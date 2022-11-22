@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Divider, Form, Input, Modal } from "antd";
 import { changePassword } from "../../Apis/Accounts";
 import { TOKEN_KEY } from "../../Constants/SystemConstants";
 import { AuthContext } from "../../Contexts/AuthContext";
@@ -11,14 +11,15 @@ import {
   PASSWORD_AT_LEAST_ONE_LOWERCASE,
   PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+  INCORRECT_OLD_PASSWORD,
 } from "../../Constants/ErrorMessages";
 
 export function ChangePasswordPage() {
   const authContext = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [componentDisabled] = useState(false);
   const [modalFinished, setModalFinished] = useState(false);
-  const [status, setStatus] = useState();
+  const [isError, setIsError] = useState(false);
+  const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const onLogOut = () => {
@@ -41,49 +42,26 @@ export function ChangePasswordPage() {
   };
 
   const onFinish = async (values) => {
-    console.log(values);
-    console.log(localStorage.getItem(TOKEN_KEY));
-
     await changePassword({ ...values })
       .then(() => {
         setModalFinished(true);
       })
       .catch((error) => {
-        if (error) {
-          setStatus("Fail: Invalid old password !");
-          console.log(error);
-        }
+        setIsError(true);
       });
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
   };
 
   return (
     <Modal
-      title="Change Password"
       open={isModalOpen}
       onCancel={handleCancel}
       closable={false}
-      footer={[]}
+      footer={null}
     >
+      <h1 className="text-2xl text-red-600 font-bold mb-5">Change Password</h1>
+      <Divider className="mb-6" />
       {modalFinished === false && (
-        <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
+        <Form form={form} onFinish={onFinish} autoComplete="off">
           <Form.Item
             label="Old Password"
             name="oldPassword"
@@ -130,36 +108,46 @@ export function ChangePasswordPage() {
           >
             <Input.Password />
           </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <Button
-              type="primary"
-              danger
-              disabled={componentDisabled}
-              onSubmit={handleSubmit}
-              htmlType="submit"
-            >
-              Save
-            </Button>
-            <label> </label>
-            <Button danger key="back" onClick={handleCancel}>
-              Cancel
-            </Button>
+          <span className="text-red-600 text-sm" hidden={!isError}>
+            {INCORRECT_OLD_PASSWORD}
+          </span>
+          <Form.Item className="mt-5" shouldUpdate>
+            {() => (
+              <div className="flex flex-row justify-end">
+                <Button
+                  className="mx-2"
+                  type="primary"
+                  danger
+                  onSubmit={handleSubmit}
+                  htmlType="submit"
+                  disabled={
+                    !form.isFieldsTouched(true) ||
+                    form.getFieldsError().filter(({ errors }) => errors.length)
+                      .length > 0
+                  }
+                >
+                  Save
+                </Button>
+                <Button
+                  className="mx-2"
+                  danger
+                  key="back"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
           </Form.Item>
-          <p style={{ color: "red" }}>{status}</p>
         </Form>
       )}
       {modalFinished === true && (
-        <div>
-          <p>Your password has been changed successfully</p>
+        <>
+          <p className="mb-8">Your password has been changed successfully</p>
           <Button danger key="back" onClick={handleClose}>
             Close
           </Button>
-        </div>
+        </>
       )}
     </Modal>
   );
