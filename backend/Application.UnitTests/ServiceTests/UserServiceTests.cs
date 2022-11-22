@@ -152,7 +152,7 @@ public class UserServiceTests
     }
 
     [Test]
-    public async Task AuthenticateAsync_ValidInput_NotFirstTimeLogin_ReturnsSuccessResponseWithData()
+    public async Task AuthenticateAsync_ValidInput_ReturnsSuccessResponseWithData()
     {
         var hashedPassword = HashStringHelper.HashString(PASSWORD);
         var user = new User
@@ -198,74 +198,7 @@ public class UserServiceTests
 
             Assert.That(result.Data?.Role, Is.EqualTo(ROLE.ToString()));
 
-            Assert.That(result.Data?.IsFirstTimeLogin, Is.False);
-
-            Assert.That(result.Data?.Token, Is.Not.Null.And.Not.Empty);
-
-            var userIdFromToken = JwtHelper.ValidateJwtToken(result.Data?.Token);
-
-            Assert.That(userIdFromToken, Is.Not.Null);
-
-            Assert.That(userIdFromToken, Is.EqualTo(UserId));
-        });
-    }
-
-    [Test]
-    public async Task AuthenticateAsync_ValidInput_FirstTimeLogin_ReturnsSuccessResponseWithData()
-    {
-        var hashedPassword = HashStringHelper.HashString(PASSWORD);
-        var user = new User
-        {
-            Id = UserId,
-            Username = USERNAME,
-            HashedPassword = hashedPassword,
-            Role = ROLE,
-            IsFirstTimeLogIn = true
-        };
-
-        _userRepository
-            .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
-
-        _userRepository
-            .Setup(ur => ur.UpdateAsync(It.IsAny<User>()))
-            .ReturnsAsync(It.IsAny<User>());
-
-        _unitOfWork
-            .Setup(ur => ur.SaveChangesAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(It.IsAny<int>());
-
-        var request = new AuthenticationRequest
-        {
-            Username = USERNAME,
-            Password = PASSWORD
-        };
-
-        var result = await _userService.AuthenticateAsync(request);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-
-            Assert.That(result, Is.InstanceOf<Response<AuthenticationResponse>>());
-
-            Assert.That(result.IsSuccess, Is.True);
-
-            Assert.That(result.Message, Is.Null);
-
-            Assert.That(result.Data, Is.Not.Null);
-
-            Assert.That(result.Data, Is.InstanceOf<AuthenticationResponse>());
-
-            Assert.That(result.Data?.Id, Is.EqualTo(UserId));
-
-            Assert.That(result.Data?.Username, Is.EqualTo(USERNAME));
-
-            Assert.That(result.Data?.Role, Is.EqualTo(ROLE.ToString()));
-
-            Assert.That(result.Data?.IsFirstTimeLogin, Is.True);
+            Assert.That(result.Data?.IsFirstTimeLogin, Is.EqualTo(user.IsFirstTimeLogIn));
 
             Assert.That(result.Data?.Token, Is.Not.Null.And.Not.Empty);
 
