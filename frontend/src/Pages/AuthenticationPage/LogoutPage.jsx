@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button } from "antd";
+import { Modal, Button, Divider } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -26,20 +26,22 @@ export function LogoutPage() {
   return (
     <>
       <Modal
-        title="Are you sure"
+        className="p-10"
         open={open}
-        footer={
-          <>
-            <Button type="primary" onClick={onLogOut} danger>
-              Log Out
-            </Button>
-            <Button onClick={handleCancel} danger>
-              Cancel
-            </Button>
-          </>
-        }
+        footer={false}
+        closable={false}
       >
-        <p>Do you want to log out?</p>
+        <h1 className="text-2xl text-red-600 font-bold mb-5">Are you sure?</h1>
+        <Divider />
+        <p className="mb-8">Do you want to log out?</p>
+        <div className="flex flex-row justify-center">
+          <Button className="mx-2" type="primary" onClick={onLogOut} danger>
+            Log Out
+          </Button>
+          <Button className="mx-2" onClick={handleCancel} danger>
+            Cancel
+          </Button>
+        </div>
       </Modal>
     </>
   );
