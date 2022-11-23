@@ -12,6 +12,7 @@ import { logIn } from "../../Apis/AuthenticationApis";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import {
   INCORRECT_LOGIN,
+  PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   PASSWORD_REQUIRED,
   USERNAME_REQUIRED,
 } from "../../Constants/ErrorMessages";
@@ -71,6 +72,11 @@ export function LoginPage() {
               {
                 required: true,
                 message: PASSWORD_REQUIRED,
+              },
+              {
+                min: 8,
+                max: 16,
+                message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
               },
             ]}
           >
