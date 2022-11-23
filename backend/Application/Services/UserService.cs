@@ -38,7 +38,12 @@ public class UserService : BaseService, IUserService
     {
         if (requestModel.Id == null)
         {
-            return new Response(false);
+            return new Response(false, ErrorMessages.BadRequest);
+        }
+
+        if (requestModel.OldPassword == requestModel.NewPassword)
+        {
+            return new Response(false, ErrorMessages.MatchingOldAndNewPassword);
         }
 
         var userRepository = UnitOfWork.AsyncRepository<User>();
@@ -47,13 +52,13 @@ public class UserService : BaseService, IUserService
 
         if (user == null)
         {
-            return new Response(false);
+            return new Response(false, ErrorMessages.BadRequest);
         }
 
         if (!user.IsFirstTimeLogIn &&
             !HashStringHelper.IsValid(requestModel.OldPassword, user.HashedPassword))
         {
-            return new Response(false);
+            return new Response(false, ErrorMessages.WrongOldPassword);
         }
 
         user.HashedPassword = HashStringHelper.HashString(requestModel.NewPassword);
@@ -66,7 +71,7 @@ public class UserService : BaseService, IUserService
         await userRepository.UpdateAsync(user);
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response(true);
+        return new Response(true, "Success");
     }
 
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
