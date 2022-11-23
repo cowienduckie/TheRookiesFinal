@@ -227,7 +227,6 @@ public class UserServiceTests
 
         var request = new ChangePasswordRequest
         {
-            Id = null,
             OldPassword = Constants.Password,
             NewPassword = Constants.Password
         };
@@ -256,7 +255,6 @@ public class UserServiceTests
 
         var request = new ChangePasswordRequest
         {
-            Id = null,
             OldPassword = Constants.Password,
             NewPassword = Constants.Password
         };
@@ -390,5 +388,4 @@ public class UserServiceTests
 
         });
     }
-
 }
