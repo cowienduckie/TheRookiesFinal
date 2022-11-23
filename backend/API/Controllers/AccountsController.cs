@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/accounts")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
     public class AccountsController : BaseController
@@ -17,11 +17,16 @@ namespace API.Controllers
             _userService = userService;
         }
 
-        [HttpPut("password")]
+        [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest requestModel)
         {
             try
             {
+                if (CurrentUser.Id == null)
+                {
+                    return BadRequest();
+                }
+
                 requestModel.Id = CurrentUser?.Id;
 
                 var response = await _userService.ChangePasswordAsync(requestModel);

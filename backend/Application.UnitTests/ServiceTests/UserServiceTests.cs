@@ -10,6 +10,7 @@ using Domain.Shared.Constants;
 using Domain.Shared.Helpers;
 using Application.DTOs.Users.ChangePassword;
 using Application.UnitTests.Common;
+using System.Data;
 
 namespace Application.UnitTests.ServiceTests;
 
@@ -226,7 +227,6 @@ public class UserServiceTests
 
         var request = new ChangePasswordRequest
         {
-            Id = null,
             OldPassword = Constants.Password,
             NewPassword = Constants.Password
         };
@@ -255,7 +255,6 @@ public class UserServiceTests
 
         var request = new ChangePasswordRequest
         {
-            Id = null,
             OldPassword = Constants.Password,
             NewPassword = Constants.Password
         };
