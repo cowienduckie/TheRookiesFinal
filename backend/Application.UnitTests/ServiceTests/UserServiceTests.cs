@@ -208,7 +208,7 @@ public class UserServiceTests
     }
 
     [Test]
-    public async Task ChangePasswordAsync_InvalidId_ReturnsFalse()
+    public async Task ChangePasswordAsync_InvalidId_ReturnsNotSuccessResponse()
     {
         var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
@@ -227,8 +227,8 @@ public class UserServiceTests
 
         var request = new ChangePasswordRequest
         {
-            OldPassword = Constants.Password,
-            NewPassword = Constants.Password
+            OldPassword = Constants.OldPassword,
+            NewPassword = Constants.NewPassword + "DIFFERENT"
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -241,11 +241,56 @@ public class UserServiceTests
 
             Assert.That(result.IsSuccess, Is.False);
 
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.BadRequest));
         });
     }
 
     [Test]
-    public async Task ChangePasswordAsync_NullUser_ReturnsFalse()
+    public async Task ChangePasswordAsync_MatchingOldAndNewPassword_ReturnsNotSuccessResponse()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = false,
+            Role = Constants.Role
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new ChangePasswordRequest
+        {
+            Id = UserId,
+            OldPassword = Constants.OldPassword,
+            NewPassword = Constants.NewPassword
+        };
+
+        var result = await _userService.ChangePasswordAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.MatchingOldAndNewPassword));
+        });
+    }
+
+    [Test]
+    public async Task ChangePasswordAsync_NullUser_ReturnsNotSuccessResponse()
     {
         _userRepository
             .Setup(ur => ur.GetAsync(
@@ -255,8 +300,8 @@ public class UserServiceTests
 
         var request = new ChangePasswordRequest
         {
-            OldPassword = Constants.Password,
-            NewPassword = Constants.Password
+            OldPassword = Constants.OldPassword,
+            NewPassword = Constants.NewPassword + "DIFFERENT"
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -269,11 +314,15 @@ public class UserServiceTests
 
             Assert.That(result.IsSuccess, Is.False);
 
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.BadRequest));
+
         });
     }
 
     [Test]
-    public async Task ChangePasswordAsync_NotFirstTimeLoginAndInvalidOldPassword_ReturnsFalse()
+    public async Task ChangePasswordAsync_NotFirstTimeLoginAndInvalidOldPassword_ReturnsNotSuccessResponse()
     {
         var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
@@ -294,8 +343,8 @@ public class UserServiceTests
         var request = new ChangePasswordRequest
         {
             Id = UserId,
-            OldPassword = Constants.Password + "DIFFERENT",
-            NewPassword = Constants.Password
+            OldPassword = Constants.OldPassword + "DIFFERENT",
+            NewPassword = Constants.NewPassword
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -308,11 +357,14 @@ public class UserServiceTests
 
             Assert.That(result.IsSuccess, Is.False);
 
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.WrongOldPassword));
         });
     }
 
     [Test]
-    public async Task ChangePasswordAsync_NotFirstTimeLoginAndValidInputs_ReturnsTrue()
+    public async Task ChangePasswordAsync_NotFirstTimeLoginAndValidInputs_ReturnsSuccessResponse()
     {
         var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
@@ -333,8 +385,8 @@ public class UserServiceTests
         var request = new ChangePasswordRequest
         {
             Id = UserId,
-            OldPassword = Constants.Password,
-            NewPassword = Constants.Password
+            OldPassword = Constants.OldPassword,
+            NewPassword = Constants.NewPassword + "DIFFERENT"
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -347,11 +399,14 @@ public class UserServiceTests
 
             Assert.That(result.IsSuccess, Is.True);
 
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo("Success"));
         });
     }
 
     [Test]
-    public async Task ChangePasswordAsync_FirstTimeLoginAndValidInputs_ReturnsTrue()
+    public async Task ChangePasswordAsync_FirstTimeLoginAndValidInputs_ReturnsSuccessResponse()
     {
         var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
@@ -372,8 +427,8 @@ public class UserServiceTests
         var request = new ChangePasswordRequest
         {
             Id = UserId,
-            OldPassword = Constants.Password,
-            NewPassword = Constants.Password
+            OldPassword = Constants.OldPassword,
+            NewPassword = Constants.NewPassword + "DIFFERENT"
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -386,6 +441,9 @@ public class UserServiceTests
 
             Assert.That(result.IsSuccess, Is.True);
 
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo("Success"));
         });
     }
 }

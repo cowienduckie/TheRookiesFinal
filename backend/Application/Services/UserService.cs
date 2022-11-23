@@ -39,12 +39,12 @@ public class UserService : BaseService, IUserService
         if (requestModel.Id == null)
         {
             return new Response(false, ErrorMessages.BadRequest);
-        }
-
+        } 
+        
         if (requestModel.OldPassword == requestModel.NewPassword)
         {
             return new Response(false, ErrorMessages.MatchingOldAndNewPassword);
-        }
+        } 
 
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
