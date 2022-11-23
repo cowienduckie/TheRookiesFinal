@@ -6,7 +6,7 @@ namespace API.Controllers;
 
 public class BaseController : ControllerBase
 {
-    protected UserInternalModel? CurrentUser => (UserInternalModel?) HttpContext.Items[Settings.CurrentUserContextKey];
+    protected UserInternalModel? CurrentUser => HttpContext.Items[Settings.CurrentUserContextKey] as UserInternalModel;
 
     protected ActionResult HandleException(Exception exception)
     {
