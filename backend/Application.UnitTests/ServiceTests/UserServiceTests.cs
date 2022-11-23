@@ -5,25 +5,18 @@ using System.Linq.Expressions;
 using Application.Common.Models;
 using Domain.Entities.Users;
 using Domain.Interfaces;
-using Domain.Shared.Enums;
 using Application.DTOs.Users.Authentication;
 using Domain.Shared.Constants;
 using Domain.Shared.Helpers;
 using Application.DTOs.Users.ChangePassword;
+using Application.UnitTests.Common;
+using System.Data;
 
 namespace Application.UnitTests.ServiceTests;
 
 public class UserServiceTests
 {
-    private const string USERNAME = "Username";
-    private const string PASSWORD = "Password";
-
-    private const string OLDPASSWORD = "Password";
-    private const string NEWPASSWORD = "Password";
-    private const UserRoles ROLE = UserRoles.Admin;
-
     private static readonly Guid UserId = new();
-
     private Mock<IAsyncRepository<User>> _userRepository = null!;
     private Mock<IUnitOfWork> _unitOfWork = null!;
     private UserService _userService = null!;
@@ -35,8 +28,8 @@ public class UserServiceTests
         _unitOfWork = new Mock<IUnitOfWork>();
 
         _unitOfWork
-            .Setup(uow => uow.AsyncRepository<User>())
-            .Returns(_userRepository.Object);
+        .Setup(uow => uow.AsyncRepository<User>())
+        .Returns(_userRepository.Object);
 
         _userService = new UserService(_unitOfWork.Object);
     }
@@ -46,8 +39,8 @@ public class UserServiceTests
     {
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as User);
 
         var result = await _userService.GetInternalModelByIdAsync(It.IsAny<Guid>());
@@ -61,15 +54,15 @@ public class UserServiceTests
         var user = new User
         {
             Id = UserId,
-            Username = USERNAME,
-            HashedPassword = PASSWORD,
-            Role = ROLE
+            Username = Constants.Username,
+            HashedPassword = Constants.Password,
+            Role = Constants.Role
         };
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         var result = await _userService.GetInternalModelByIdAsync(It.IsAny<Guid>());
@@ -82,7 +75,7 @@ public class UserServiceTests
 
             Assert.That(result?.Id, Is.EqualTo(UserId));
 
-            Assert.That(result?.Role, Is.EqualTo(ROLE));
+            Assert.That(result?.Role, Is.EqualTo(Constants.Role));
         });
     }
 
@@ -91,8 +84,8 @@ public class UserServiceTests
     {
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as User);
 
         var result = await _userService.AuthenticateAsync(It.IsAny<AuthenticationRequest>());
@@ -116,25 +109,25 @@ public class UserServiceTests
     [Test]
     public async Task AuthenticateAsync_WrongPassword_ReturnsNotSuccessResponse()
     {
-        var hashedPassword = HashStringHelper.HashString(PASSWORD + "DIFFERENT");
+        var hashedPassword = HashStringHelper.HashString(Constants.Password + "DIFFERENT");
         var user = new User
         {
             Id = UserId,
-            Username = USERNAME,
+            Username = Constants.Username,
             HashedPassword = hashedPassword,
-            Role = ROLE
+            Role = Constants.Role
         };
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         var request = new AuthenticationRequest
         {
-            Username = USERNAME,
-            Password = PASSWORD
+            Username = Constants.Username,
+            Password = Constants.Password
         };
 
         var result = await _userService.AuthenticateAsync(request);
@@ -158,26 +151,26 @@ public class UserServiceTests
     [Test]
     public async Task AuthenticateAsync_ValidInput_ReturnsSuccessResponseWithData()
     {
-        var hashedPassword = HashStringHelper.HashString(PASSWORD);
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
         {
             Id = UserId,
-            Username = USERNAME,
+            Username = Constants.Username,
             HashedPassword = hashedPassword,
-            Role = ROLE,
+            Role = Constants.Role,
             IsFirstTimeLogIn = false
         };
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
 
         var request = new AuthenticationRequest
         {
-            Username = USERNAME,
-            Password = PASSWORD
+            Username = Constants.Username,
+            Password = Constants.Password
         };
 
         var result = await _userService.AuthenticateAsync(request);
@@ -198,9 +191,9 @@ public class UserServiceTests
 
             Assert.That(result.Data?.Id, Is.EqualTo(UserId));
 
-            Assert.That(result.Data?.Username, Is.EqualTo(USERNAME));
+            Assert.That(result.Data?.Username, Is.EqualTo(Constants.Username));
 
-            Assert.That(result.Data?.Role, Is.EqualTo(ROLE.ToString()));
+            Assert.That(result.Data?.Role, Is.EqualTo(Constants.Role.ToString()));
 
             Assert.That(result.Data?.IsFirstTimeLogin, Is.EqualTo(user.IsFirstTimeLogIn));
 
@@ -217,29 +210,26 @@ public class UserServiceTests
     [Test]
     public async Task ChangePasswordAsync_InvalidId_ReturnsFalse()
     {
-        var hashedPassword = HashStringHelper.HashString(OLDPASSWORD);
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
         {
             Id = UserId,
-            Username = USERNAME,
+            Username = Constants.Username,
             HashedPassword = hashedPassword,
-            Role = ROLE
+            Role = Constants.Role
         }; 
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
-
-        var hashedOldPassword = HashStringHelper.HashString(OLDPASSWORD);
-        var hashedNewPassword = HashStringHelper.HashString(NEWPASSWORD);
 
         var request = new ChangePasswordRequest
         {
             Id = null,
-            OldPassword = hashedOldPassword,
-            NewPassword = hashedNewPassword
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -260,18 +250,15 @@ public class UserServiceTests
     {
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as User);
-
-        var hashedOldPassword = HashStringHelper.HashString(OLDPASSWORD);
-        var hashedNewPassword = HashStringHelper.HashString(NEWPASSWORD);
 
         var request = new ChangePasswordRequest
         {
             Id = null,
-            OldPassword = hashedOldPassword,
-            NewPassword = hashedNewPassword
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -290,30 +277,27 @@ public class UserServiceTests
     [Test]
     public async Task ChangePasswordAsync_NotFirstTimeLoginAndInvalidOldPassword_ReturnsFalse()
     {
-        var hashedPassword = HashStringHelper.HashString(OLDPASSWORD);
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
         {
             Id = UserId,
-            Username = USERNAME,
+            Username = Constants.Username,
             HashedPassword = hashedPassword,
             IsFirstTimeLogIn = false,
-            Role = ROLE
+            Role = Constants.Role
         };
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
-
-        var hashedOldPassword = HashStringHelper.HashString(OLDPASSWORD + "DIFFERENT");
-        var hashedNewPassword = HashStringHelper.HashString(NEWPASSWORD);
 
         var request = new ChangePasswordRequest
         {
             Id = UserId,
-            OldPassword = hashedOldPassword,
-            NewPassword = hashedNewPassword
+            OldPassword = Constants.Password + "DIFFERENT",
+            NewPassword = Constants.Password
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -332,30 +316,27 @@ public class UserServiceTests
     [Test]
     public async Task ChangePasswordAsync_NotFirstTimeLoginAndValidInputs_ReturnsTrue()
     {
-        var hashedPassword = HashStringHelper.HashString(OLDPASSWORD);
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
         {
             Id = UserId,
-            Username = USERNAME,
+            Username = Constants.Username,
             HashedPassword = hashedPassword,
             IsFirstTimeLogIn = false,
-            Role = ROLE
+            Role = Constants.Role
         };
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
-
-        var hashedOldPassword = HashStringHelper.HashString(OLDPASSWORD);
-        var hashedNewPassword = HashStringHelper.HashString(NEWPASSWORD);
 
         var request = new ChangePasswordRequest
         {
             Id = UserId,
-            OldPassword = hashedOldPassword,
-            NewPassword = hashedNewPassword
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -374,30 +355,27 @@ public class UserServiceTests
     [Test]
     public async Task ChangePasswordAsync_FirstTimeLoginAndValidInputs_ReturnsTrue()
     {
-        var hashedPassword = HashStringHelper.HashString(OLDPASSWORD);
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
         {
             Id = UserId,
-            Username = USERNAME,
+            Username = Constants.Username,
             HashedPassword = hashedPassword,
             IsFirstTimeLogIn = true,
-            Role = ROLE
+            Role = Constants.Role
         };
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);
-
-        var hashedOldPassword = HashStringHelper.HashString(OLDPASSWORD);
-        var hashedNewPassword = HashStringHelper.HashString(NEWPASSWORD);
 
         var request = new ChangePasswordRequest
         {
             Id = UserId,
-            OldPassword = hashedOldPassword,
-            NewPassword = hashedNewPassword
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
         };
 
         var result = await _userService.ChangePasswordAsync(request);
@@ -412,4 +390,5 @@ public class UserServiceTests
 
         });
     }
+
 }
