@@ -21,4 +21,9 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="ServiceTests\" />
+  </ItemGroup>
+
 </Project>
