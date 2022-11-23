@@ -1,8 +1,8 @@
 import { callApi } from "../Helpers/ApiHelper";
-import { BASE_URL } from "../Constants/SystemConstants";
+import { API_BASE_URL } from "../Constants/SystemConstants";
 
 export async function logIn(loginInfo) {
-  const url = `${BASE_URL}/api/authentication`;
+  const url = `${API_BASE_URL}/api/authentication`;
 
   return await callApi("post", url, loginInfo);
 }
