@@ -22,8 +22,7 @@ public static class JwtHelper
                 new Claim(JwtSettings.IdTokenClaimName, user.Id.ToString())
             }),
 
-            Expires = DateTime.UtcNow
-                .AddDays(JwtSettings.ExpiredTimeInDay),
+            Expires = DateTime.UtcNow.AddDays(JwtSettings.ExpiredTimeInDay),
 
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(SecurityKey),
@@ -61,8 +60,8 @@ public static class JwtHelper
             var jwtToken = (JwtSecurityToken) validatedToken;
 
             var userId = Guid.Parse(jwtToken.Claims
-                .First(c => c.Type == JwtSettings.IdTokenClaimName)
-                .Value);
+                                            .First(c => c.Type == JwtSettings.IdTokenClaimName)
+                                            .Value);
 
             return userId;
         }

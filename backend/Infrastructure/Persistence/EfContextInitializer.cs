@@ -1,7 +1,4 @@
-﻿using Domain.Entities.Users;
-using Domain.Shared.Enums;
-using Domain.Shared.Helpers;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Persistence;
@@ -23,7 +20,10 @@ public class EfContextInitializer
     {
         try
         {
-            if (_context.Database.IsSqlServer()) await _context.Database.MigrateAsync();
+            if (_context.Database.IsSqlServer())
+            {
+                await _context.Database.MigrateAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -47,24 +47,5 @@ public class EfContextInitializer
 
     private async Task TrySeedAsync()
     {
-        if (!_context.Users.Any())
-        {
-            _context.Users.Add(new User
-            {
-                Username = "admin",
-                HashedPassword = HashStringHelper.HashString("admin"),
-                Role = UserRoles.Admin
-            });
-
-            _context.Users.Add(new User
-            {
-                Username = "staff",
-                HashedPassword = HashStringHelper.HashString("staff"),
-                Role = UserRoles.Staff
-            });
-
-            await _context.SaveChangesAsync();
-        }
-
     }
 }
