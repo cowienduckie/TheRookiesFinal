@@ -1,0 +1,1 @@
+export { ManageAssignmentPage } from "./ManageAssignmentPage";
