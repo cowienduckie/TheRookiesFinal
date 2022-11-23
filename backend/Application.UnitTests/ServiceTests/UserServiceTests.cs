@@ -6,16 +6,17 @@ using Application.Common.Models;
 using Domain.Entities.Users;
 using Domain.Interfaces;
 using Application.DTOs.Users.Authentication;
-using Application.UnitTests.Common;
 using Domain.Shared.Constants;
 using Domain.Shared.Helpers;
+using Application.DTOs.Users.ChangePassword;
+using Application.UnitTests.Common;
+using System.Data;
 
 namespace Application.UnitTests.ServiceTests;
 
 public class UserServiceTests
 {
     private static readonly Guid UserId = new();
-
     private Mock<IAsyncRepository<User>> _userRepository = null!;
     private Mock<IUnitOfWork> _unitOfWork = null!;
     private UserService _userService = null!;
@@ -203,6 +204,188 @@ public class UserServiceTests
             Assert.That(userIdFromToken, Is.Not.Null);
 
             Assert.That(userIdFromToken, Is.EqualTo(UserId));
+        });
+    }
+
+    [Test]
+    public async Task ChangePasswordAsync_InvalidId_ReturnsFalse()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            Role = Constants.Role
+        }; 
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new ChangePasswordRequest
+        {
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
+        };
+
+        var result = await _userService.ChangePasswordAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+        });
+    }
+
+    [Test]
+    public async Task ChangePasswordAsync_NullUser_ReturnsFalse()
+    {
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(null as User);
+
+        var request = new ChangePasswordRequest
+        {
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
+        };
+
+        var result = await _userService.ChangePasswordAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+        });
+    }
+
+    [Test]
+    public async Task ChangePasswordAsync_NotFirstTimeLoginAndInvalidOldPassword_ReturnsFalse()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = false,
+            Role = Constants.Role
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new ChangePasswordRequest
+        {
+            Id = UserId,
+            OldPassword = Constants.Password + "DIFFERENT",
+            NewPassword = Constants.Password
+        };
+
+        var result = await _userService.ChangePasswordAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+        });
+    }
+
+    [Test]
+    public async Task ChangePasswordAsync_NotFirstTimeLoginAndValidInputs_ReturnsTrue()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = false,
+            Role = Constants.Role
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new ChangePasswordRequest
+        {
+            Id = UserId,
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
+        };
+
+        var result = await _userService.ChangePasswordAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+        });
+    }
+
+    [Test]
+    public async Task ChangePasswordAsync_FirstTimeLoginAndValidInputs_ReturnsTrue()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = true,
+            Role = Constants.Role
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new ChangePasswordRequest
+        {
+            Id = UserId,
+            OldPassword = Constants.Password,
+            NewPassword = Constants.Password
+        };
+
+        var result = await _userService.ChangePasswordAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
         });
     }
 }
