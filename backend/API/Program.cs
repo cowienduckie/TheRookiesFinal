@@ -21,14 +21,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
 
-    using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
-    {
-        var initializer = scope.ServiceProvider.GetRequiredService<EfContextInitializer>();
+using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var initializer = scope.ServiceProvider.GetRequiredService<EfContextInitializer>();
 
-        await initializer.InitializeAsync();
-        await initializer.SeedAsync();
-    }
+    await initializer.InitializeAsync();
+    await initializer.SeedAsync();
 }
 
 app.UseHealthChecks("/health");
