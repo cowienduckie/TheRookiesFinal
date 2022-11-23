@@ -21,8 +21,17 @@ export function ChangePasswordFirstTimePage() {
     navigate("/");
   };
 
+  const handleCancel = () => {
+    navigate("/");
+  };
+
   return (
-    <Modal open={true} closable={false} footer={false}>
+    <Modal
+      open={true}
+      closable={handleCancel}
+      footer={false}
+      onCancel={handleCancel}
+    >
       <h1 className="text-2xl text-red-600 font-bold mb-5">Change Password</h1>
       <Divider />
       <p className="mb-2">This is the first time you logged in.</p>

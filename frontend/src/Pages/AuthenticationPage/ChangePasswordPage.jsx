@@ -11,6 +11,7 @@ import {
   PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   INCORRECT_OLD_PASSWORD,
+  PASSWORD_COMPARED,
 } from "../../Constants/ErrorMessages";
 
 export function ChangePasswordPage() {
@@ -28,7 +29,7 @@ export function ChangePasswordPage() {
   };
 
   const handleCancel = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   const handleClose = () => {
@@ -54,7 +55,7 @@ export function ChangePasswordPage() {
     <Modal
       open={isModalOpen}
       onCancel={handleCancel}
-      closable={false}
+      closable={handleCancel}
       footer={null}
     >
       <h1 className="text-2xl text-red-600 font-bold mb-5">Change Password</h1>
@@ -77,6 +78,7 @@ export function ChangePasswordPage() {
           <Form.Item
             label="New Password"
             name="newPassword"
+            dependencies={["oldPassword"]}
             rules={[
               {
                 required: true,
@@ -103,6 +105,14 @@ export function ChangePasswordPage() {
                 max: 16,
                 message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
               },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("oldPassword") !== value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(PASSWORD_COMPARED));
+                },
+              }),
             ]}
           >
             <Input.Password />

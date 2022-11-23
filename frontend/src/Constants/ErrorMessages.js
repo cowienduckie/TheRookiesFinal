@@ -13,3 +13,5 @@ export const INCORRECT_LOGIN =
   "Username or password is incorrect. Please try again!";
 export const INCORRECT_OLD_PASSWORD =
   "Old password is incorrect. Please try again!";
+export const PASSWORD_COMPARED =
+  "The new password cannot match the old password!";
