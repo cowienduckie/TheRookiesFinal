@@ -86,6 +86,11 @@ export function ChangePasswordPage() {
                 message: PASSWORD_REQUIRED,
               },
               {
+                min: 8,
+                max: 16,
+                message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+              },
+              {
                 validator() {
                   if (!isError) {
                     return Promise.resolve();
