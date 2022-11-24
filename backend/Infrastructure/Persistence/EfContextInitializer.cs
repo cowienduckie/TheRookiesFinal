@@ -23,7 +23,10 @@ public class EfContextInitializer
     {
         try
         {
-            if (_context.Database.IsSqlServer()) await _context.Database.MigrateAsync();
+            if (_context.Database.IsSqlServer())
+            {
+                await _context.Database.MigrateAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -47,27 +50,23 @@ public class EfContextInitializer
 
     private async Task TrySeedAsync()
     {
-        // if (!_context.Users.Any())
-        // {
-        //    _context.Users.Add(new User
-        //    {
-        //        Username = "admin",
-        //        HashedPassword = HashStringHelper.HashString("admin"),
-        //        Role = UserRoles.Admin
-        //    });
+        if (!_context.Users.Any())
+        {
+           _context.Users.Add(new User
+           {
+               Username = "admin",
+               HashedPassword = HashStringHelper.HashString("Admin@123"),
+               Role = UserRoles.Admin
+           });
 
-        //    _context.Users.Add(new User
-        //    {
-        //        Username = "staff",
-        //        HashedPassword = HashStringHelper.HashString("staff"),
-        //        Role = UserRoles.Staff
-        //    });
+           _context.Users.Add(new User
+           {
+               Username = "staff",
+               HashedPassword = HashStringHelper.HashString("Staff@123"),
+               Role = UserRoles.Staff
+           });
 
-        //    await _context.SaveChangesAsync();
-        // }
-
-        // var userdat = _context.Users.FirstOrDefault(u => u.Username == "dat");
-        // userdat.HashedPassword = HashStringHelper.HashString("123");
-        // await _context.SaveChangesAsync();
+           await _context.SaveChangesAsync();
+        }
     }
 }

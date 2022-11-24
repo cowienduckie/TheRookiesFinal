@@ -19,21 +19,21 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var isAnonymousAllowed = context
-            .ActionDescriptor
-            .EndpointMetadata
-            .OfType<AllowAnonymousAttribute>()
-            .Any();
+                                .ActionDescriptor
+                                .EndpointMetadata
+                                .OfType<AllowAnonymousAttribute>()
+                                .Any();
 
-        if (isAnonymousAllowed) return;
-
-        var user = (UserInternalModel?) context.HttpContext.Items[Settings.CurrentUserContextKey];
-
-        if (user == null || (_roles.Count > 0 && !_roles.Contains(user.Role)))
+        if (isAnonymousAllowed)
         {
-            context.Result = new JsonResult(new {message = ErrorMessages.Unauthorized})
-            {
-                StatusCode = StatusCodes.Status401Unauthorized
-            };
+            return;
+        }
+
+        var user = context.HttpContext.Items[Settings.CurrentUserContextKey] as UserInternalModel;
+
+        if (user == null || (_roles.Any() && !_roles.Contains(user.Role)))
+        {
+            context.Result = new UnauthorizedResult();
         }
     }
 }
