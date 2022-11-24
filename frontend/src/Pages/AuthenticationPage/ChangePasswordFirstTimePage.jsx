@@ -58,7 +58,7 @@ export function ChangePasswordFirstTimePage() {
               message: PASSWORD_AT_LEAST_ONE_UPPERCASE,
             },
             {
-              pattern: /^(?=.*[!*_@#$%^&+= ]).*$/,
+              pattern: /^(?=.*[!*_@#$%^&+=])[A-Za-z0-9!*_@#$%^&+=]*$/,
               message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
             },
             {

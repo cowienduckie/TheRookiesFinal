@@ -6,13 +6,16 @@ import {
   Radio,
   Select,
   ConfigProvider,
+  Modal,
 } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
 export function CreateUserPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const { Option } = Select;
   const navigate = useNavigate();
@@ -21,15 +24,20 @@ export function CreateUserPage() {
     return current && current > dayjs().endOf("day");
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
   const handleSubmit = () => {
-    navigate("/admin/manage-user");
+    showModal();
+    //navigate("/admin/manage-user");
   };
 
   const handleCancel = () => {
     navigate("/admin/manage-user");
   };
 
-  const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
+  const dateFormatList = ["YYYY/MM/DD", "YYYY/MM/DD"];
 
   const layout = {
     labelCol: { span: 2 },
@@ -85,13 +93,17 @@ export function CreateUserPage() {
             }),
           ]}
         >
-          <DatePicker disabledDate={disabledDate} style={{ width: "100%" }} format={dateFormatList}/>
+          <DatePicker
+            disabledDate={disabledDate}
+            style={{ width: "100%" }}
+            format={dateFormatList}
+          />
         </Form.Item>
 
         <Form.Item
           name="radio-button"
           label="Gender"
-          class="text-red-600"
+          className="text-red-600"
           rules={[{ required: true, message: "Please pick your gender!" }]}
         >
           <Radio.Group>
@@ -148,7 +160,11 @@ export function CreateUserPage() {
             }),
           ]}
         >
-          <DatePicker disabledDate={disabledDate} style={{ width: "100%" }} format={dateFormatList}/>
+          <DatePicker
+            disabledDate={disabledDate}
+            style={{ width: "100%" }}
+            format={dateFormatList}
+          />
         </Form.Item>
 
         <Form.Item
@@ -161,9 +177,7 @@ export function CreateUserPage() {
             <Option value="staff">Staff</Option>
           </Select>
         </Form.Item>
-        <Form.Item
-          {...tailLayout}
-        >
+        <Form.Item {...tailLayout}>
           <Button
             className="mx-2"
             type="primary"
@@ -171,13 +185,34 @@ export function CreateUserPage() {
             onSubmit={handleSubmit}
             htmlType="submit"
           >
-            Submit
+            Save
           </Button>
           <Button className="mx-3" danger onClick={handleCancel}>
             Cancel
           </Button>
         </Form.Item>
       </Form>
+
+      <Modal
+        open={isModalOpen}
+        onOk={handleCancel}
+        onCancel={handleCancel}
+        closable={handleCancel}
+        footer={[]}
+      >
+        <h1 className="text-2xl text-red-600 font-bold mb-5">
+          Create User Success
+        </h1>
+        <p className="mb-8">User has been created successfully!</p>
+        <Button
+          className="content-end"
+          danger
+          key="back"
+          onClick={handleCancel}
+        >
+          Close
+        </Button>
+      </Modal>
     </>
   );
 }

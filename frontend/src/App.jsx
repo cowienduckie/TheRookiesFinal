@@ -27,11 +27,13 @@ function App() {
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
-          <Route path="/admin/manage-user" element={<ManageUserPage />}></Route>
-          <Route
-            path="/admin/manage-user/create-user"
-            element={<CreateUserPage />}
-          />
+          <Route path="/admin/manage-user" element={<ManageUserPage />}>
+            <Route
+              path="/admin/manage-user/create-user"
+              element={<CreateUserPage />}
+            />
+          </Route>
+
           <Route
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
@@ -60,6 +62,10 @@ function App() {
         element={<ChangePasswordFirstTimePage />}
       />
       <Route path="/logout" element={<LogoutPage />} />
+      <Route
+        path="/admin/manage-user/create-user"
+        element={<CreateUserPage />}
+      />
     </Routes>
   );
   // const createUserRoutes = (
