@@ -30,13 +30,13 @@ export function DropdownLayout() {
 
   return (
     <Dropdown menu={{ items }} trigger={["click"]}>
-      <a onClick={(e) => e.preventDefault()}>
+      <div className="cursor-pointer">
         <Space>
           <p className="text-white">
             {authContext.username} <CaretDownOutlined />
           </p>
         </Space>
-      </a>
+      </div>
     </Dropdown>
   );
 }
