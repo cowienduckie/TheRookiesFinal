@@ -1,18 +1,25 @@
 import { Divider, Modal } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 export function DetailedInforUserPage() {
   let { id } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(true);
   console.log(id);
   return (
     <>
-      <Modal open={true} closable={false} footer={false}>
+      <Modal open={isModalOpen} closable={false} footer={false}>
         <div className=" flex justify-between content-center">
           <h1 className="text-2xl text-red-600 font-bold">
             Detail User Information
           </h1>
-          <button className="border border-red-600 text-red-600 pb-1 pl-1 pr-1 rounded h-fit">
+          <button
+            className="border-2 border-red-600 text-red-600 pb-1 pl-1 pr-1 rounded h-fit"
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          >
             <CloseOutlined />
           </button>
         </div>

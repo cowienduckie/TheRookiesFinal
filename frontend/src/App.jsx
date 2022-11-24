@@ -29,7 +29,7 @@ function App() {
           <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
             <Route
-              path="/admin/manage-user/detail-user/:id"
+              path="/admin/manage-user/:id"
               element={<DetailedInforUserPage />}
             />
           </Route>
@@ -55,16 +55,16 @@ function App() {
 
   const modalRoutes = (
     <Routes>
-      <Route
-        path="/admin/manage-user/detail-user/:id"
-        element={<DetailedInforUserPage />}
-      />
       <Route path="/change-password" element={<ChangePasswordPage />} />
       <Route
         path="/change-password-first-time"
         element={<ChangePasswordFirstTimePage />}
       />
       <Route path="/logout" element={<LogoutPage />} />
+      <Route
+        path="/admin/manage-user/:id"
+        element={<DetailedInforUserPage />}
+      />
     </Routes>
   );
 
