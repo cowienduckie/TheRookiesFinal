@@ -1,4 +1,5 @@
 import { Button, Divider, Form, Input, Modal } from "antd";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../Apis/Accounts";
 import {
@@ -12,26 +13,28 @@ import {
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
-
   const [form] = Form.useForm();
+  const [backendError, setBackendError] = useState({
+    isError: false,
+    message: "",
+  });
+
+  useEffect(() => {
+    form.validateFields();
+  }, [backendError, form]);
 
   const onFinish = async (values) => {
-    await changePassword({ ...values });
-
-    navigate("/");
-  };
-
-  const handleCancel = () => {
-    navigate("/");
+    await changePassword({ ...values })
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        setBackendError({ isError: true, message: error.statusText });
+      });
   };
 
   return (
-    <Modal
-      open={true}
-      closable={handleCancel}
-      footer={false}
-      onCancel={handleCancel}
-    >
+    <Modal open={true} closable={false} footer={false}>
       <h1 className="text-2xl text-red-600 font-bold mb-5">Change Password</h1>
       <Divider />
       <p className="mb-2">This is the first time you logged in.</p>
@@ -66,9 +69,23 @@ export function ChangePasswordFirstTimePage() {
               max: 16,
               message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
             },
+            {
+              validator() {
+                if (backendError.isError) {
+                  return Promise.reject(new Error(backendError.message));
+                } else {
+                  return Promise.resolve();
+                }
+              }
+            },
           ]}
         >
-          <Input.Password />
+          <Input.Password
+            onChange={() => {
+              if (backendError.isError)
+                setBackendError({ isError: false, message: "" });
+            }}
+          />
         </Form.Item>
         <Form.Item shouldUpdate style={{ textAlign: "right" }}>
           {() => (

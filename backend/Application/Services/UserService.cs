@@ -39,12 +39,7 @@ public class UserService : BaseService, IUserService
         if (requestModel.Id == null)
         {
             return new Response(false, ErrorMessages.BadRequest);
-        } 
-        
-        if (requestModel.OldPassword == requestModel.NewPassword)
-        {
-            return new Response(false, ErrorMessages.MatchingOldAndNewPassword);
-        } 
+        }
 
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
@@ -59,6 +54,11 @@ public class UserService : BaseService, IUserService
             !HashStringHelper.IsValid(requestModel.OldPassword, user.HashedPassword))
         {
             return new Response(false, ErrorMessages.WrongOldPassword);
+        }
+
+        if (HashStringHelper.IsValid(requestModel.NewPassword, user.HashedPassword))
+        {
+            return new Response(false, ErrorMessages.MatchingOldAndNewPassword);
         }
 
         user.HashedPassword = HashStringHelper.HashString(requestModel.NewPassword);

@@ -31,7 +31,8 @@ export function LoginPage() {
         authContext.setAuthInfo(
           userInfo.username,
           userInfo.role,
-          userInfo.token
+          userInfo.token,
+          userInfo.isFirstTimeLogin
         );
 
         if (userInfo.isFirstTimeLogin) {
