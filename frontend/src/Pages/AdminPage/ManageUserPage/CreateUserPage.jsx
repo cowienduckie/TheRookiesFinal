@@ -16,9 +16,6 @@ export function CreateUserPage() {
   const [form] = Form.useForm();
   const { Option } = Select;
   const navigate = useNavigate();
-  const onFinish = () => {
-    navigate("/");
-  };
 
   const disabledDate = (current) => {
     return current && current > dayjs().endOf("day");
@@ -30,14 +27,6 @@ export function CreateUserPage() {
 
   const handleCancel = () => {
     navigate("/admin/manage-user");
-  };
-
-  //let newDate = new Date();
-  //let date = newDate.getDay();
-
-  const consoleLog = () => {
-    //console.log(dayjs().get("day", 0));
-    // console.log(getFieldValue("joinedDate").getDay())
   };
 
   const layout = {
@@ -141,15 +130,10 @@ export function CreateUserPage() {
             }),
             ({ getFieldValue }) => ({
               validator(_, value) {
-                // const dayOfWeek = getFieldValue("joinedDate").getDay();
-                // const isWeekend = dayOfWeek === 6 || dayOfWeek === 0;
                 if (
                   !value ||
-                  getFieldValue("joinedDate") !== dayjs().get("day", 0)
-                  //value.getDay() !== 6
-                  //   getFieldValue("joinedDate") !== dayjs().weekday(0)
-                  //   ||
-                  //   getFieldValue("joinedDate") !== dayjs().isoWeekday(6)
+                  (getFieldValue("joinedDate").day() !== 0 &&
+                    getFieldValue("joinedDate").day() !== 6)
                 ) {
                   return Promise.resolve();
                 }
@@ -192,9 +176,6 @@ export function CreateUserPage() {
           </Button>
           <Button className="mx-2" danger onClick={handleCancel}>
             Cancel
-          </Button>
-          <Button className="mx-2" danger onClick={consoleLog}>
-            Log
           </Button>
         </Form.Item>
       </Form>
