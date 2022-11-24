@@ -29,18 +29,20 @@ export function CreateUserPage() {
     navigate("/admin/manage-user");
   };
 
+  const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
+
   const layout = {
-    labelCol: {
-      span: 2,
-    },
-    wrapperCol: {
-      span: 10,
-    },
+    labelCol: { span: 2 },
+    wrapperCol: { span: 5 },
+  };
+
+  const tailLayout = {
+    wrapperCol: { offset: 3 },
   };
 
   return (
     <>
-      <h1 className="text-2xl text-red-600 font-bold mb-5">Create User Page</h1>
+      <h1 className="text-2xl text-red-600 font-bold mb-5">Create New User</h1>
       <Form
         {...layout}
         form={form}
@@ -83,7 +85,7 @@ export function CreateUserPage() {
             }),
           ]}
         >
-          <DatePicker disabledDate={disabledDate} />
+          <DatePicker disabledDate={disabledDate} style={{ width: "100%" }} format={dateFormatList}/>
         </Form.Item>
 
         <Form.Item
@@ -146,7 +148,7 @@ export function CreateUserPage() {
             }),
           ]}
         >
-          <DatePicker disabledDate={disabledDate} />
+          <DatePicker disabledDate={disabledDate} style={{ width: "100%" }} format={dateFormatList}/>
         </Form.Item>
 
         <Form.Item
@@ -160,10 +162,7 @@ export function CreateUserPage() {
           </Select>
         </Form.Item>
         <Form.Item
-          wrapperCol={{
-            ...layout.wrapperCol,
-            offset: 6,
-          }}
+          {...tailLayout}
         >
           <Button
             className="mx-2"
@@ -174,7 +173,7 @@ export function CreateUserPage() {
           >
             Submit
           </Button>
-          <Button className="mx-2" danger onClick={handleCancel}>
+          <Button className="mx-3" danger onClick={handleCancel}>
             Cancel
           </Button>
         </Form.Item>

@@ -19,6 +19,7 @@ export function ChangePasswordPage() {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [modalFinished, setModalFinished] = useState(false);
   const [isError, setIsError] = useState(false);
+
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -48,11 +49,19 @@ export function ChangePasswordPage() {
       })
       .catch((error) => {
         setIsError(true);
+        //let oldPasswordValue = form.getFieldValue("oldPassword")
+        form.current.validateFields();
       });
+  };
+
+  const layout = {
+    labelCol: { span: 2 },
+    wrapperCol: { span: 5 },
   };
 
   return (
     <Modal
+      {...layout}
       open={isModalOpen}
       onCancel={handleCancel}
       closable={handleCancel}
@@ -70,9 +79,21 @@ export function ChangePasswordPage() {
                 required: true,
                 message: PASSWORD_REQUIRED,
               },
+
+              ({ validateFields }) => ({
+                validator(_, ) {
+                  if (!isError) {
+                    return Promise.resolve();
+                  }
+                  setIsError(false);
+                  return Promise.reject(
+                    new Error("Old password is not valid!")
+                  );
+                },
+              }),
             ]}
           >
-            <Input.Password />
+            <Input.Password style={{ width: "80%" }} />
           </Form.Item>
 
           <Form.Item
@@ -115,7 +136,7 @@ export function ChangePasswordPage() {
               }),
             ]}
           >
-            <Input.Password />
+            <Input.Password style={{ width: "80%" }} />
           </Form.Item>
           <span className="text-red-600 text-sm" hidden={!isError}>
             {INCORRECT_OLD_PASSWORD}
