@@ -14,19 +14,25 @@ import {
   ManageUserPage,
   ReportPage,
 } from "./Pages";
+import { DetailedInforUserPage } from "./Pages/AdminPage/ManageUserPage/DetailedInforUserPage";
 
 function App() {
   const location = useLocation();
   const background = location.state && location.state.background;
 
   const mainRoutes = (
-    <Routes location={background || location}>      
+    <Routes location={background || location}>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<MainLayout />}>
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
-          <Route path="/admin/manage-user" element={<ManageUserPage />} />
+          <Route path="/admin/manage-user" element={<ManageUserPage />}>
+            <Route
+              path="/admin/manage-user/detail-user/:id"
+              element={<DetailedInforUserPage />}
+            />
+          </Route>
           <Route
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
@@ -49,8 +55,15 @@ function App() {
 
   const modalRoutes = (
     <Routes>
-      <Route path="/change-password" element={<ChangePasswordPage />} />      
-      <Route path="/change-password-first-time" element={<ChangePasswordFirstTimePage />} />
+      <Route
+        path="/admin/manage-user/detail-user/:id"
+        element={<DetailedInforUserPage />}
+      />
+      <Route path="/change-password" element={<ChangePasswordPage />} />
+      <Route
+        path="/change-password-first-time"
+        element={<ChangePasswordFirstTimePage />}
+      />
       <Route path="/logout" element={<LogoutPage />} />
     </Routes>
   );
