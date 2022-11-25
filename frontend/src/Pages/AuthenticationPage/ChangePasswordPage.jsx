@@ -1,24 +1,25 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button, Divider, Form, Input, Modal } from "antd";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../Apis/Accounts";
-import { AuthContext } from "../../Contexts/AuthContext";
 import {
-  PASSWORD_REQUIRED,
-  PASSWORD_AT_LEAST_ONE_DIGIT,
-  PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
-  PASSWORD_AT_LEAST_ONE_LOWERCASE,
-  PASSWORD_AT_LEAST_ONE_UPPERCASE,
-  PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   INCORRECT_OLD_PASSWORD,
+  PASSWORD_AT_LEAST_ONE_DIGIT,
+  PASSWORD_AT_LEAST_ONE_LOWERCASE,
+  PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
+  PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_COMPARED,
+  PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+  PASSWORD_REQUIRED,
 } from "../../Constants/ErrorMessages";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 export function ChangePasswordPage() {
   const authContext = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [modalFinished, setModalFinished] = useState(false);
   const [isError, setIsError] = useState(false);
+
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
@@ -41,6 +42,10 @@ export function ChangePasswordPage() {
     setModalFinished(true);
   };
 
+  useEffect(() => {
+    form.validateFields();
+  }, [isError, form]);
+
   const onFinish = async (values) => {
     await changePassword({ ...values })
       .then(() => {
@@ -61,7 +66,17 @@ export function ChangePasswordPage() {
       <h1 className="text-2xl text-red-600 font-bold mb-5">Change Password</h1>
       <Divider className="mb-6" />
       {modalFinished === false && (
-        <Form form={form} onFinish={onFinish} autoComplete="off">
+        <Form
+          form={form}
+          onFinish={onFinish}
+          autoComplete="off"
+          labelCol={{
+            span: 8,
+          }}
+          wrapperCol={{
+            span: 16,
+          }}
+        >
           <Form.Item
             label="Old Password"
             name="oldPassword"
@@ -70,9 +85,22 @@ export function ChangePasswordPage() {
                 required: true,
                 message: PASSWORD_REQUIRED,
               },
+              {
+                validator() {
+                  if (!isError) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(INCORRECT_OLD_PASSWORD));
+                },
+              },
             ]}
           >
-            <Input.Password />
+            <Input.Password
+              onChange={() => {
+                if (isError) setIsError(false);
+              }}
+              style={{ width: "80%" }}
+            />
           </Form.Item>
 
           <Form.Item
@@ -115,11 +143,8 @@ export function ChangePasswordPage() {
               }),
             ]}
           >
-            <Input.Password />
+            <Input.Password style={{ width: "80%" }} />
           </Form.Item>
-          <span className="text-red-600 text-sm" hidden={!isError}>
-            {INCORRECT_OLD_PASSWORD}
-          </span>
           <Form.Item className="mt-5" shouldUpdate>
             {() => (
               <div className="flex flex-row justify-end">
