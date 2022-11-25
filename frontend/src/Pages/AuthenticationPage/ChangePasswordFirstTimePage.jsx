@@ -10,6 +10,7 @@ import {
   PASSWORD_AT_LEAST_ONE_LOWERCASE,
   PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+  PASSWORD_ONLY_ALLOW
 } from "../../Constants/ErrorMessages";
 
 export function ChangePasswordFirstTimePage() {
@@ -55,23 +56,27 @@ export function ChangePasswordFirstTimePage() {
           rules={[
             {
               required: true,
-              message: PASSWORD_REQUIRED,
+              message: PASSWORD_REQUIRED
             },
             {
-              pattern: /^(?=.*[0-9])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-              message: PASSWORD_AT_LEAST_ONE_DIGIT,
+              pattern: /^(?=.*[0-9])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_DIGIT
             },
             {
-              pattern: /^(?=.*[a-z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-              message: PASSWORD_AT_LEAST_ONE_LOWERCASE,
+              pattern: /^(?=.*[a-z])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_LOWERCASE
             },
             {
-              pattern: /^(?=.*[A-Z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-              message: PASSWORD_AT_LEAST_ONE_UPPERCASE,
+              pattern: /^(?=.*[A-Z])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_UPPERCASE
             },
             {
-              pattern: /^(?=.*[!*_@#$%^&+= ]).*$/,
-              message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
+              pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-?/`~])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
+            },
+            {
+              pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+              message: PASSWORD_ONLY_ALLOW
             },
             {
               min: 8,
