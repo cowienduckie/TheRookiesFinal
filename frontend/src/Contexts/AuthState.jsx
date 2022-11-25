@@ -26,7 +26,7 @@ export function AuthState(props) {
     token &&
     userRole &&
     username &&
-    isFirstTimeLogin !== null &&
+    !!isFirstTimeLogin &&
     (userRole === STAFF || userRole === ADMIN)
   ) {
     initialState.authenticated = true;
