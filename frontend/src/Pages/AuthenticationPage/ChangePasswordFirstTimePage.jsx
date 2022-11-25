@@ -23,6 +23,12 @@ export function ChangePasswordFirstTimePage() {
   });
 
   useEffect(() => {
+    if (!authContext.isFirstTimeLogin) {
+      navigate("/");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     form.validateFields();
   }, [backendError]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -81,7 +87,7 @@ export function ChangePasswordFirstTimePage() {
             {
               min: 8,
               max: 16,
-              message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+              message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS
             },
             {
               validator() {
