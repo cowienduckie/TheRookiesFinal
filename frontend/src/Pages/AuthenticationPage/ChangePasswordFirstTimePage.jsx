@@ -18,7 +18,7 @@ export function ChangePasswordFirstTimePage() {
   const [form] = Form.useForm();
   const [backendError, setBackendError] = useState({
     isError: false,
-    message: "",
+    message: ""
   });
 
   useEffect(() => {
@@ -85,8 +85,8 @@ export function ChangePasswordFirstTimePage() {
                 } else {
                   return Promise.resolve();
                 }
-              },
-            },
+              }
+            }
           ]}
         >
           <Input.Password
