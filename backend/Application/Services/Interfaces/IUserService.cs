@@ -10,5 +10,5 @@ public interface IUserService
     Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest requestModel);
     Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id);
     Task<Response> ChangePasswordAsync(ChangePasswordRequest requestModel);
-    Task<Response<GetUserResponse>> GetByIdAsync(Guid id);
+    Task<Response<GetUserResponse>> GetAsync(GetUserRequest request);
 }

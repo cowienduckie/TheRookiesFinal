@@ -89,11 +89,13 @@ public class UserService : BaseService, IUserService
         return new UserInternalModel(user);
     }
 
-    public async Task<Response<GetUserResponse>> GetByIdAsync(Guid id)
+    public async Task<Response<GetUserResponse>> GetAsync(GetUserRequest request)
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Id == id);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted &&
+                                                            u.Location == request.Location &&
+                                                            u.Id == request.Id);
 
         if (user == null)
         {
