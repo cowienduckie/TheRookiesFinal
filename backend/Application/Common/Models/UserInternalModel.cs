@@ -9,9 +9,12 @@ public class UserInternalModel
     {
         Id = user.Id;
         Role = user.Role;
+        Location = user.Location;
     }
 
     public Guid Id { get; }
 
     public UserRoles Role { get; }
+
+    public Locations Location { get; }
 }

@@ -21,7 +21,7 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Username == requestModel.Username);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Username == requestModel.Username);
 
         if (user == null ||
             !HashStringHelper.IsValid(requestModel.Password, user.HashedPassword))
@@ -44,7 +44,7 @@ public class UserService : BaseService, IUserService
 
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Id == requestModel.Id);
 
         if (user == null)
         {
@@ -79,7 +79,7 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Id == id);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Id == id);
 
         if (user == null)
         {
