@@ -15,8 +15,8 @@ export async function callApi(method, url, data = null) {
     })
     .catch((error) => {
       throw new Response("", {
-        status: error.response.status,
-        statusText: error.response.message,
+        status: error.response.data.status,
+        statusText: error.response.data.message,
       });
     });
 
