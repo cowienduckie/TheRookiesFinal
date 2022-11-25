@@ -39,18 +39,12 @@ export function CreateUserPage() {
   const dateFormatList = ["YYYY/MM/DD", "YYYY/MM/DD"];
 
   const layout = {
-    labelCol: {
-      span: 2,
-    },
-    wrapperCol: {
-      span: 5,
-    },
+    labelCol: { span: 2 },
+    wrapperCol: { span: 5 },
   };
 
   const tailLayout = {
-    wrapperCol: {
-      offset: 3,
-    },
+    wrapperCol: { offset: 3 },
   };
 
   return (

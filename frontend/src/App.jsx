@@ -33,7 +33,6 @@ function App() {
               element={<CreateUserPage />}
             />
           </Route>
-
           <Route
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
