@@ -12,10 +12,10 @@ import { logIn } from "../../Apis/AuthenticationApis";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import {
   INCORRECT_LOGIN,
+  PASSWORD_ONLY_ALLOW,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   PASSWORD_REQUIRED,
   USERNAME_REQUIRED,
-  PASSWORD_NO_SPACE,
 } from "../../Constants/ErrorMessages";
 
 export function LoginPage() {
@@ -75,8 +75,9 @@ export function LoginPage() {
                 message: PASSWORD_REQUIRED,
               },
               {
-                pattern: /^(?=.*[A-Za-z0-9])[A-Za-z0-9!*_@#$%^&+=]*$/,
-                message: PASSWORD_NO_SPACE,
+                pattern:
+                  /^(?=.*[A-Za-z0-9])[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+                message: PASSWORD_ONLY_ALLOW,
               },
               {
                 min: 8,

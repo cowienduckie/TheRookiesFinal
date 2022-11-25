@@ -68,17 +68,11 @@ function App() {
       />
     </Routes>
   );
-  // const createUserRoutes = (
-  //   <Routes>
-  //     <Route path="/admin/manage-user/create-user" element={<CreateUserPage />} />
-  //   </Routes>
-  // );
 
   return (
     <AuthState>
       {mainRoutes}
       {background && modalRoutes}
-      {/* {background && createUserRoutes} */}
     </AuthState>
   );
 }
