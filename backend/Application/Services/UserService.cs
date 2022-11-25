@@ -1,6 +1,7 @@
 ﻿using Application.Common.Models;
 using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
+using Application.DTOs.Users.GetListUsers;
 using Application.DTOs.Users.GetUser;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
@@ -12,7 +13,6 @@ namespace Application.Services;
 
 public class UserService : BaseService, IUserService
 {
-
     public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
     }
@@ -105,5 +105,10 @@ public class UserService : BaseService, IUserService
         var getUserDto = new GetUserResponse(user);
 
         return new Response<GetUserResponse>(true, getUserDto);
+    }
+
+    public async Task<Response<GetListUsersResponse>> GetListAsync(GetListUsersRequest request)
+    {
+        throw new NotImplementedException();
     }
 }
