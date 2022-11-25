@@ -15,7 +15,11 @@ export function MainLayout() {
     if (!authContext.authenticated) {
       navigate("/login");
     }
-  });
+
+    if(authContext.isFirstTimeLogin) {
+      navigate("/change-password-first-time");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { Header, Content, Sider } = Layout;
 

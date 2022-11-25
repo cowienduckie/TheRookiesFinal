@@ -5,6 +5,7 @@ import {
   TOKEN_KEY,
   ROLE_KEY,
   USERNAME_KEY,
+  FIRST_TIME_LOGIN_KEY
 } from "../Constants/SystemConstants";
 import { AuthContext } from "./AuthContext";
 import { authReducer, CLEAR_AUTH, SET_AUTH } from "./AuthReducer";
@@ -14,30 +15,35 @@ export function AuthState(props) {
     authenticated: false,
     userRole: null,
     username: null,
+    isFirstTimeLogin: false
   };
   const token = localStorage.getItem(TOKEN_KEY);
   const userRole = localStorage.getItem(ROLE_KEY);
   const username = localStorage.getItem(USERNAME_KEY);
+  const isFirstTimeLogin = localStorage.getItem(FIRST_TIME_LOGIN_KEY);
 
   if (
     token &&
     userRole &&
     username &&
+    isFirstTimeLogin &&
     (userRole === STAFF || userRole === ADMIN)
   ) {
     initialState.authenticated = true;
     initialState.userRole = userRole;
     initialState.username = username;
+    initialState.isFirstTimeLogin = isFirstTimeLogin;
   }
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  const setAuthInfo = (username, userRole, token) => {
+  const setAuthInfo = (username, userRole, token, isFirstTimeLogin) => {
     dispatch({
       type: SET_AUTH,
       username: username,
       userRole: userRole,
       token: token,
+      isFirstTimeLogin: isFirstTimeLogin
     });
   };
 
@@ -51,6 +57,7 @@ export function AuthState(props) {
         authenticated: state.authenticated,
         userRole: state.userRole,
         username: state.username,
+        isFirstTimeLogin: state.isFirstTimeLogin,
         setAuthInfo: setAuthInfo,
         clearAuthInfo: clearAuthInfo,
       }}

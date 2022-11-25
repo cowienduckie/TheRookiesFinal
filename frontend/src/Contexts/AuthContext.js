@@ -4,6 +4,7 @@ export const AuthContext = createContext({
   authenticated: false,
   userRole: "",
   username: "",
-  setAuthInfo: (username, userRole, token) => {},
+  isFirstTimeLogin: false,
+  setAuthInfo: (username, userRole, token, isFirstTimeLogin) => {},
   clearAuthInfo: () => {},
 });
