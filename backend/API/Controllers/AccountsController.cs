@@ -24,7 +24,7 @@ namespace API.Controllers
         {
             try
             {
-                if (CurrentUser?.Id == null)
+                if (CurrentUser == null)
                 {
                     return BadRequest(new Response(false, ErrorMessages.BadRequest));
                 }
