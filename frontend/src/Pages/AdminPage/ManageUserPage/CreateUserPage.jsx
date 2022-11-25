@@ -6,7 +6,7 @@ import {
   Radio,
   Select,
   ConfigProvider,
-  Modal,
+  Modal
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -40,11 +40,11 @@ export function CreateUserPage() {
 
   const layout = {
     labelCol: { span: 2 },
-    wrapperCol: { span: 5 },
+    wrapperCol: { span: 5 }
   };
 
   const tailLayout = {
-    wrapperCol: { offset: 3 },
+    wrapperCol: { offset: 3 }
   };
 
   return (
@@ -88,8 +88,8 @@ export function CreateUserPage() {
                 return Promise.reject(
                   new Error("User is under 18. Please select a different date")
                 );
-              },
-            }),
+              }
+            })
           ]}
         >
           <DatePicker
@@ -110,9 +110,9 @@ export function CreateUserPage() {
               theme={{
                 components: {
                   Radio: {
-                    colorPrimary: "#FF0000",
-                  },
-                },
+                    colorPrimary: "#FF0000"
+                  }
+                }
               }}
             >
               <Radio value="Female">Female</Radio>
@@ -139,7 +139,7 @@ export function CreateUserPage() {
                     "Joined date is not later than Date of Birth. Please select a different date"
                   )
                 );
-              },
+              }
             }),
             ({ getFieldValue }) => ({
               validator(_, value) {
@@ -155,8 +155,8 @@ export function CreateUserPage() {
                     "Joined date is Saturday or Sunday. Please select a different date"
                   )
                 );
-              },
-            }),
+              }
+            })
           ]}
         >
           <DatePicker
