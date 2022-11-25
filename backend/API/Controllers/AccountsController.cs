@@ -1,6 +1,8 @@
 ﻿using API.Attributes;
+using Application.Common.Models;
 using Application.DTOs.Users.ChangePassword;
 using Application.Services.Interfaces;
+using Domain.Shared.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -18,13 +20,13 @@ namespace API.Controllers
         }
 
         [HttpPut("change-password")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest requestModel)
+        public async Task<ActionResult<Response>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
         {
             try
             {
-                if (CurrentUser.Id == null)
+                if (CurrentUser == null)
                 {
-                    return BadRequest();
+                    return BadRequest(new Response(false, ErrorMessages.BadRequest));
                 }
 
                 requestModel.Id = CurrentUser?.Id;

@@ -15,6 +15,10 @@ export function MainLayout() {
     if (!authContext.authenticated) {
       navigate("/login");
     }
+
+    if(authContext.isFirstTimeLogin) {
+      navigate("/change-password-first-time");
+    }
   });
 
   const { Header, Content, Sider } = Layout;
