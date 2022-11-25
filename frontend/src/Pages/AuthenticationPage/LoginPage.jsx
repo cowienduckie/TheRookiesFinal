@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   LockOutlined,
   UserOutlined,
   EyeTwoTone,
-  EyeInvisibleOutlined,
+  EyeInvisibleOutlined
 } from "@ant-design/icons";
 import { Button, Card, Form, Input } from "antd";
 import { AuthContext } from "../../Contexts/AuthContext";
@@ -11,19 +11,30 @@ import { useNavigate } from "react-router-dom";
 import { logIn } from "../../Apis/AuthenticationApis";
 import nashLogo from "../../Assets/nashLogo.jpg";
 import {
-  INCORRECT_LOGIN,
+  PASSWORD_ONLY_ALLOW,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   PASSWORD_REQUIRED,
-  USERNAME_REQUIRED,
+  USERNAME_REQUIRED
 } from "../../Constants/ErrorMessages";
 
 export function LoginPage() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [form] = Form.useForm();
+  const [backendError, setBackendError] = useState({
+    isError: false,
+    message: ""
+  });
 
-  const [isError, setIsError] = useState(false);
+  useEffect(() => {
+    if (authContext.authenticated) {
+      navigate("/");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    form.validateFields();
+  }, [backendError]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onFinish = (values) => {
     logIn(values)
@@ -42,7 +53,7 @@ export function LoginPage() {
         }
       })
       .catch((error) => {
-        setIsError(true);
+        setBackendError({ isError: true, message: error.statusText });
       });
   };
 
@@ -50,15 +61,33 @@ export function LoginPage() {
     <div className="h-screen w-screen flex align-items-center bg-slate-100">
       <Card className="m-auto w-3/12 shadow-lg">
         <img className="w-1/2 m-auto mb-2" src={nashLogo} alt="Nash-Logo" />
-        <Form form={form} layout="vertical" size="large" onFinish={onFinish}>
+        <Form
+          form={form}
+          layout="vertical"
+          size="large"
+          onChange={() => {
+            if (backendError.isError)
+              setBackendError({ isError: false, message: "" });
+          }}
+          onFinish={onFinish}
+        >
           <Form.Item
             label="Username"
             name="username"
             rules={[
               {
                 required: true,
-                message: USERNAME_REQUIRED,
+                message: USERNAME_REQUIRED
               },
+              {
+                validator() {
+                  if (backendError.isError) {
+                    return Promise.reject(new Error(""));
+                  } else {
+                    return Promise.resolve();
+                  }
+                }
+              }
             ]}
           >
             <Input
@@ -72,13 +101,27 @@ export function LoginPage() {
             rules={[
               {
                 required: true,
-                message: PASSWORD_REQUIRED,
+                message: PASSWORD_REQUIRED
+              },
+              {
+                pattern:
+                  /^(?=.*[A-Za-z0-9])[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+                message: PASSWORD_ONLY_ALLOW
               },
               {
                 min: 8,
                 max: 16,
-                message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+                message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS
               },
+              {
+                validator() {
+                  if (backendError.isError) {
+                    return Promise.reject(new Error(backendError.message));
+                  } else {
+                    return Promise.resolve();
+                  }
+                }
+              }
             ]}
           >
             <Input.Password
@@ -90,9 +133,6 @@ export function LoginPage() {
               }
             />
           </Form.Item>
-          <span className="text-red-600 text-sm" hidden={!isError}>
-            {INCORRECT_LOGIN}
-          </span>
           <Form.Item shouldUpdate>
             {() => (
               <Button
