@@ -6,9 +6,10 @@ using Domain.Shared.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
+
 [Route("api/[controller]")]
-[ApiController]
 [Authorize]
+[ApiController]
 public class AccountsController : BaseController
 {
     private readonly IUserService _userService;

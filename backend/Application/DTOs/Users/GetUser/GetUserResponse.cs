@@ -1,6 +1,6 @@
 using Domain.Entities.Users;
 
-namespace Application.DTOs.Users.GetUsers;
+namespace Application.DTOs.Users.GetUser;
 
 public class GetUserResponse
 {
@@ -13,6 +13,7 @@ public class GetUserResponse
         LastName = user.LastName;
         DateOfBirth = user.DateOfBirth;
         Gender = user.Gender.ToString();
+        JoinedDate = user.JoinedDate;
         Role = user.Role.ToString();
         Location = user.Location.ToString();
     }
