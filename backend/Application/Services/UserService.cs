@@ -1,16 +1,22 @@
 ﻿using Application.Common.Models;
 using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
+using Application.DTOs.Users.CreateUser;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
+using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
+using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interfaces;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text.RegularExpressions;
 
 namespace Application.Services;
 
 public class UserService : BaseService, IUserService
 {
+    private readonly EfContext? _context;
 
     public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
@@ -74,6 +80,67 @@ public class UserService : BaseService, IUserService
         return new Response(true, "Success");
     }
 
+    public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserRequest requestModel)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var adminCreator = await userRepository.GetAsync(admin => admin.Id == requestModel.AdminId);
+
+        if (adminCreator != null)
+        {
+            if (GetAge(requestModel.DateOfBirth) < 18)
+            {
+                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, null);
+            }
+
+            if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) != 1
+                || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, null);
+            }
+
+            var latestStaffCode = _context?.Users.OrderByDescending(user => user.StaffCode).First().StaffCode;
+
+            if (latestStaffCode == null)
+            {
+                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, null);
+            }
+
+            var latestUserName = _context?.Users.OrderByDescending(user => user.Username).First().StaffCode;
+
+            if (latestUserName == null)
+            {
+                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, null);
+            }
+
+            var newStaffCode = getNewStaffCode(latestStaffCode);
+            var newUserName = getNewUserName(requestModel.FirstName, requestModel.LastName, latestUserName);
+            var newPassword = HashStringHelper.HashString(getNewPassword(requestModel.FirstName, requestModel.LastName, requestModel.DateOfBirth));
+
+            var user = new User
+            {
+                StaffCode = newStaffCode,
+                FirstName = requestModel.FirstName,
+                LastName = requestModel.LastName,
+                Username = newUserName,
+                HashedPassword = newPassword,
+                DateOfBirth = requestModel.DateOfBirth,
+                Gender = requestModel.Gender,
+                JoinedDate = requestModel.JoinedDate,
+                Role = requestModel.Role,
+                Location = adminCreator.Location,
+                IsFirstTimeLogIn = true,
+            };
+            var responseModel = new CreateUserResponse(user);
+
+            await userRepository.AddAsync(user);
+            await UnitOfWork.SaveChangesAsync();
+
+            return new Response<CreateUserResponse>(true, "Success", responseModel);
+        }
+        return new Response<CreateUserResponse>(false, ErrorMessages.BadRequest, null);
+    }
+
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
@@ -86,5 +153,58 @@ public class UserService : BaseService, IUserService
         }
 
         return new UserInternalModel(user);
+    }
+
+    public static int GetAge(DateTime birthDate)
+    {
+        var today = DateTime.Now;
+
+        var age = today.Year - birthDate.Year;
+
+        if (today.Month < birthDate.Month || (today.Month == birthDate.Month && today.Day < birthDate.Day)) { age--; }
+        
+        return age;
+    }
+
+    public static string getNewStaffCode(string previousStaffCode)
+    {
+        var prefix = "SD";
+
+        var number = Regex.Match(previousStaffCode, @"\d+").Value;
+
+        var nextStaffCodeNumber = Convert.ToInt32(number) + 1;
+
+        return prefix + nextStaffCodeNumber.ToString().PadLeft(4, '0');
+    }
+
+    public static string getNewUserName(string firstName, string lastName, string previousUserName)
+    {
+        var previousNumber = Regex.Match(previousUserName, @"\d+").Value;
+
+        var number = (previousNumber == "") ? 1 : Convert.ToInt32(previousNumber) + 1;
+
+        var firstNames = firstName.Split("[ ]+");
+
+        var userName = lastName;
+
+        foreach (var name in firstNames) { 
+            userName += name.Substring(1);
+        }
+        
+        return userName + number.ToString();
+    }
+
+    public static string getNewPassword(string firstName, string lastName, DateTime dateOfBirth)
+    {
+        var firstNames = firstName.Split("[ ]+");
+
+        var userName = lastName;
+
+        foreach (var name in firstNames)
+        {
+            userName += name[1..];
+        }
+
+        return userName + "@" + dateOfBirth.ToString("ddMMyyyy");
     }
 }

@@ -6,6 +6,10 @@ public class ErrorMessages
     public const string LoginFailed = "Username or password is incorrect!";
     public const string Unauthorized = "Unauthorized";
     public const string BadRequest = "Bad request!";
+
     public const string MatchingOldAndNewPassword = "The new password cannot match the old password!";
     public const string WrongOldPassword = "Old password is wrong!";
+
+    public const string InvalidAge = "User's age is invalid!";
+    public const string InvalidJoinedDate = "Joined date is invalid!";
 }
