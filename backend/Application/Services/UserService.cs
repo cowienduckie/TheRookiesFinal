@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models;
+using Application.DTOs.Users;
 using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
 using Application.DTOs.Users.GetListUsers;
@@ -6,6 +7,7 @@ using Application.DTOs.Users.GetUser;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
+using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
 using Infrastructure.Persistence.Interfaces;
 
@@ -94,8 +96,8 @@ public class UserService : BaseService, IUserService
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
         var user = await userRepository.GetAsync(u => !u.IsDeleted &&
-                                                            u.Location == request.Location &&
-                                                            u.Id == request.Id);
+                                                        u.Location == request.Location &&
+                                                        u.Id == request.Id);
 
         if (user == null)
         {
@@ -109,6 +111,28 @@ public class UserService : BaseService, IUserService
 
     public async Task<Response<GetListUsersResponse>> GetListAsync(GetListUsersRequest request)
     {
-        throw new NotImplementedException();
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var users = await userRepository.ListAsync(u => !u.IsDeleted &&
+                                                        u.Location == request.Location);
+        
+        var validSortFields = new []
+        {
+            ModelFields.StaffCode,
+            ModelFields.FullName,
+            ModelFields.Username,
+            ModelFields.JoinedDate,
+            ModelFields.Role
+        };
+
+        var validSearchFields = new []
+        {
+            ModelFields.FullName,
+            ModelFields.StaffCode
+        };
+        
+        var response = new GetListUsersResponse();
+
+        return new Response<GetListUsersResponse>(true, response);
     }
 }
