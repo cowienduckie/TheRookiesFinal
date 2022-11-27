@@ -1,5 +1,5 @@
 import { Button, Divider, Form, Input, Modal } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../Apis/Accounts";
 import {
@@ -15,6 +15,7 @@ import { AuthContext } from "../../Contexts/AuthContext";
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
   const [form] = Form.useForm();
   const [backendError, setBackendError] = useState({
     isError: false,
@@ -22,7 +23,7 @@ export function ChangePasswordFirstTimePage() {
   });
 
   useEffect(() => {
-    if (!AuthContext.isFirstTimeLogin) {
+    if (!authContext.isFirstTimeLogin) {
       navigate("/");
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
