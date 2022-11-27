@@ -2,6 +2,7 @@ import { Button, Divider, Form, Input, Modal } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../Apis/Accounts";
+import { AuthContext } from "../../Contexts/AuthContext";
 import {
   PASSWORD_REQUIRED,
   PASSWORD_AT_LEAST_ONE_DIGIT,
@@ -11,7 +12,6 @@ import {
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   PASSWORD_ONLY_ALLOW
 } from "../../Constants/ErrorMessages";
-import { AuthContext } from "../../Contexts/AuthContext";
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export function ChangePasswordFirstTimePage() {
   const [form] = Form.useForm();
   const [backendError, setBackendError] = useState({
     isError: false,
-    message: "",
+    message: ""
   });
 
   useEffect(() => {
@@ -30,11 +30,18 @@ export function ChangePasswordFirstTimePage() {
 
   useEffect(() => {
     form.validateFields();
-  }, [backendError, form]);
+  }, [backendError]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onFinish = async (values) => {
     await changePassword({ ...values })
       .then(() => {
+        authContext.setAuthInfo(
+          authContext.username,
+          authContext.userRole,
+          authContext.token,
+          false
+        );
+
         navigate("/");
       })
       .catch((error) => {
@@ -90,7 +97,7 @@ export function ChangePasswordFirstTimePage() {
                   return Promise.resolve();
                 }
               }
-            },
+            }
           ]}
         >
           <Input.Password

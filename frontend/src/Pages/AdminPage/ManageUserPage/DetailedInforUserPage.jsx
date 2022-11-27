@@ -1,12 +1,23 @@
 import { Divider, Modal } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserById } from "../../../Apis/AdminApis";
 
 export function DetailedInforUserPage() {
+  const [data, setData] = useState({});
   let { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(true);
   console.log(id);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await getUserById(id);
+      console.log(res);
+    };
+
+    loadData();
+  }, []);
   return (
     <>
       <Modal open={isModalOpen} closable={false} footer={false}>
