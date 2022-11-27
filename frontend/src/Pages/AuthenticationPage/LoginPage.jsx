@@ -76,10 +76,6 @@ export function LoginPage() {
             name="username"
             rules={[
               {
-                required: true,
-                message: USERNAME_REQUIRED
-              },
-              {
                 validator() {
                   if (backendError.isError) {
                     return Promise.reject(new Error(""));
@@ -87,7 +83,15 @@ export function LoginPage() {
                     return Promise.resolve();
                   }
                 }
-              }
+              },
+              ({ getFieldValue }) => ({
+                validator() {
+                  if (getFieldValue("username") !== "") {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(USERNAME_REQUIRED));
+                }
+              })
             ]}
           >
             <Input
@@ -99,13 +103,17 @@ export function LoginPage() {
             label="Password"
             name="password"
             rules={[
-              {
-                required: true,
-                message: PASSWORD_REQUIRED
-              },
+              ({ getFieldValue }) => ({
+                validator() {
+                  if (getFieldValue("password") !== "") {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(PASSWORD_REQUIRED));
+                }
+              }),
               {
                 pattern:
-                  /^(?=.*[A-Za-z0-9])[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+                  /^(?=.*[A-Za-z0-9])[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
                 message: PASSWORD_ONLY_ALLOW
               },
               {

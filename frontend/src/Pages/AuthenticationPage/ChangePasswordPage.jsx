@@ -83,10 +83,6 @@ export function ChangePasswordPage() {
             name="oldPassword"
             rules={[
               {
-                required: true,
-                message: PASSWORD_REQUIRED
-              },
-              {
                 min: 8,
                 max: 16,
                 message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS
@@ -98,7 +94,15 @@ export function ChangePasswordPage() {
                   }
                   return Promise.reject(new Error(INCORRECT_OLD_PASSWORD));
                 }
-              }
+              },
+              ({ getFieldValue }) => ({
+                validator() {
+                  if (getFieldValue("oldPassword") !== "") {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(PASSWORD_REQUIRED));
+                }
+              })
             ]}
           >
             <Input.Password
@@ -114,10 +118,14 @@ export function ChangePasswordPage() {
             name="newPassword"
             dependencies={["oldPassword"]}
             rules={[
-              {
-                required: true,
-                message: PASSWORD_REQUIRED
-              },
+              ({ getFieldValue }) => ({
+                validator() {
+                  if (getFieldValue("newPassword") !== "") {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(PASSWORD_REQUIRED));
+                }
+              }),
               {
                 pattern: /^(?=.*[0-9])[^\n]*$/,
                 message: PASSWORD_AT_LEAST_ONE_DIGIT
@@ -131,11 +139,11 @@ export function ChangePasswordPage() {
                 message: PASSWORD_AT_LEAST_ONE_UPPERCASE
               },
               {
-                pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-?/`~])[^\n]*$/,
+                pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-/`~])[^\n]*$/,
                 message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
               },
               {
-                pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+                pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
                 message: PASSWORD_ONLY_ALLOW
               },
               {

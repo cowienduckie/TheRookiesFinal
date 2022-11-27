@@ -60,10 +60,14 @@ export function ChangePasswordFirstTimePage() {
           label="New Password"
           name="newPassword"
           rules={[
-            {
-              required: true,
-              message: PASSWORD_REQUIRED
-            },
+            ({ getFieldValue }) => ({
+              validator() {
+                if (getFieldValue("newPassword") !== "") {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error(PASSWORD_REQUIRED));
+              }
+            }),
             {
               pattern: /^(?=.*[0-9])[^\n]*$/,
               message: PASSWORD_AT_LEAST_ONE_DIGIT
@@ -77,11 +81,11 @@ export function ChangePasswordFirstTimePage() {
               message: PASSWORD_AT_LEAST_ONE_UPPERCASE
             },
             {
-              pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-?/`~])[^\n]*$/,
+              pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-/`~])[^\n]*$/,
               message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
             },
             {
-              pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+              pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
               message: PASSWORD_ONLY_ALLOW
             },
             {
