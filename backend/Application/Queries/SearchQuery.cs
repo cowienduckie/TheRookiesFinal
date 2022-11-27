@@ -1,4 +1,4 @@
-﻿namespace API.Queries;
+﻿namespace Application.Queries;
 
 public class SearchQuery
 {

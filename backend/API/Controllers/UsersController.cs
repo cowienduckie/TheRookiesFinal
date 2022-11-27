@@ -1,10 +1,12 @@
 using API.Attributes;
 using Application.Common.Models;
 using Application.DTOs.Users.GetUser;
+using Application.DTOs.Users.GetListUsers;
 using Application.Services.Interfaces;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Application.Queries;
 
 namespace API.Controllers;
 
@@ -37,6 +39,41 @@ public class UsersController : BaseController
         try
         {
             var response = await _userService.GetAsync(getUserRequest);
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<Response<GetListUsersResponse>>> GetList(
+        [FromQuery] PagingQuery pagingQuery,
+        [FromQuery] SortQuery sortQuery,
+        [FromQuery] FilterQuery filterQuery,
+        [FromQuery] SearchQuery searchQuery)
+    {
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
+
+        var request = new GetListUsersRequest(CurrentUser.Location, 
+                                                pagingQuery, 
+                                                sortQuery, 
+                                                filterQuery, 
+                                                searchQuery);
+
+        try
+        {
+            var response = await _userService.GetListAsync(request);
 
             if (!response.IsSuccess)
             {

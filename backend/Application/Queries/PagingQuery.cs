@@ -1,6 +1,6 @@
 using Domain.Shared.Constants;
 
-namespace API.Queries;
+namespace Application.Queries;
 
 public class PagingQuery
 {

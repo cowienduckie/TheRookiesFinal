@@ -1,6 +1,6 @@
 ﻿using Domain.Shared.Enums;
 
-namespace API.Queries;
+namespace Application.Queries;
 
 public class FilterQuery
 {
