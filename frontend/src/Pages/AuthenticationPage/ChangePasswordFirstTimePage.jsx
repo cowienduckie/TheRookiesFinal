@@ -11,6 +11,7 @@ import {
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   PASSWORD_ONLY_ALLOW
 } from "../../Constants/ErrorMessages";
+import { AuthContext } from "../../Contexts/AuthContext";
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export function ChangePasswordFirstTimePage() {
   });
 
   useEffect(() => {
-    if (!authContext.isFirstTimeLogin) {
+    if (!AuthContext.isFirstTimeLogin) {
       navigate("/");
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
