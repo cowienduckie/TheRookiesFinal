@@ -65,10 +65,15 @@ public class UsersController : BaseController
             return BadRequest(new Response(false, ErrorMessages.BadRequest));
         }
 
-        var request = new GetListUsersRequest(CurrentUser.Location, 
-                                                pagingQuery, 
-                                                sortQuery, 
-                                                filterQuery, 
+        if (sortQuery.SortField == ModelFields.None)
+        {
+            sortQuery.SortField = ModelFields.FullName;
+        }
+
+        var request = new GetListUsersRequest(CurrentUser.Location,
+                                                pagingQuery,
+                                                sortQuery,
+                                                filterQuery,
                                                 searchQuery);
 
         try

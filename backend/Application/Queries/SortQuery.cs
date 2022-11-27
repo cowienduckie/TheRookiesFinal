@@ -6,7 +6,7 @@ public class SortQuery
 {
     public SortQuery()
     {
-        SortField = ModelFields.FullName;
+        SortField = ModelFields.None;
         SortDirection = SortDirections.Ascending;
     }
 

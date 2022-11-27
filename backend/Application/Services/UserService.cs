@@ -4,6 +4,7 @@ using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
 using Application.DTOs.Users.GetListUsers;
 using Application.DTOs.Users.GetUser;
+using Application.Helpers;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
@@ -113,9 +114,11 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var users = await userRepository.ListAsync(u => !u.IsDeleted &&
-                                                        u.Location == request.Location);
-        
+        var users = (await userRepository.ListAsync(u => !u.IsDeleted &&
+                                                            u.Location == request.Location))
+                                .Select(u => new UserInfoModel(u))
+                                .AsQueryable();
+
         var validSortFields = new []
         {
             ModelFields.StaffCode,
@@ -125,13 +128,31 @@ public class UserService : BaseService, IUserService
             ModelFields.Role
         };
 
-        var validSearchFields = new []
+        var validFilterFields = new[]
+        {
+            ModelFields.Role
+        };
+
+        var searchFields = new []
         {
             ModelFields.FullName,
             ModelFields.StaffCode
         };
-        
-        var response = new GetListUsersResponse();
+
+        var processedList = users.FilterByField(validFilterFields,
+                                                request.FilterQuery.FilterField,
+                                                request.FilterQuery.FilterValue)
+                                    .SearchByField(searchFields,
+                                                request.SearchQuery.SearchValue)
+                                    .SortByField(validSortFields,
+                                                request.SortQuery.SortField,
+                                                request.SortQuery.SortDirection);
+
+        var paginatedList = new PagedList<UserInfoModel>(processedList,
+                                                        request.PagingQuery.PageIndex,
+                                                        request.PagingQuery.PageSize);
+
+        var response = new GetListUsersResponse(request, paginatedList);
 
         return new Response<GetListUsersResponse>(true, response);
     }

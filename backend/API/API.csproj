@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Queries\**" />
+    <Content Remove="Queries\**" />
+    <EmbeddedResource Remove="Queries\**" />
+    <None Remove="Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
@@ -26,7 +33,6 @@
     <Folder Include="Extensions\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Attributes\" />
-    <Folder Include="Queries\" />
   </ItemGroup>
 
   <ItemGroup>

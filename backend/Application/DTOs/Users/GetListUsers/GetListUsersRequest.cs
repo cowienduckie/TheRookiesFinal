@@ -20,7 +20,7 @@ public class GetListUsersRequest
     }
 
     public PagingQuery PagingQuery { get; set; }
-    
+
     public SortQuery SortQuery { get; set; }
 
     public FilterQuery FilterQuery { get; set; }
