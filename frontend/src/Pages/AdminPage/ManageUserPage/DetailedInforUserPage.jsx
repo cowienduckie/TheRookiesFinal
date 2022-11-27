@@ -8,25 +8,25 @@ export function DetailedInforUserPage() {
   const [data, setData] = useState({});
   let { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  console.log(id);
 
   useEffect(() => {
     const loadData = async () => {
       const res = await getUserById(id);
-      console.log(res);
+      setData(res);
     };
 
     loadData();
   }, []);
+
   return (
     <>
       <Modal open={isModalOpen} closable={false} footer={false}>
-        <div className=" flex justify-between content-center">
+        <div className="flex justify-between">
           <h1 className="text-2xl text-red-600 font-bold">
             Detail User Information
           </h1>
           <button
-            className="border-2 border-red-600 text-red-600 pb-1 pl-1 pr-1 rounded h-fit"
+            className="text-red-600"
             onClick={() => {
               setIsModalOpen(false);
             }}
@@ -40,31 +40,31 @@ export function DetailedInforUserPage() {
             <tbody>
               <tr>
                 <td>Staff Code:</td>
-                <td>SD1901</td>
+                <td>{data.staffCode}</td>
               </tr>
               <tr>
                 <td>Full Name:</td>
-                <td>An Nguyen Thuy</td>
+                <td>{data.fullName}</td>
               </tr>
               <tr>
                 <td>User Name:</td>
-                <td>annt</td>
+                <td>{data.username}</td>
               </tr>
               <tr>
                 <td>Date of birth:</td>
-                <td>29/04/1993</td>
+                <td>{data.dateOfBirth}</td>
               </tr>
               <tr>
                 <td>Gender:</td>
-                <td>Female</td>
+                <td>{data.gender}</td>
               </tr>
               <tr>
                 <td>Type:</td>
-                <td>Staff</td>
+                <td>{data.role}</td>
               </tr>
               <tr>
                 <td>Location:</td>
-                <td>Hanoi</td>
+                <td>{data.location}</td>
               </tr>
             </tbody>
           </table>

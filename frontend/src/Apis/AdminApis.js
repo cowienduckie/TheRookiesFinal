@@ -1,8 +1,8 @@
 import { callApi } from "../Helpers/ApiHelper";
 import { API_BASE_URL } from "../Constants/SystemConstants";
 
-export async function getUserById(data) {
-  const url = `${API_BASE_URL}/api/users/${data}`;
+export async function getUserById(id) {
+  const url = `${API_BASE_URL}/api/users/${id}`;
 
-  return await callApi("get", url, data);
+  return await callApi("get", url);
 }
