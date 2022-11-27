@@ -4,6 +4,11 @@ namespace API.Queries;
 
 public class FilterQuery
 {
-    public ModelFields? FilterField { get; set; }
+    public FilterQuery()
+    {
+        FilterField = ModelFields.None;
+    }
+
+    public ModelFields FilterField { get; set; }
     public string? FilterValue { get; set; }
 }

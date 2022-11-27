@@ -2,6 +2,7 @@
 
 public enum ModelFields
 {
+    None,
     StaffCode,
     FullName,
     Role,
