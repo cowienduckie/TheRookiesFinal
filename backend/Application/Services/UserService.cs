@@ -170,7 +170,7 @@ public class UserService : BaseService, IUserService
 
         if (user.Location != requestModel.AdminLocation)
         {
-            return new Response<EditUserResponse>(false, "Dat ngu");
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidLocation);
         }
 
         if (GetAge(requestModel.DateOfBirth) < 18)
