@@ -93,32 +93,32 @@ public class UsersController : BaseController
         {
             return HandleException(exception);
         }
+    }
 
-        [HttpPost("create")]
-        public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
+    [HttpPost("create")]
+    public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
+    {
+        try
         {
-            try
+            if (CurrentUser == null)
             {
-                if (CurrentUser == null)
-                {
-                    return BadRequest(new Response(false, ErrorMessages.BadRequest));
-                }
-
-                requestModel.AdminId = CurrentUser.Id;
-
-                var response = await _userService.CreateUserAsync(requestModel);
-
-                if (!response.IsSuccess)
-                {
-                    return BadRequest(response);
-                }
-
-                return Ok(response);
+                return BadRequest(new Response(false, ErrorMessages.BadRequest));
             }
-            catch (Exception exception)
+
+            requestModel.Location = CurrentUser.Location;
+
+            var response = await _userService.CreateUserAsync(requestModel);
+
+            if (!response.IsSuccess)
             {
-                return HandleException(exception);
+                return BadRequest(response);
             }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
         }
     }
 }

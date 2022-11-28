@@ -6,9 +6,6 @@ namespace Application.DTOs.Users.CreateUser;
 public class CreateUserRequest
 {
     [Required]
-    public Guid? AdminId { get; set; }
-
-    [Required]
     public string FirstName { get; set; } = null!;
 
     [Required]

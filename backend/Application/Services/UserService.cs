@@ -88,69 +88,59 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var adminCreator = await userRepository.GetAsync(admin => admin.Id == requestModel.AdminId);
+        var user = new User();
 
-        if (adminCreator != null)
+        var responseModel = new CreateUserResponse(user);
+
+        if (GetAge(requestModel.DateOfBirth) < 18)
         {
-            var user = new User();
-
-            var responseModel = new CreateUserResponse(user);
-
-            if (GetAge(requestModel.DateOfBirth) < 18)
-            {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, responseModel);
-            }
-
-            if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) != 1
-                || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
-            }
-
-            var latestStaffCode = _context?.Users.OrderByDescending(user => user.StaffCode).First().StaffCode;
-
-            if (latestStaffCode == null)
-            {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
-            }
-
-            var latestUserName = _context?.Users.OrderByDescending(user => user.Username).First().StaffCode;
-
-            if (latestUserName == null)
-            {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
-            }
-
-            var newStaffCode = GetNewStaffCode(latestStaffCode);
-            var newUserName = GetNewUserName(requestModel.FirstName, requestModel.LastName, latestUserName);
-            var newPassword = HashStringHelper.HashString(GetNewPassword(requestModel.FirstName, requestModel.LastName, requestModel.DateOfBirth));
-
-            user = new User
-            {
-                StaffCode = newStaffCode,
-                FirstName = requestModel.FirstName,
-                LastName = requestModel.LastName,
-                Username = newUserName,
-                HashedPassword = newPassword,
-                DateOfBirth = requestModel.DateOfBirth,
-                Gender = requestModel.Gender,
-                JoinedDate = requestModel.JoinedDate,
-                Role = requestModel.Role,
-                Location = adminCreator.Location,
-                IsFirstTimeLogIn = true,
-            };
-            responseModel = new CreateUserResponse(user);
-
-            await userRepository.AddAsync(user);
-            await UnitOfWork.SaveChangesAsync();
-
-            return new Response<CreateUserResponse>(true, "Success", responseModel);
+            return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, responseModel);
         }
-        else if (adminCreator?.Role != UserRoles.Admin)
+
+        if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) != 1
+            || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
-            return new Response<CreateUserResponse>(false, ErrorMessages.Unauthorized, new CreateUserResponse(new User()));
+            return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
         }
-        return new Response<CreateUserResponse>(false, ErrorMessages.BadRequest, new CreateUserResponse(new User()));
+
+        var latestStaffCode = _context?.Users.OrderByDescending(user => user.StaffCode).First().StaffCode;
+
+        if (latestStaffCode == null)
+        {
+            return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
+        }
+
+        var latestUserName = _context?.Users.OrderByDescending(user => user.Username).First().StaffCode;
+
+        if (latestUserName == null)
+        {
+            return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
+        }
+
+        var newStaffCode = GetNewStaffCode(latestStaffCode);
+        var newUserName = GetNewUserName(requestModel.FirstName, requestModel.LastName, latestUserName);
+        var newPassword = HashStringHelper.HashString(GetNewPassword(requestModel.FirstName, requestModel.LastName, requestModel.DateOfBirth));
+
+        user = new User
+        {
+            StaffCode = newStaffCode,
+            FirstName = requestModel.FirstName,
+            LastName = requestModel.LastName,
+            Username = newUserName,
+            HashedPassword = newPassword,
+            DateOfBirth = requestModel.DateOfBirth,
+            Gender = requestModel.Gender,
+            JoinedDate = requestModel.JoinedDate,
+            Role = requestModel.Role,
+            Location = requestModel.Location,
+            IsFirstTimeLogIn = true,
+        };
+        responseModel = new CreateUserResponse(user);
+
+        await userRepository.AddAsync(user);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response<CreateUserResponse>(true, "Success", responseModel);
     }
 
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
@@ -194,7 +184,7 @@ public class UserService : BaseService, IUserService
                                 .Select(u => new GetUserResponse(u))
                                 .AsQueryable();
 
-        var validSortFields = new []
+        var validSortFields = new[]
         {
             ModelFields.StaffCode,
             ModelFields.FullName,
@@ -208,7 +198,7 @@ public class UserService : BaseService, IUserService
             ModelFields.Role
         };
 
-        var searchFields = new []
+        var searchFields = new[]
         {
             ModelFields.FullName,
             ModelFields.StaffCode
