@@ -4,6 +4,7 @@ using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
 using Application.DTOs.Users.GetListUsers;
 using Application.DTOs.Users.GetUser;
+using Application.DTOs.Users.EditUser;
 using Application.Helpers;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
@@ -155,5 +156,50 @@ public class UserService : BaseService, IUserService
         var response = new GetListUsersResponse(paginatedList);
 
         return new Response<GetListUsersResponse>(true, response);
+    }
+
+    public async Task<Response<EditUserResponse>> EditUserAsync(EditUserRequest requestModel)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(admin => admin.Id == requestModel.Id);
+
+        if (user == null)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.BadRequest );
+        }
+
+        if (GetAge(requestModel.DateOfBirth) < 18)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidAge );
+        }
+
+        if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) > 0
+            || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidJoinedDate);
+        }
+
+        user.DateOfBirth = requestModel.DateOfBirth;
+        user.Gender = requestModel.Gender;
+        user.JoinedDate = requestModel.JoinedDate;
+        user.Role = requestModel.Role;
+
+        await userRepository.UpdateAsync(user);
+
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response<EditUserResponse>(true, "Success");
+    }
+
+    private int GetAge(DateTime dateOfBirth)
+    {
+        var today = DateTime.Now;
+
+        var age = today.Year - dateOfBirth.Year;
+
+        if (today.Month < dateOfBirth.Month || (today.Month == dateOfBirth.Month && today.Day < dateOfBirth.Day)) { age--; }
+
+        return age;
     }
 }
