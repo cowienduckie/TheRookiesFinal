@@ -116,7 +116,7 @@ public class UserService : BaseService, IUserService
 
         var users = (await userRepository.ListAsync(u => !u.IsDeleted &&
                                                             u.Location == request.Location))
-                                .Select(u => new UserInfoModel(u))
+                                .Select(u => new GetUserResponse(u))
                                 .AsQueryable();
 
         var validSortFields = new []
@@ -148,11 +148,11 @@ public class UserService : BaseService, IUserService
                                                 request.SortQuery.SortField,
                                                 request.SortQuery.SortDirection);
 
-        var paginatedList = new PagedList<UserInfoModel>(processedList,
-                                                        request.PagingQuery.PageIndex,
-                                                        request.PagingQuery.PageSize);
+        var paginatedList = new PagedList<GetUserResponse>(processedList,
+                                                            request.PagingQuery.PageIndex,
+                                                            request.PagingQuery.PageSize);
 
-        var response = new GetListUsersResponse(request, paginatedList);
+        var response = new GetListUsersResponse(paginatedList);
 
         return new Response<GetListUsersResponse>(true, response);
     }
