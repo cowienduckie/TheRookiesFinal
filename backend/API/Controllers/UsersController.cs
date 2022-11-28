@@ -104,7 +104,7 @@ public class UsersController : BaseController
                 return BadRequest(new Response(false, ErrorMessages.BadRequest));
             }
 
-            requestModel.AdminId = CurrentUser.Id;
+            requestModel.Location = CurrentUser.Location;
 
             var response = await _userService.CreateUserAsync(requestModel);
 
