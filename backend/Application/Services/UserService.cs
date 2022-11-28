@@ -20,7 +20,6 @@ namespace Application.Services;
 
 public class UserService : BaseService, IUserService
 {
-    private readonly EfContext? _context;
 
     public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
@@ -103,14 +102,14 @@ public class UserService : BaseService, IUserService
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
         }
 
-        var latestStaffCode = _context?.Users.OrderByDescending(user => user.StaffCode).First().StaffCode;
+        var latestStaffCode = userRepository.ListAsync(user => user.IsDeleted == false).Result.OrderByDescending(user => user.StaffCode).First().StaffCode;
 
         if (latestStaffCode == null)
         {
             return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
         }
 
-        var latestUserName = _context?.Users.OrderByDescending(user => user.Username).First().StaffCode;
+        var latestUserName = userRepository.ListAsync(user => user.IsDeleted == false).Result.OrderByDescending(user => user.StaffCode).First().Username;
 
         if (latestUserName == null)
         {
