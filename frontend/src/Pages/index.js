@@ -11,7 +11,8 @@ export {
   ManageAssignmentPage,
   ManageRequestForReturningPage,
   ReportPage,
-  CreateUserPage
+  CreateUserPage,
+  EditUserPage
 } from "./AdminPage";
 
 export {

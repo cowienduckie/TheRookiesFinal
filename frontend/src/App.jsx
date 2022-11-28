@@ -5,6 +5,7 @@ import {
   ChangePasswordFirstTimePage,
   ChangePasswordPage,
   CreateUserPage,
+  EditUserPage,
   HomePage,
   LoginPage,
   LogoutPage,
@@ -31,6 +32,10 @@ function App() {
             <Route
               path="/admin/manage-user/create-user"
               element={<CreateUserPage />}
+            />
+            <Route
+              path="/admin/manage-user/edit-user/:id"
+              element={<EditUserPage />}
             />
           </Route>
           <Route
