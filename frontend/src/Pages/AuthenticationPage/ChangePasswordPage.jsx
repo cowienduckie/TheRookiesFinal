@@ -14,6 +14,7 @@ import {
   PASSWORD_REQUIRED
 } from "../../Constants/ErrorMessages";
 import { AuthContext } from "../../Contexts/AuthContext";
+import { CheckNullValidation } from "../../Helpers";
 
 export function ChangePasswordPage() {
   const authContext = useContext(AuthContext);
@@ -95,14 +96,7 @@ export function ChangePasswordPage() {
                   return Promise.reject(new Error(INCORRECT_OLD_PASSWORD));
                 }
               },
-              ({ getFieldValue }) => ({
-                validator() {
-                  if (getFieldValue("oldPassword") !== "") {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error(PASSWORD_REQUIRED));
-                }
-              })
+              CheckNullValidation(PASSWORD_REQUIRED, "oldPassword")
             ]}
           >
             <Input.Password
@@ -118,14 +112,7 @@ export function ChangePasswordPage() {
             name="newPassword"
             dependencies={["oldPassword"]}
             rules={[
-              ({ getFieldValue }) => ({
-                validator() {
-                  if (getFieldValue("newPassword") !== "") {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(new Error(PASSWORD_REQUIRED));
-                }
-              }),
+              CheckNullValidation(PASSWORD_REQUIRED, "newPassword"),
               {
                 pattern: /^(?=.*[0-9])[^\n]*$/,
                 message: PASSWORD_AT_LEAST_ONE_DIGIT

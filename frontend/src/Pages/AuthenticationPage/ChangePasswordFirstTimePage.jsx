@@ -12,6 +12,7 @@ import {
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   PASSWORD_ONLY_ALLOW
 } from "../../Constants/ErrorMessages";
+import { CheckNullValidation } from "../../Helpers";
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
@@ -60,14 +61,7 @@ export function ChangePasswordFirstTimePage() {
           label="New Password"
           name="newPassword"
           rules={[
-            ({ getFieldValue }) => ({
-              validator() {
-                if (getFieldValue("newPassword") !== "") {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error(PASSWORD_REQUIRED));
-              }
-            }),
+            CheckNullValidation(PASSWORD_REQUIRED, "newPassword"),
             {
               pattern: /^(?=.*[0-9])[^\n]*$/,
               message: PASSWORD_AT_LEAST_ONE_DIGIT
