@@ -96,7 +96,7 @@ public class UserService : BaseService, IUserService
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, responseModel);
         }
 
-        if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) != 1
+        if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) != -1
             || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);

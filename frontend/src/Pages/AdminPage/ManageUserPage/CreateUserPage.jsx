@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { createUser } from "../../../Apis/CreateUserApis";
 dayjs.extend(customParseFormat);
 
 export function CreateUserPage() {
@@ -24,12 +25,15 @@ export function CreateUserPage() {
     return current && current > dayjs().endOf("day");
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleSubmit = () => {
-    showModal();
+  const onFinish = async (values) => {
+    await createUser(values)
+      .then((data) => {
+        console.log(data);
+        setIsModalOpen(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleCancel = () => {
@@ -50,12 +54,7 @@ export function CreateUserPage() {
   return (
     <>
       <h1 className="text-2xl text-red-600 font-bold mb-5">Create New User</h1>
-      <Form
-        {...layout}
-        form={form}
-        name="nest-messages"
-        onFinish={handleSubmit}
-      >
+      <Form {...layout} form={form} name="nest-messages" onFinish={onFinish}>
         <Form.Item
           name="firstName"
           label="FirstName"
@@ -181,7 +180,7 @@ export function CreateUserPage() {
             className="mx-2"
             type="primary"
             danger
-            onSubmit={handleSubmit}
+            onSubmit={onFinish}
             htmlType="submit"
           >
             Save
