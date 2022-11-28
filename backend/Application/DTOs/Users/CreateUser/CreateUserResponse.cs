@@ -12,8 +12,6 @@ public class CreateUserResponse
         StaffCode = user.StaffCode;
         FirstName = user.FirstName;
         LastName = user.LastName;
-        Username = user.Username;
-        HashedPassword = user.HashedPassword;
         DateOfBirth = user.DateOfBirth;
         Gender = user.Gender;
         JoinedDate = user.JoinedDate;
@@ -24,15 +22,11 @@ public class CreateUserResponse
 
     public Guid Id { get; }
 
-    public string? StaffCode { get; }
+    public string StaffCode { get; }
 
-    public string? FirstName { get; }
+    public string FirstName { get; }
 
-    public string? LastName { get; }
-
-    public string? Username { get; }
-
-    public string? HashedPassword { get; }
+    public string LastName { get; }
 
     public DateTime DateOfBirth { get; }
 
