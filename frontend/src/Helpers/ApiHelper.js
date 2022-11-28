@@ -28,10 +28,10 @@ export function queriesToString(queries) {
     "?" +
     `pageIndex=${queries.pageIndex}&` +
     `pageSize=${queries.pageSize}&` +
-    `sortField=${queries.sortField}` +
-    `sortDirection=${queries.sortDirection}` +
-    `filterField=${queries.filterField}` +
-    `filterValue=${queries.filterValue}` +
-    `searchValue=${queries.searchValue}`
+    `sortField=${queries.sortField}&` +
+    `sortDirection=${queries.sortDirection}&` +
+    `filterField=${queries.filterField}&` +
+    `filterValue=${queries.filterValue}&` +
+    `searchValue=${queries.searchValue}&`
   );
 }
