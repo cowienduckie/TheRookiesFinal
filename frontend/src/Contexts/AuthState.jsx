@@ -26,13 +26,13 @@ export function AuthState(props) {
     token &&
     userRole &&
     username &&
-    isFirstTimeLogin &&
+    !!isFirstTimeLogin &&
     (userRole === STAFF || userRole === ADMIN)
   ) {
     initialState.authenticated = true;
     initialState.userRole = userRole;
     initialState.username = username;
-    initialState.isFirstTimeLogin = isFirstTimeLogin;
+    initialState.isFirstTimeLogin = (isFirstTimeLogin === "true");
   }
 
   const [state, dispatch] = useReducer(authReducer, initialState);

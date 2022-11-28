@@ -9,10 +9,12 @@ import {
   PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
   PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_COMPARED,
+  PASSWORD_ONLY_ALLOW,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
-  PASSWORD_REQUIRED,
+  PASSWORD_REQUIRED
 } from "../../Constants/ErrorMessages";
 import { AuthContext } from "../../Contexts/AuthContext";
+import { CheckNullValidation } from "../../Helpers";
 
 export function ChangePasswordPage() {
   const authContext = useContext(AuthContext);
@@ -71,10 +73,10 @@ export function ChangePasswordPage() {
           onFinish={onFinish}
           autoComplete="off"
           labelCol={{
-            span: 8,
+            span: 8
           }}
           wrapperCol={{
-            span: 16,
+            span: 16
           }}
         >
           <Form.Item
@@ -82,8 +84,9 @@ export function ChangePasswordPage() {
             name="oldPassword"
             rules={[
               {
-                required: true,
-                message: PASSWORD_REQUIRED,
+                min: 8,
+                max: 16,
+                message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS
               },
               {
                 validator() {
@@ -91,8 +94,9 @@ export function ChangePasswordPage() {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error(INCORRECT_OLD_PASSWORD));
-                },
+                }
               },
+              CheckNullValidation(PASSWORD_REQUIRED, "oldPassword")
             ]}
           >
             <Input.Password
@@ -108,30 +112,31 @@ export function ChangePasswordPage() {
             name="newPassword"
             dependencies={["oldPassword"]}
             rules={[
+              CheckNullValidation(PASSWORD_REQUIRED, "newPassword"),
               {
-                required: true,
-                message: PASSWORD_REQUIRED,
+                pattern: /^(?=.*[0-9])[^\n]*$/,
+                message: PASSWORD_AT_LEAST_ONE_DIGIT
               },
               {
-                pattern: /^(?=.*[0-9])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-                message: PASSWORD_AT_LEAST_ONE_DIGIT,
+                pattern: /^(?=.*[a-z])[^\n]*$/,
+                message: PASSWORD_AT_LEAST_ONE_LOWERCASE
               },
               {
-                pattern: /^(?=.*[a-z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-                message: PASSWORD_AT_LEAST_ONE_LOWERCASE,
+                pattern: /^(?=.*[A-Z])[^\n]*$/,
+                message: PASSWORD_AT_LEAST_ONE_UPPERCASE
               },
               {
-                pattern: /^(?=.*[A-Z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-                message: PASSWORD_AT_LEAST_ONE_UPPERCASE,
+                pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-/`~])[^\n]*$/,
+                message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
               },
               {
-                pattern: /^(?=.*[!*_@#$%^&+= ]).*$/,
-                message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
+                pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
+                message: PASSWORD_ONLY_ALLOW
               },
               {
                 min: 8,
                 max: 16,
-                message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+                message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
@@ -139,8 +144,8 @@ export function ChangePasswordPage() {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error(PASSWORD_COMPARED));
-                },
-              }),
+                }
+              })
             ]}
           >
             <Input.Password style={{ width: "80%" }} />

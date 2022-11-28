@@ -18,3 +18,15 @@ export const patternValidate = (value, regex, msg) => {
   }
   return "";
 };
+
+export function CheckNullValidation(errorMsg, fieldName) {
+  return ({ getFieldValue }) => ({
+    validator() {
+      if (getFieldValue(fieldName) !== "") {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error(errorMsg));
+    }
+  });
+}
+

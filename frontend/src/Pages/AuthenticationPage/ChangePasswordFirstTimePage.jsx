@@ -1,7 +1,8 @@
 import { Button, Divider, Form, Input, Modal } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { changePassword } from "../../Apis/Accounts";
+import { AuthContext } from "../../Contexts/AuthContext";
 import {
   PASSWORD_REQUIRED,
   PASSWORD_AT_LEAST_ONE_DIGIT,
@@ -9,23 +10,39 @@ import {
   PASSWORD_AT_LEAST_ONE_LOWERCASE,
   PASSWORD_AT_LEAST_ONE_UPPERCASE,
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+  PASSWORD_ONLY_ALLOW
 } from "../../Constants/ErrorMessages";
+import { CheckNullValidation } from "../../Helpers";
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
   const [form] = Form.useForm();
   const [backendError, setBackendError] = useState({
     isError: false,
-    message: "",
+    message: ""
   });
 
   useEffect(() => {
+    if (!authContext.isFirstTimeLogin) {
+      navigate("/");
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     form.validateFields();
-  }, [backendError, form]);
+  }, [backendError]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onFinish = async (values) => {
     await changePassword({ ...values })
       .then(() => {
+        authContext.setAuthInfo(
+          authContext.username,
+          authContext.userRole,
+          authContext.token,
+          false
+        );
+
         navigate("/");
       })
       .catch((error) => {
@@ -44,30 +61,31 @@ export function ChangePasswordFirstTimePage() {
           label="New Password"
           name="newPassword"
           rules={[
+            CheckNullValidation(PASSWORD_REQUIRED, "newPassword"),
             {
-              required: true,
-              message: PASSWORD_REQUIRED,
+              pattern: /^(?=.*[0-9])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_DIGIT
             },
             {
-              pattern: /^(?=.*[0-9])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-              message: PASSWORD_AT_LEAST_ONE_DIGIT,
+              pattern: /^(?=.*[a-z])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_LOWERCASE
             },
             {
-              pattern: /^(?=.*[a-z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-              message: PASSWORD_AT_LEAST_ONE_LOWERCASE,
+              pattern: /^(?=.*[A-Z])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_UPPERCASE
             },
             {
-              pattern: /^(?=.*[A-Z])[A-Za-z0-9!*_@#$%^&+= ]*$/,
-              message: PASSWORD_AT_LEAST_ONE_UPPERCASE,
+              pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-/`~])[^\n]*$/,
+              message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
             },
             {
-              pattern: /^(?=.*[!*_@#$%^&+= ]).*$/,
-              message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER,
+              pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
+              message: PASSWORD_ONLY_ALLOW
             },
             {
               min: 8,
               max: 16,
-              message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
+              message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS
             },
             {
               validator() {
@@ -77,7 +95,7 @@ export function ChangePasswordFirstTimePage() {
                   return Promise.resolve();
                 }
               }
-            },
+            }
           ]}
         >
           <Input.Password
