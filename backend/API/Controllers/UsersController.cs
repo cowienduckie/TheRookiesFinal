@@ -94,9 +94,9 @@ public class UsersController : BaseController
         }
     }
 
-    [HttpPut("eidt-user")]
+    [HttpPut("edit")]
         public async Task<ActionResult<Response<EditUserResponse>>> Update(
-        [FromBody] EditUserRequest requestModel)
+        [FromBody] EditUserRequest requestModel) 
         {
             try
             {
@@ -105,7 +105,7 @@ public class UsersController : BaseController
                     return BadRequest(new Response(false, ErrorMessages.BadRequest));
                 }
 
-                requestModel.Id = CurrentUser.Id;
+                requestModel.AdminLocation = CurrentUser.Location;
 
                 var response = await _userService.EditUserAsync(requestModel);
 

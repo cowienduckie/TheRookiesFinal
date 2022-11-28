@@ -1,5 +1,4 @@
 ﻿using Application.Common.Models;
-using Application.DTOs.Users;
 using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
 using Application.DTOs.Users.GetListUsers;
@@ -162,11 +161,16 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(admin => admin.Id == requestModel.Id);
+        var user = await userRepository.GetAsync(user => user.Id == requestModel.Id);
 
         if (user == null)
         {
             return new Response<EditUserResponse>(false, ErrorMessages.BadRequest );
+        }
+
+        if (user.Location != requestModel.AdminLocation)
+        {
+            return new Response<EditUserResponse>(false, "Dat ngu");
         }
 
         if (GetAge(requestModel.DateOfBirth) < 18)

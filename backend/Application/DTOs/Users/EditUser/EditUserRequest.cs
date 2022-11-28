@@ -19,5 +19,7 @@ namespace Application.DTOs.Users.EditUser
 
         [Required]
         public UserRoles Role { get; set; }
+
+        public Locations AdminLocation { get; set; }
     }
 }
