@@ -12,6 +12,7 @@ import {
   PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS,
   PASSWORD_ONLY_ALLOW
 } from "../../Constants/ErrorMessages";
+import { CheckNullValidation } from "../../Helpers";
 
 export function ChangePasswordFirstTimePage() {
   const navigate = useNavigate();
@@ -60,10 +61,7 @@ export function ChangePasswordFirstTimePage() {
           label="New Password"
           name="newPassword"
           rules={[
-            {
-              required: true,
-              message: PASSWORD_REQUIRED
-            },
+            CheckNullValidation(PASSWORD_REQUIRED, "newPassword"),
             {
               pattern: /^(?=.*[0-9])[^\n]*$/,
               message: PASSWORD_AT_LEAST_ONE_DIGIT
@@ -77,11 +75,11 @@ export function ChangePasswordFirstTimePage() {
               message: PASSWORD_AT_LEAST_ONE_UPPERCASE
             },
             {
-              pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-?/`~])[^\n]*$/,
+              pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-/`~])[^\n]*$/,
               message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
             },
             {
-              pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+              pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
               message: PASSWORD_ONLY_ALLOW
             },
             {
