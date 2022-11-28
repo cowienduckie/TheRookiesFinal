@@ -7,10 +7,11 @@ import {
   Button,
   Radio,
   Select,
-  ConfigProvider,
+  ConfigProvider
 } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { editUser } from "../../../Apis/EditUserApis";
 dayjs.extend(customParseFormat);
 
 export function EditUserPage() {
@@ -32,9 +33,19 @@ export function EditUserPage() {
     return current && current > dayjs().endOf("day");
   };
 
+  const onFinish = async (values) => {
+    await editUser(values)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
-      <Form {...layout}>
+      <Form {...layout} onFinish={onFinish}>
         <h1 className="text-2xl text-red-600 font-bold mb-5">Edit User</h1>
         <Form.Item label="First Name">
           <Input disabled />
@@ -137,7 +148,7 @@ export function EditUserPage() {
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button className="mx-2" type="primary" danger>
+          <Button className="mx-2" type="primary" danger onSubmit={onFinish}>
             Save
           </Button>
 
