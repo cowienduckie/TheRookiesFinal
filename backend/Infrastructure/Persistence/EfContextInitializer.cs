@@ -52,21 +52,42 @@ public class EfContextInitializer
     {
         if (!_context.Users.Any())
         {
-           _context.Users.Add(new User
-           {
-               Username = "admin",
-               HashedPassword = HashStringHelper.HashString("Admin@123"),
-               Role = UserRoles.Admin
-           });
+            for (int i = 1; i <= 10; i++)
+            {
+                var adminCode = i.ToString().PadLeft(4, '0');
+                var userCode = (2 * i).ToString().PadLeft(4, '0');
+                var now = DateTime.Now;
 
-           _context.Users.Add(new User
-           {
-               Username = "staff",
-               HashedPassword = HashStringHelper.HashString("Staff@123"),
-               Role = UserRoles.Staff
-           });
+                _context.Users.Add(new User
+                {
+                    StaffCode = $"SD{adminCode}",
+                    FirstName = "Admin",
+                    LastName = adminCode,
+                    Username = $"admin{i}",
+                    HashedPassword = HashStringHelper.HashString("Admin@123"),
+                    DateOfBirth = now.AddYears(-18),
+                    Gender = i % 2 == 0 ? Genders.Female : Genders.Male,
+                    JoinedDate = now,
+                    Role = UserRoles.Admin,
+                    Location = i % 2 == 0 ? Locations.HaNoi : Locations.HCMCity,
+                });
 
-           await _context.SaveChangesAsync();
+                _context.Users.Add(new User
+                {
+                    StaffCode = $"SD{userCode}",
+                    FirstName = "Staff",
+                    LastName = userCode,
+                    Username = $"staff{i}",
+                    HashedPassword = HashStringHelper.HashString("Staff@123"),
+                    DateOfBirth = now.AddYears(-18),
+                    Gender = i % 2 == 0 ? Genders.Male : Genders.Female,
+                    JoinedDate = now,
+                    Role = UserRoles.Staff,
+                    Location = i % 2 == 0 ? Locations.HaNoi : Locations.HCMCity,
+                });
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

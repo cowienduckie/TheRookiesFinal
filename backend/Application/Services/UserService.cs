@@ -1,9 +1,14 @@
 ﻿using Application.Common.Models;
+using Application.DTOs.Users;
 using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
+using Application.DTOs.Users.GetListUsers;
+using Application.DTOs.Users.GetUser;
+using Application.Helpers;
 using Application.Services.Interfaces;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
+using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
 using Infrastructure.Persistence.Interfaces;
 
@@ -11,7 +16,6 @@ namespace Application.Services;
 
 public class UserService : BaseService, IUserService
 {
-
     public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
     }
@@ -20,7 +24,7 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Username == requestModel.Username);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Username == requestModel.Username);
 
         if (user == null ||
             !HashStringHelper.IsValid(requestModel.Password, user.HashedPassword))
@@ -43,7 +47,7 @@ public class UserService : BaseService, IUserService
 
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Id == requestModel.Id);
 
         if (user == null)
         {
@@ -78,7 +82,7 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Id == id);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Id == id);
 
         if (user == null)
         {
@@ -86,5 +90,70 @@ public class UserService : BaseService, IUserService
         }
 
         return new UserInternalModel(user);
+    }
+
+    public async Task<Response<GetUserResponse>> GetAsync(GetUserRequest request)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(u => !u.IsDeleted &&
+                                                        u.Location == request.Location &&
+                                                        u.Id == request.Id);
+
+        if (user == null)
+        {
+            return new Response<GetUserResponse>(false, ErrorMessages.NotFound);
+        }
+
+        var getUserDto = new GetUserResponse(user);
+
+        return new Response<GetUserResponse>(true, getUserDto);
+    }
+
+    public async Task<Response<GetListUsersResponse>> GetListAsync(GetListUsersRequest request)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var users = (await userRepository.ListAsync(u => !u.IsDeleted &&
+                                                            u.Location == request.Location))
+                                .Select(u => new GetUserResponse(u))
+                                .AsQueryable();
+
+        var validSortFields = new []
+        {
+            ModelFields.StaffCode,
+            ModelFields.FullName,
+            ModelFields.Username,
+            ModelFields.JoinedDate,
+            ModelFields.Role
+        };
+
+        var validFilterFields = new[]
+        {
+            ModelFields.Role
+        };
+
+        var searchFields = new []
+        {
+            ModelFields.FullName,
+            ModelFields.StaffCode
+        };
+
+        var processedList = users.FilterByField(validFilterFields,
+                                                request.FilterQuery.FilterField,
+                                                request.FilterQuery.FilterValue)
+                                    .SearchByField(searchFields,
+                                                request.SearchQuery.SearchValue)
+                                    .SortByField(validSortFields,
+                                                request.SortQuery.SortField,
+                                                request.SortQuery.SortDirection);
+
+        var paginatedList = new PagedList<GetUserResponse>(processedList,
+                                                            request.PagingQuery.PageIndex,
+                                                            request.PagingQuery.PageSize);
+
+        var response = new GetListUsersResponse(paginatedList);
+
+        return new Response<GetListUsersResponse>(true, response);
     }
 }
