@@ -88,36 +88,40 @@ public class UserService : BaseService, IUserService
 
         if (adminCreator != null)
         {
+            var user = new User();
+
+            var responseModel = new CreateUserResponse(user);
+
             if (GetAge(requestModel.DateOfBirth) < 18)
             {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, null);
+                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, responseModel);
             }
 
             if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) != 1
                 || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
             {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, null);
+                return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
             }
 
             var latestStaffCode = _context?.Users.OrderByDescending(user => user.StaffCode).First().StaffCode;
 
             if (latestStaffCode == null)
             {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, null);
+                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
             }
 
             var latestUserName = _context?.Users.OrderByDescending(user => user.Username).First().StaffCode;
 
             if (latestUserName == null)
             {
-                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, null);
+                return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
             }
 
-            var newStaffCode = getNewStaffCode(latestStaffCode);
-            var newUserName = getNewUserName(requestModel.FirstName, requestModel.LastName, latestUserName);
-            var newPassword = HashStringHelper.HashString(getNewPassword(requestModel.FirstName, requestModel.LastName, requestModel.DateOfBirth));
+            var newStaffCode = GetNewStaffCode(latestStaffCode);
+            var newUserName = GetNewUserName(requestModel.FirstName, requestModel.LastName, latestUserName);
+            var newPassword = HashStringHelper.HashString(GetNewPassword(requestModel.FirstName, requestModel.LastName, requestModel.DateOfBirth));
 
-            var user = new User
+            user = new User
             {
                 StaffCode = newStaffCode,
                 FirstName = requestModel.FirstName,
@@ -131,14 +135,18 @@ public class UserService : BaseService, IUserService
                 Location = adminCreator.Location,
                 IsFirstTimeLogIn = true,
             };
-            var responseModel = new CreateUserResponse(user);
+            responseModel = new CreateUserResponse(user);
 
             await userRepository.AddAsync(user);
             await UnitOfWork.SaveChangesAsync();
 
             return new Response<CreateUserResponse>(true, "Success", responseModel);
         }
-        return new Response<CreateUserResponse>(false, ErrorMessages.BadRequest, null);
+        else if (adminCreator?.Role != UserRoles.Admin)
+        {
+            return new Response<CreateUserResponse>(false, ErrorMessages.Unauthorized, new CreateUserResponse(new User()));
+        }
+        return new Response<CreateUserResponse>(false, ErrorMessages.BadRequest, new CreateUserResponse(new User()));
     }
 
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
@@ -162,11 +170,11 @@ public class UserService : BaseService, IUserService
         var age = today.Year - birthDate.Year;
 
         if (today.Month < birthDate.Month || (today.Month == birthDate.Month && today.Day < birthDate.Day)) { age--; }
-        
+
         return age;
     }
 
-    public static string getNewStaffCode(string previousStaffCode)
+    public static string GetNewStaffCode(string previousStaffCode)
     {
         var prefix = "SD";
 
@@ -177,7 +185,7 @@ public class UserService : BaseService, IUserService
         return prefix + nextStaffCodeNumber.ToString().PadLeft(4, '0');
     }
 
-    public static string getNewUserName(string firstName, string lastName, string previousUserName)
+    public static string GetNewUserName(string firstName, string lastName, string previousUserName)
     {
         var previousNumber = Regex.Match(previousUserName, @"\d+").Value;
 
@@ -187,14 +195,15 @@ public class UserService : BaseService, IUserService
 
         var userName = lastName;
 
-        foreach (var name in firstNames) { 
+        foreach (var name in firstNames)
+        {
             userName += name.Substring(1);
         }
-        
+
         return userName + number.ToString();
     }
 
-    public static string getNewPassword(string firstName, string lastName, DateTime dateOfBirth)
+    public static string GetNewPassword(string firstName, string lastName, DateTime dateOfBirth)
     {
         var firstNames = firstName.Split("[ ]+");
 
