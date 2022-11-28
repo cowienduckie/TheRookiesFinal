@@ -1,11 +1,17 @@
-import { Button, Dropdown, Select, Table } from "antd";
-import ButtonGroup from "antd/es/button/button-group";
-import { FilterFilled } from "@ant-design/icons";
+import { Button, Select, Table } from "antd";
+import { FilterFilled, EditOutlined, CloseOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUserList } from "../../../Apis/UserApis";
 import { queriesToString } from "../../../Helpers/ApiHelper";
+import {
+  FULL_NAME_ENUM,
+  JOINED_DATE_ENUM,
+  ROLE_ENUM,
+  STAFF_CODE_ENUM,
+  USERNAME_ENUM
+} from "../../../Constants/ModelFieldConstants";
 
 function useLoader() {
   const { search } = useLocation();
@@ -74,13 +80,13 @@ export function UserListPage() {
     navigate(queryString);
   };
 
-  const handleTableChange = (pagination, filter, sorter) => {
+  const handleTableChange = (pagination, _, sorter) => {
     const newQueries = {
       ...queries,
       pageIndex: pagination.current,
       pageSize: pagination.pageSize,
       sortField: sorter.columnKey,
-      sortDirection: sorter.order === "ascend" ? "1" : "0"
+      sortDirection: sorter.order === "ascend" ? "0" : "1"
     };
 
     navigateByQueries(newQueries);
@@ -95,67 +101,83 @@ export function UserListPage() {
     navigateByQueries(newQueries);
   };
 
+  const onFilter = (value) => {
+    const newQueries = {
+      ...queries,
+      filterField: ROLE_ENUM,
+      filterValue: value
+    };
+
+    navigateByQueries(newQueries);
+  };
+
   const columns = [
     {
       title: "Staff Code",
       dataIndex: "staffCode",
-      key: "1",
+      key: STAFF_CODE_ENUM,
       sorter: true,
-      defaultSortOrder: "descend"
+      defaultSortOrder: "ascend",
+      render: (text) => <p className="cursor-pointer">{text}</p>
     },
     {
       title: "Full Name",
       dataIndex: "fullName",
-      key: "2",
+      key: FULL_NAME_ENUM,
       sorter: true,
-      defaultSortOrder: "descend"
+      defaultSortOrder: "ascend"
     },
     {
       title: "Username",
       dataIndex: "username",
-      key: "4",
+      key: USERNAME_ENUM,
       sorter: true,
-      defaultSortOrder: "descend"
+      defaultSortOrder: "ascend"
     },
     {
       title: "Joined Date",
       dataIndex: "joinedDate",
-      key: "5",
+      key: JOINED_DATE_ENUM,
       sorter: true,
-      defaultSortOrder: "descend"
+      defaultSortOrder: "ascend"
     },
     {
       title: "Type",
       dataIndex: "role",
-      key: "3",
+      key: ROLE_ENUM,
       sorter: true,
-      defaultSortOrder: "descend"
-    }
-  ];
-
-  const filterItems = [
-    {
-      label: "Admin",
-      key: "Admin"
+      defaultSortOrder: "ascend"
     },
     {
-      label: "Staff",
-      key: "Staff"
+      title: "",
+      dataIndex: "",
+      key: "actions",
+      render: (_, record) => (
+        <div className="max-w-fit">
+          <Button
+            className="mx-2"
+            icon={<EditOutlined className="align-middle" />}
+          />
+          <Button
+            className="mx-2"
+            danger
+            icon={<CloseOutlined className="align-middle" />}
+          />
+        </div>
+      )
     }
   ];
-
-  const filterMenu = {
-    items: filterItems
-  };
 
   return (
     <>
       <h1 className="font-bold text-red-600 text-2xl">USER LIST</h1>
       <div className="flex flex-row py-5 w-full justify-between">
-        <div className="w-full p-0">
+        <div className="w-1/2 p-0">
           <Select
+            className="w-1/6"
             defaultValue=""
             suffixIcon={<FilterFilled />}
+            onChange={onFilter}
             options={[
               {
                 label: "Type",
@@ -172,8 +194,8 @@ export function UserListPage() {
             ]}
           />
         </div>
-        <div className="w-full p-0 flex flex-row justify-end">
-          <Search className="mr-3" onSearch={onSearch} />
+        <div className="w-1/2 p-0 flex flex-row justify-end">
+          <Search className="w-1/3 mr-3" onSearch={onSearch} />
           <Button className="ml-3" danger>
             Create New User
           </Button>
