@@ -69,7 +69,7 @@ public class EfContextInitializer
                     Gender = i % 2 == 0 ? Genders.Female : Genders.Male,
                     JoinedDate = now,
                     Role = UserRoles.Admin,
-                    Location = i % 2 == 0 ? Locations.Hanoi : Locations.HcmCity,
+                    Location = i % 2 == 0 ? Locations.HaNoi : Locations.HCMCity,
                 });
 
                 _context.Users.Add(new User
@@ -83,7 +83,7 @@ public class EfContextInitializer
                     Gender = i % 2 == 0 ? Genders.Male : Genders.Female,
                     JoinedDate = now,
                     Role = UserRoles.Staff,
-                    Location = i % 2 == 0 ? Locations.Hanoi : Locations.HcmCity,
+                    Location = i % 2 == 0 ? Locations.HaNoi : Locations.HCMCity,
                 });
             }
 
