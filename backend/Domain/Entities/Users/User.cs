@@ -17,13 +17,13 @@ public class User : AuditableEntity<Guid>
 
     public DateTime DateOfBirth { get; set; }
 
-    public Genders Gender { get; set; }
+    public Gender Gender { get; set; }
 
     public DateTime JoinedDate { get; set; }
 
-    public UserRoles Role { get; set; }
+    public UserRole Role { get; set; }
 
-    public Locations Location { get; set; }
+    public Location Location { get; set; }
 
     public bool IsFirstTimeLogIn { get; set; } = true;
 }

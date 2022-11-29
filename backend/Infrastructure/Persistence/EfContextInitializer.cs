@@ -60,10 +60,10 @@ public class EfContextInitializer
                 Username = "adminhn",
                 HashedPassword = HashStringHelper.HashString("Admin@123"),
                 DateOfBirth = DateTime.Now.AddYears(-18),
-                Gender = Genders.Male,
+                Gender = Gender.Male,
                 JoinedDate = DateTime.Now,
-                Role = UserRoles.Admin,
-                Location = Locations.HaNoi,
+                Role = UserRole.Admin,
+                Location = Location.HaNoi,
             });
 
             _context.Users.Add(new User
@@ -74,10 +74,10 @@ public class EfContextInitializer
                 Username = "adminhcm",
                 HashedPassword = HashStringHelper.HashString("Admin@123"),
                 DateOfBirth = DateTime.Now.AddYears(-18),
-                Gender = Genders.Female,
+                Gender = Gender.Female,
                 JoinedDate = DateTime.Now,
-                Role = UserRoles.Admin,
-                Location = Locations.HCMCity,
+                Role = UserRole.Admin,
+                Location = Location.HCMCity,
             });
 
             await _context.SaveChangesAsync();
