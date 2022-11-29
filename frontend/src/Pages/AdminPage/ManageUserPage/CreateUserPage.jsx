@@ -13,12 +13,25 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { createUser } from "../../../Apis/CreateUserApis";
+import {
+  DOB_REQUIRED,
+  DOB_UNDER_18,
+  FIRST_NAME_REQUIRED,
+  GENDER_REQUIRED,
+  JOINED_DATE_NOT_LATER_DOB,
+  JOINED_DATE_NOT_WEEKENDS,
+  JOINED_DATE_REQUIRED,
+  LAST_NAME_REQUIRED,
+  NAME_ONLY_ALLOW,
+  ROLE_REQUIRED
+} from "../../../Constants/ErrorMessages";
 dayjs.extend(customParseFormat);
 
 export function CreateUserPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const { Option } = Select;
+  const dateFormatList = ["YYYY/MM/DD", "YYYY/MM/DD"];
   const navigate = useNavigate();
 
   const disabledDate = (current) => {
@@ -26,29 +39,28 @@ export function CreateUserPage() {
   };
 
   const onFinish = async (values) => {
-    await createUser(values)
-      .then((data) => {
-        console.log(data);
-        setIsModalOpen(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    values = {
+      ...values,
+      gender: parseInt(values.gender),
+      role: parseInt(values.role)
+    };
+    await createUser(values).then((data) => {
+      console.log(data);
+      setIsModalOpen(true);
+    });
   };
 
   const handleCancel = () => {
     navigate("/admin/manage-user");
   };
 
-  const dateFormatList = ["YYYY/MM/DD", "YYYY/MM/DD"];
-
   const layout = {
     labelCol: { span: 2 },
-    wrapperCol: { span: 5 }
+    wrapperCol: { span: 6 }
   };
 
   const tailLayout = {
-    wrapperCol: { offset: 3 }
+    wrapperCol: { offset: 5 }
   };
 
   return (
@@ -57,15 +69,27 @@ export function CreateUserPage() {
       <Form {...layout} form={form} name="nest-messages" onFinish={onFinish}>
         <Form.Item
           name="firstName"
-          label="FirstName"
-          rules={[{ required: true }]}
+          label="First Name"
+          rules={[
+            { required: true, message: FIRST_NAME_REQUIRED },
+            {
+              pattern: /^[A-Za-z ]*$/,
+              message: NAME_ONLY_ALLOW
+            }
+          ]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name="LastName"
-          label="LastName"
-          rules={[{ required: true }]}
+          name="lastName"
+          label="Last Name"
+          rules={[
+            { required: true, message: LAST_NAME_REQUIRED },
+            {
+              pattern: /^[A-Za-z ]*$/,
+              message: NAME_ONLY_ALLOW
+            }
+          ]}
         >
           <Input />
         </Form.Item>
@@ -74,7 +98,7 @@ export function CreateUserPage() {
           name="dateOfBirth"
           label="Date Of Birth"
           rules={[
-            { required: true, message: "Please enter your date of birth" },
+            { required: true, message: DOB_REQUIRED },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (
@@ -84,9 +108,7 @@ export function CreateUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error("User is under 18. Please select a different date")
-                );
+                return Promise.reject(new Error(DOB_UNDER_18));
               }
             })
           ]}
@@ -99,12 +121,12 @@ export function CreateUserPage() {
         </Form.Item>
 
         <Form.Item
-          name="radio-button"
+          name="gender"
           label="Gender"
           className="text-red-600"
-          rules={[{ required: true, message: "Please pick your gender!" }]}
+          rules={[{ required: true, message: GENDER_REQUIRED }]}
         >
-          <Radio.Group>
+          <Radio.Group name="gender">
             <ConfigProvider
               theme={{
                 components: {
@@ -113,9 +135,10 @@ export function CreateUserPage() {
                   }
                 }
               }}
+              name="gender"
             >
-              <Radio value="Female">Female</Radio>
-              <Radio value="Male">Male</Radio>
+              <Radio value="1">Female</Radio>
+              <Radio value="0">Male</Radio>
             </ConfigProvider>
           </Radio.Group>
         </Form.Item>
@@ -124,7 +147,7 @@ export function CreateUserPage() {
           name="joinedDate"
           label="Joined Date"
           rules={[
-            { required: true, message: "Please enter your joined date" },
+            { required: true, message: JOINED_DATE_REQUIRED },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (
@@ -133,11 +156,7 @@ export function CreateUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error(
-                    "Joined date is not later than Date of Birth. Please select a different date"
-                  )
-                );
+                return Promise.reject(new Error(JOINED_DATE_NOT_LATER_DOB));
               }
             }),
             ({ getFieldValue }) => ({
@@ -149,11 +168,7 @@ export function CreateUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error(
-                    "Joined date is Saturday or Sunday. Please select a different date"
-                  )
-                );
+                return Promise.reject(new Error(JOINED_DATE_NOT_WEEKENDS));
               }
             })
           ]}
@@ -166,13 +181,13 @@ export function CreateUserPage() {
         </Form.Item>
 
         <Form.Item
-          name="type"
+          name="role"
           label="Type"
-          rules={[{ required: true, message: "Please pick an user type!" }]}
+          rules={[{ required: true, message: ROLE_REQUIRED }]}
         >
-          <Select>
-            <Option value="admin">Admin</Option>
-            <Option value="staff">Staff</Option>
+          <Select name="role">
+            <Option value="0">Admin</Option>
+            <Option value="1">Staff</Option>
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>
