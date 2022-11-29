@@ -15,6 +15,8 @@ using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text.RegularExpressions;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Application.Services;
 
@@ -104,24 +106,17 @@ public class UserService : BaseService, IUserService
 
         var latestStaffCode = userRepository.ListAsync(user => user.IsDeleted == false).Result.OrderByDescending(user => user.StaffCode).First().StaffCode;
 
-        if (latestStaffCode == null)
-        {
-            return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
-        }
+        var sameUserNameCount = userRepository.ListAsync(user => user.IsDeleted == false).Result
+            .Where(user => CheckValidUserName(requestModel.FirstName, requestModel.LastName, user.Username)).Count();
 
-        var latestUserName = userRepository.ListAsync(user => user.IsDeleted == false).Result.OrderByDescending(user => user.StaffCode).First().Username;
-
-        if (latestUserName == null)
-        {
-            return new Response<CreateUserResponse>(false, ErrorMessages.InternalServerError, responseModel);
-        }
-
-        var newStaffCode = GetNewStaffCode(latestStaffCode);
-        var newUserName = GetNewUserName(requestModel.FirstName, requestModel.LastName, latestUserName);
-        var newPassword = HashStringHelper.HashString(GetNewPassword(requestModel.FirstName, requestModel.LastName, requestModel.DateOfBirth));
+        var newStaffCode = (latestStaffCode == null) ? "SD0001" : GetNewStaffCode(latestStaffCode);
+        var newUserName = GetNewUserNameWithoutNumber(requestModel.FirstName, requestModel.LastName)
+            + ((sameUserNameCount == 0) ? "" : sameUserNameCount.ToString());
+        var newPassword = HashStringHelper.HashString(GetNewPassword(newUserName, requestModel.DateOfBirth));
 
         user = new User
         {
+            Id = Guid.NewGuid(),
             StaffCode = newStaffCode,
             FirstName = requestModel.FirstName,
             LastName = requestModel.LastName,
@@ -134,6 +129,7 @@ public class UserService : BaseService, IUserService
             Location = requestModel.Location,
             IsFirstTimeLogIn = true,
         };
+
         responseModel = new CreateUserResponse(user);
 
         await userRepository.AddAsync(user);
@@ -238,40 +234,52 @@ public class UserService : BaseService, IUserService
 
         var number = Regex.Match(previousStaffCode, @"\d+").Value;
 
-        var nextStaffCodeNumber = Convert.ToInt32(number) + 1;
+        var nextStaffCodeNumber = (number == "" || number == null) ? 1 : Convert.ToInt32(number) + 1;
 
         return prefix + nextStaffCodeNumber.ToString().PadLeft(4, '0');
     }
 
     public static string GetNewUserName(string firstName, string lastName, string previousUserName)
     {
+        var userName = GetNewUserNameWithoutNumber(firstName, lastName);
+
+        if (previousUserName != null)
+        {
+            return userName.ToLower() + "1";
+        }
+
         var previousNumber = Regex.Match(previousUserName, @"\d+").Value;
 
-        var number = (previousNumber == "") ? 1 : Convert.ToInt32(previousNumber) + 1;
+        var number = Convert.ToInt32(previousNumber) + 1;
 
-        var firstNames = firstName.Split("[ ]+");
-
-        var userName = lastName;
-
-        foreach (var name in firstNames)
-        {
-            userName += name.Substring(1);
-        }
-
-        return userName + number.ToString();
+        return userName.ToLower() + number;
     }
 
-    public static string GetNewPassword(string firstName, string lastName, DateTime dateOfBirth)
+    public static bool CheckValidUserName(string firstName, string lastName, string username)
     {
-        var firstNames = firstName.Split("[ ]+");
+        var previousUserNameWithoutNumber = Regex.Match(username, @"[a-zA-Z]+").Value;
 
-        var userName = lastName;
+        return (previousUserNameWithoutNumber == GetNewUserNameWithoutNumber(firstName, lastName));
+    }
 
-        foreach (var name in firstNames)
+    public static string GetNewUserNameWithoutNumber(string firstName, string lastName)
+    {
+        var fullname = firstName + " " + lastName;
+
+        var nameWordArray = fullname.Split(" ");
+
+        var userName = nameWordArray[nameWordArray.Length - 1];
+
+        for (int i = 0; i < nameWordArray.Length - 1; i++)
         {
-            userName += name[1..];
+            userName += nameWordArray[i].Substring(0, 1);
         }
 
-        return userName + "@" + dateOfBirth.ToString("ddMMyyyy");
+        return userName.ToLower();
+    }
+
+    public static string GetNewPassword(string userName, DateTime dateOfBirth)
+    {
+        return userName.ToLower() + "@" + dateOfBirth.ToString("ddMMyyyy");
     }
 }

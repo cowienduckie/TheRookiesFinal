@@ -20,9 +20,7 @@ public class CreateUserRequest
     [Required]
     public DateTime JoinedDate { get; set; }
 
-    [Required]
     public UserRoles Role { get; set; }
 
-    [Required]
     public Locations Location { get; set; }
 }
