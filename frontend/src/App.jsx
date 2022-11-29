@@ -14,7 +14,7 @@ import {
   ManageRequestForReturningPage,
   ManageUserPage,
   ReportPage,
-  UserListPage,
+  UserListPage
 } from "./Pages";
 
 function App() {
@@ -29,10 +29,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
-            <Route
-              index={true}
-              element={<UserListPage />}
-            />
+            <Route index={true} element={<UserListPage />} />
             <Route
               path="/admin/manage-user/create-user"
               element={<CreateUserPage />}
@@ -66,10 +63,6 @@ function App() {
         element={<ChangePasswordFirstTimePage />}
       />
       <Route path="/logout" element={<LogoutPage />} />
-      <Route
-        path="/admin/manage-user/create-user"
-        element={<CreateUserPage />}
-      />
     </Routes>
   );
 
