@@ -14,9 +14,9 @@ import {
   ManageRequestForReturningPage,
   ManageUserPage,
   ReportPage,
-  UserListPage
+  UserListPage,
+  DetailedInfoUserPage
 } from "./Pages";
-import { DetailedInforUserPage } from "./Pages/AdminPage/ManageUserPage/DetailedInforUserPage";
 
 function App() {
   const location = useLocation();
@@ -37,7 +37,7 @@ function App() {
             />
             <Route
               path="/admin/manage-user/:id"
-              element={<DetailedInforUserPage />}
+              element={<DetailedInfoUserPage />}
             />
           </Route>
           <Route
@@ -70,7 +70,7 @@ function App() {
       <Route path="/logout" element={<LogoutPage />} />
       <Route
         path="/admin/manage-user/:id"
-        element={<DetailedInforUserPage />}
+        element={<DetailedInfoUserPage />}
       />
     </Routes>
   );

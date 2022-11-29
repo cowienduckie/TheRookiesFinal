@@ -13,7 +13,7 @@ export async function createUser(data) {
 }
 
 export async function getUserById(id) {
-  const url = `${API_BASE_URL}/api/users/${id}`;
+  const url = `${urlGet}/${id}`;
 
   return await callApi("get", url);
 }
