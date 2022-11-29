@@ -611,6 +611,14 @@ video {
   margin-left: 2.5rem !important;
 }
 
+.mr-2 {
+  margin-right: 0.5rem !important;
+}
+
+.ml-2 {
+  margin-left: 0.5rem !important;
+}
+
 .mr-3 {
   margin-right: 0.75rem !important;
 }
@@ -663,10 +671,6 @@ video {
 
 .w-3\/4 {
   width: 75% !important;
-}
-
-.w-1\/6 {
-  width: 16.666667% !important;
 }
 
 .w-1\/3 {
