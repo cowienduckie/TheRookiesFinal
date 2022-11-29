@@ -57,7 +57,7 @@ export function MainLayout() {
             <Menu
               theme="light"
               mode="vertical"
-              selectedKeys={location.pathname}
+              selectedKeys={"/" + location.pathname.split("/").slice(1,3).join("/")}
             >
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>

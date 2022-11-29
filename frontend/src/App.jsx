@@ -39,7 +39,7 @@ function App() {
               element={<CreateUserPage />}
             />
             <Route
-              path="/admin/manage-user/edit-user/:id"
+              path="/admin/manage-user/edit-user/:userId"
               element={<EditUserPage />}
             />
           </Route>
@@ -71,10 +71,6 @@ function App() {
         element={<ChangePasswordFirstTimePage />}
       />
       <Route path="/logout" element={<LogoutPage />} />
-      <Route
-        path="/admin/manage-user/create-user"
-        element={<CreateUserPage />}
-      />
     </Routes>
   );
 

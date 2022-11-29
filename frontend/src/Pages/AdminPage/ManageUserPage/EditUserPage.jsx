@@ -1,5 +1,6 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect} from "react";
+import { useNavigate, useParams  } from "react-router-dom";
+import moment from 'moment';
 import {
   DatePicker,
   Form,
@@ -11,11 +12,27 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { editUser } from "../../../Apis/EditUserApis";
+import { editUser, getUserById } from "../../../Apis/UserApis";
 dayjs.extend(customParseFormat);
 
 export function EditUserPage() {
   const navigate = useNavigate();
+
+  const { userId } = useParams();
+  const [form] = Form.useForm();
+
+  useEffect(() =>{
+    getUserById(userId).then(res => {
+      form.setFieldValue("firstName", res.firstName);
+      form.setFieldValue("lastName", res.lastName);
+      form.setFieldValue("gender", res.gender.toLowerCase());
+      form.setFieldValue("dateOfBirth", moment(res.dateOfBirth, "DD/MM/YYYY"));
+      form.setFieldValue("type", res.role);
+      form.setFieldValue("joinedDate", moment(res.joinedDate, "DD/MM/YYYY"));
+    })
+    
+  }, []);
+
   const layout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 7 }
@@ -45,12 +62,12 @@ export function EditUserPage() {
 
   return (
     <>
-      <Form {...layout} onFinish={onFinish}>
-        <h1 className="text-2xl text-red-600 font-bold mb-5">Edit User</h1>
-        <Form.Item label="First Name">
+      <Form {...layout}  onFinish={onFinish} form={form}>
+        <h1 className="font-bold text-red-600 text-2xl">Edit User</h1>
+        <Form.Item label="First Name" name="firstName">
           <Input disabled />
         </Form.Item>
-        <Form.Item label="Last Name">
+        <Form.Item label="Last Name" name="lastName" >
           <Input disabled />
         </Form.Item>
         <Form.Item
@@ -78,7 +95,7 @@ export function EditUserPage() {
         </Form.Item>
 
         <Form.Item
-          name="radio-button"
+          name="gender"
           label="Gender"
           class="text-red-600"
           rules={[{ required: true, message: "Please pick your gender!" }]}
@@ -149,10 +166,9 @@ export function EditUserPage() {
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button className="mx-2" type="primary" danger onSubmit={onFinish}>
+          <Button className="mx-2" type="primary" danger onClick={onFinish}>
             Save
           </Button>
-
           <Button className="mx-5" onClick={handleCancel} danger>
             Cancel
           </Button>
