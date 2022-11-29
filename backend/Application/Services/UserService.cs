@@ -186,7 +186,7 @@ public class UserService : BaseService, IUserService
                                 .Select(u => new GetUserResponse(u))
                                 .AsQueryable();
 
-        var validSortFields = new []
+        var validSortFields = new[]
         {
             ModelField.StaffCode,
             ModelField.FullName,
@@ -195,12 +195,12 @@ public class UserService : BaseService, IUserService
             ModelField.Role
         };
 
-        var validFilterFields = new []
+        var validFilterFields = new[]
         {
             ModelField.Role
         };
 
-        var searchFields = new []
+        var searchFields = new[]
         {
             ModelField.FullName,
             ModelField.StaffCode

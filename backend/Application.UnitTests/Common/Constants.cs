@@ -15,5 +15,4 @@ public static class Constants
     public const Gender NewGender = Gender.Male;
     public const Location NewLocation = Location.HaNoi;
     public const bool IsFirstTimeLogIn = true;
-
 }

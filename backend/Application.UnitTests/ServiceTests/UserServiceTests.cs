@@ -217,7 +217,7 @@ public class UserServiceTests
             Username = Constants.Username,
             HashedPassword = hashedPassword,
             Role = Constants.Role
-        }; 
+        };
 
         _userRepository
             .Setup(ur => ur.GetAsync(
