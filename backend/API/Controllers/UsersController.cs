@@ -12,7 +12,7 @@ using Application.Queries;
 namespace API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(UserRoles.Admin)]
+[Authorize(UserRole.Admin)]
 [ApiController]
 public class UsersController : BaseController
 {
@@ -66,9 +66,9 @@ public class UsersController : BaseController
             return BadRequest(new Response(false, ErrorMessages.BadRequest));
         }
 
-        if (sortQuery.SortField == ModelFields.None)
+        if (sortQuery.SortField == ModelField.None)
         {
-            sortQuery.SortField = ModelFields.FullName;
+            sortQuery.SortField = ModelField.FullName;
         }
 
         var request = new GetListUsersRequest(CurrentUser.Location,

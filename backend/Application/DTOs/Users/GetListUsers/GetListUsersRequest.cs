@@ -6,7 +6,7 @@ namespace Application.DTOs.Users.GetListUsers;
 public class GetListUsersRequest
 {
     public GetListUsersRequest(
-        Locations location,
+        Location location,
         PagingQuery pagingQuery,
         SortQuery sortQuery,
         FilterQuery filterQuery,
@@ -27,5 +27,5 @@ public class GetListUsersRequest
 
     public SearchQuery SearchQuery { get; set; }
 
-    public Locations Location { get; set; }
+    public Location Location { get; set; }
 }

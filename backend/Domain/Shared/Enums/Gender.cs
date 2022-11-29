@@ -1,6 +1,6 @@
 namespace Domain.Shared.Enums;
 
-public enum Genders {
+public enum Gender {
     Male,
     Female
 }

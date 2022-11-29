@@ -1,6 +1,6 @@
 ﻿namespace Domain.Shared.Enums;
 
-public enum ModelFields
+public enum ModelField
 {
     None,
     StaffCode,
