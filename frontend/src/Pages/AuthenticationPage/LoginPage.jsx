@@ -16,6 +16,7 @@ import {
   PASSWORD_REQUIRED,
   USERNAME_REQUIRED
 } from "../../Constants/ErrorMessages";
+import { CheckNullValidation } from "../../Helpers/InputValidations";
 
 export function LoginPage() {
   const authContext = useContext(AuthContext);
@@ -76,10 +77,6 @@ export function LoginPage() {
             name="username"
             rules={[
               {
-                required: true,
-                message: USERNAME_REQUIRED
-              },
-              {
                 validator() {
                   if (backendError.isError) {
                     return Promise.reject(new Error(""));
@@ -87,7 +84,8 @@ export function LoginPage() {
                     return Promise.resolve();
                   }
                 }
-              }
+              },
+              CheckNullValidation(USERNAME_REQUIRED, "username")
             ]}
           >
             <Input
@@ -99,13 +97,10 @@ export function LoginPage() {
             label="Password"
             name="password"
             rules={[
-              {
-                required: true,
-                message: PASSWORD_REQUIRED
-              },
+              CheckNullValidation(PASSWORD_REQUIRED, "password"),
               {
                 pattern:
-                  /^(?=.*[A-Za-z0-9])[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+                  /^(?=.*[A-Za-z0-9])[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
                 message: PASSWORD_ONLY_ALLOW
               },
               {

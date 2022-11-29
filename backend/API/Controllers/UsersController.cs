@@ -1,15 +1,18 @@
 using API.Attributes;
 using Application.Common.Models;
 using Application.DTOs.Users.GetUser;
+using Application.DTOs.Users.GetListUsers;
+using Application.DTOs.Users.CreateUser;
 using Application.Services.Interfaces;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Application.Queries;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(UserRoles.Admin)]
+[Authorize(UserRole.Admin)]
 [ApiController]
 public class UsersController : BaseController
 {
@@ -41,6 +44,73 @@ public class UsersController : BaseController
             if (!response.IsSuccess)
             {
                 return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<Response<GetListUsersResponse>>> GetList(
+        [FromQuery] PagingQuery pagingQuery,
+        [FromQuery] SortQuery sortQuery,
+        [FromQuery] FilterQuery filterQuery,
+        [FromQuery] SearchQuery searchQuery)
+    {
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
+
+        if (sortQuery.SortField == ModelField.None)
+        {
+            sortQuery.SortField = ModelField.FullName;
+        }
+
+        var request = new GetListUsersRequest(CurrentUser.Location,
+                                                pagingQuery,
+                                                sortQuery,
+                                                filterQuery,
+                                                searchQuery);
+
+        try
+        {
+            var response = await _userService.GetListAsync(request);
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [HttpPost("create")]
+    public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.Location = CurrentUser.Location;
+
+            var response = await _userService.CreateUserAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
             }
 
             return Ok(response);

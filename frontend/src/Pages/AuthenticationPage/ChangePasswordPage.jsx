@@ -14,6 +14,7 @@ import {
   PASSWORD_REQUIRED
 } from "../../Constants/ErrorMessages";
 import { AuthContext } from "../../Contexts/AuthContext";
+import { CheckNullValidation } from "../../Helpers";
 
 export function ChangePasswordPage() {
   const authContext = useContext(AuthContext);
@@ -84,10 +85,6 @@ export function ChangePasswordPage() {
             name="oldPassword"
             rules={[
               {
-                required: true,
-                message: PASSWORD_REQUIRED
-              },
-              {
                 min: 8,
                 max: 16,
                 message: PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS
@@ -99,7 +96,8 @@ export function ChangePasswordPage() {
                   }
                   return Promise.reject(new Error(INCORRECT_OLD_PASSWORD));
                 }
-              }
+              },
+              CheckNullValidation(PASSWORD_REQUIRED, "oldPassword")
             ]}
           >
             <Input.Password
@@ -115,10 +113,7 @@ export function ChangePasswordPage() {
             name="newPassword"
             dependencies={["oldPassword"]}
             rules={[
-              {
-                required: true,
-                message: PASSWORD_REQUIRED
-              },
+              CheckNullValidation(PASSWORD_REQUIRED, "newPassword"),
               {
                 pattern: /^(?=.*[0-9])[^\n]*$/,
                 message: PASSWORD_AT_LEAST_ONE_DIGIT
@@ -132,11 +127,11 @@ export function ChangePasswordPage() {
                 message: PASSWORD_AT_LEAST_ONE_UPPERCASE
               },
               {
-                pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-?/`~])[^\n]*$/,
+                pattern: /^(?=.*[!*_@#$%^&+=<>|.,:;"'{})(-/`~])[^\n]*$/,
                 message: PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER
               },
               {
-                pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-?/`~]*$/,
+                pattern: /^[A-Za-z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]*$/,
                 message: PASSWORD_ONLY_ALLOW
               },
               {

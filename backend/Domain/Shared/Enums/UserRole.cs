@@ -1,6 +1,6 @@
 ﻿namespace Domain.Shared.Enums;
 
-public enum UserRoles
+public enum UserRole
 {
     Admin,
     Staff
