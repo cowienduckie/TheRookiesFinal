@@ -2,11 +2,11 @@ import { Divider, Modal } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUserById } from "../../../Apis/AdminApis";
+import { getUserById } from "../../../Apis/UserApis";
 
 export function DetailedInforUserPage() {
   const [data, setData] = useState({});
-  let { id } = useParams();
+  const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export function DetailedInforUserPage() {
     };
 
     loadData();
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

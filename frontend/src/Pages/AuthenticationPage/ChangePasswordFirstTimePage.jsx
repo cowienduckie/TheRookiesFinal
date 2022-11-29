@@ -40,7 +40,6 @@ export function ChangePasswordFirstTimePage() {
         authContext.setAuthInfo(
           authContext.username,
           authContext.userRole,
-          authContext.token,
           localStorage.getItem(TOKEN_KEY),
           false
         );

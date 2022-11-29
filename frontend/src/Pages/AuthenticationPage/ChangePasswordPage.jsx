@@ -54,7 +54,6 @@ export function ChangePasswordPage() {
         setModalFinished(true);
       })
       .catch((error) => {
-        console.log(error);
         setIsError(true);
       });
   };
