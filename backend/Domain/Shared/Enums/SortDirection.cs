@@ -1,6 +1,6 @@
 ﻿namespace Domain.Shared.Enums;
 
-public enum SortDirections
+public enum SortDirection
 {
     Ascending,
     Descending

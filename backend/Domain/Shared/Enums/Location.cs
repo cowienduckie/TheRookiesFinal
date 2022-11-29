@@ -1,6 +1,6 @@
 namespace Domain.Shared.Enums;
 
-public enum Locations {
+public enum Location {
     HaNoi,
     HCMCity
 }

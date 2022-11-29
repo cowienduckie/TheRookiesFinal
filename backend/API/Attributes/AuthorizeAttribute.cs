@@ -9,11 +9,11 @@ namespace API.Attributes;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
-    private readonly IList<UserRoles> _roles;
+    private readonly IList<UserRole> _roles;
 
-    public AuthorizeAttribute(params UserRoles[]? roles)
+    public AuthorizeAttribute(params UserRole[]? roles)
     {
-        _roles = roles ?? Array.Empty<UserRoles>();
+        _roles = roles ?? Array.Empty<UserRole>();
     }
 
     public void OnAuthorization(AuthorizationFilterContext context)
