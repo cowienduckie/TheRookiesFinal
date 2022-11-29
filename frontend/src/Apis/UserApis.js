@@ -12,5 +12,5 @@ export async function getUserById(userId) {
 }
 
 export async function editUser(editModel) {
-  return await callApi("put", url + "/edit", editModel);
+  return await callApi("put", url , editModel);
 }

@@ -25,12 +25,12 @@ export function EditUserPage() {
     getUserById(userId).then(res => {
       form.setFieldValue("firstName", res.firstName);
       form.setFieldValue("lastName", res.lastName);
-      form.setFieldValue("gender", res.gender.toLowerCase());
+      form.setFieldValue("gender", res.gender === "Male" ? "0" : "1");
       form.setFieldValue("dateOfBirth", moment(res.dateOfBirth, "DD/MM/YYYY"));
-      form.setFieldValue("type", res.role);
+      form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
       form.setFieldValue("joinedDate", moment(res.joinedDate, "DD/MM/YYYY"));
     })
-    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const layout = {
@@ -51,13 +51,17 @@ export function EditUserPage() {
   };
 
   const onFinish = async (values) => {
+    console.log(values)
+    values ={
+      ...values,
+      role: parseInt(values.role),
+      gender: parseInt(values.gender),
+      id: userId
+    }
+
     await editUser(values)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    navigate("/admin/manage-user");
   };
 
   return (
@@ -97,7 +101,7 @@ export function EditUserPage() {
         <Form.Item
           name="gender"
           label="Gender"
-          class="text-red-600"
+          className="text-red-600"
           rules={[{ required: true, message: "Please pick your gender!" }]}
         >
           <Radio.Group>
@@ -110,8 +114,8 @@ export function EditUserPage() {
                 }
               }}
             >
-              <Radio value="female"> Female </Radio>
-              <Radio value="male"> Male </Radio>
+              <Radio value="1"> Female </Radio>
+              <Radio value="0"> Male </Radio>
             </ConfigProvider>
           </Radio.Group>
         </Form.Item>
@@ -157,16 +161,16 @@ export function EditUserPage() {
         </Form.Item>
         <Form.Item
           label="Type"
-          name="type"
+          name="role"
           rules={[{ required: true, message: "Please pick an user type!" }]}
         >
           <Select>
-            <Select.Option value="staff">Staff</Select.Option>
-            <Select.Option value="admin">Admin</Select.Option>
+            <Select.Option value="1">Staff</Select.Option>
+            <Select.Option value="0">Admin</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button className="mx-2" type="primary" danger onClick={onFinish}>
+          <Button className="mx-2" type="primary" danger htmlType="submit">
             Save
           </Button>
           <Button className="mx-5" onClick={handleCancel} danger>

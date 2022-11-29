@@ -94,7 +94,7 @@ public class UsersController : BaseController
         }
     }
 
-    [HttpPut("edit")]
+    [HttpPut]
         public async Task<ActionResult<Response<EditUserResponse>>> Update(
         [FromBody] EditUserRequest requestModel) 
         {
