@@ -51,7 +51,7 @@ export function MainLayout() {
             theme="light"
           >
             <img className="m-auto mt-5 w-3/4" src={nashLogo} alt="Nash-Logo" />
-            <h1 className="text-red-600 font-bold text-xl text-center mb-8">
+            <h1 className="text-red-600 font-bold text-xl text-center mb-8 whitespace-nowrap">
               Online Asset Management
             </h1>
             <Menu
