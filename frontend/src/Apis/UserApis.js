@@ -11,3 +11,9 @@ export async function getUserList(queries = "") {
 export async function createUser(data) {
   return await callApi("post", urlPost, data);
 }
+
+export async function getUserById(id) {
+  const url = `${urlGet}/${id}`;
+
+  return await callApi("get", url);
+}

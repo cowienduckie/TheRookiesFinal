@@ -73,6 +73,7 @@ function useLoader() {
 export function UserListPage() {
   const { pagedData, queries, loading } = useLoader();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navigateByQueries = (queries) => {
     const queryString = queriesToString(queries);
@@ -118,7 +119,11 @@ export function UserListPage() {
       key: STAFF_CODE_ENUM,
       sorter: true,
       defaultSortOrder: "ascend",
-      render: (text) => <p className="cursor-pointer">{text}</p>
+      render: (text, record) => (
+        <Link to={`/admin/manage-user/${record.id}`} state={{ background: location }}>
+          <p>{text}</p>
+        </Link>
+      )
     },
     {
       title: "Full Name",

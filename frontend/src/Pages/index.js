@@ -12,7 +12,8 @@ export {
   ManageRequestForReturningPage,
   ReportPage,
   CreateUserPage,
-  UserListPage
+  UserListPage,
+  DetailedInfoUserPage
 } from "./AdminPage";
 
 export {
