@@ -18,7 +18,7 @@ public class Assignment : AuditableEntity<Guid>
 
     public DateTime AssignedDate { get; set; }
 
-    public AssignmentStates State { get; set; }
+    public AssignmentState State { get; set; }
 
     public string? Note { get; set; }
 }

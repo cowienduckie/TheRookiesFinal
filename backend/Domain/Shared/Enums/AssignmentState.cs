@@ -1,6 +1,6 @@
 namespace Domain.Shared.Enums;
 
-public enum AssignmentStates
+public enum AssignmentState
 {
     Waiting,
     Accepted,

@@ -277,7 +277,7 @@ public class UserService : BaseService, IUserService
 
         var assignments = await assignmentRepository.ListAsync(a => !a.IsDeleted &&
                                                                     a.AssignedTo == userId &&
-                                                                    a.State != AssignmentStates.Declined);
+                                                                    a.State != AssignmentState.Declined);
 
         return assignments.Any();
     }
