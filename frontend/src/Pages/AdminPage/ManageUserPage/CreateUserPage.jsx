@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { createUser } from "../../../Apis/CreateUserApis";
+import { createUser } from "../../../Apis/UserApis";
 import {
   DOB_REQUIRED,
   DOB_UNDER_18,
@@ -25,6 +25,12 @@ import {
   NAME_ONLY_ALLOW,
   ROLE_REQUIRED
 } from "../../../Constants/ErrorMessages";
+import {
+  GENDER_FEMALE_ENUM,
+  GENDER_MALE_ENUM,
+  ROLE_ADMIN_ENUM,
+  ROLE_STAFF_ENUM
+} from "../../../Constants/CreateUserConstants";
 dayjs.extend(customParseFormat);
 
 export function CreateUserPage() {
@@ -137,8 +143,8 @@ export function CreateUserPage() {
               }}
               name="gender"
             >
-              <Radio value="1">Female</Radio>
-              <Radio value="0">Male</Radio>
+              <Radio value={GENDER_FEMALE_ENUM}>Female</Radio>
+              <Radio value={GENDER_MALE_ENUM}>Male</Radio>
             </ConfigProvider>
           </Radio.Group>
         </Form.Item>
@@ -186,8 +192,8 @@ export function CreateUserPage() {
           rules={[{ required: true, message: ROLE_REQUIRED }]}
         >
           <Select name="role">
-            <Option value="0">Admin</Option>
-            <Option value="1">Staff</Option>
+            <Option value={ROLE_ADMIN_ENUM}>Admin</Option>
+            <Option value={ROLE_STAFF_ENUM}>Staff</Option>
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>
