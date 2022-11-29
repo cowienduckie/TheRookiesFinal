@@ -1,6 +1,5 @@
 ﻿using Domain.Entities.Users;
 using Domain.Shared.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace Application.DTOs.Users.CreateUser;
 

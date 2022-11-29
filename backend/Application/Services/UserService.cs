@@ -94,37 +94,34 @@ public class UserService : BaseService, IUserService
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, responseModel);
         }
 
-        bool isJoinedDateAfterDOB = DateTime.Compare(requestModel.JoinedDate, requestModel.DateOfBirth) > 0;
+        bool isJoinedDateAfterDob = DateTime.Compare(requestModel.JoinedDate, requestModel.DateOfBirth) > 0;
 
-        if (!isJoinedDateAfterDOB ||
-            requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || 
+        if (!isJoinedDateAfterDob ||
+            requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday ||
             requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
         }
 
         var latestStaffCode = userRepository
-                                .ListAsync(user => user.IsDeleted == false)
+                                .ListAsync(u => !u.IsDeleted)
                                 .Result
-                                .OrderByDescending(user => user.StaffCode)
+                                .OrderByDescending(u => u.StaffCode)
                                 .First()
                                 .StaffCode;
 
         var sameUserNameCount = userRepository
-                                    .ListAsync(user => user.IsDeleted == false)
+                                    .ListAsync(u => !u.IsDeleted)
                                     .Result
-                                    .Where(user => CheckValidUserName(requestModel.FirstName, 
-                                                                        requestModel.LastName, 
-                                                                        user.Username))
-                                    .Count();
+                                    .Count(u => CheckValidUserName(requestModel.FirstName,
+                                                                    requestModel.LastName,
+                                                                    u.Username));
 
-        var newStaffCode = (latestStaffCode == null) 
-                            ? "SD0001" 
-                            : GetNewStaffCode(latestStaffCode);
+        var newStaffCode = GetNewStaffCode(latestStaffCode);
 
         var newUserName = GetNewUserNameWithoutNumber(requestModel.FirstName, requestModel.LastName)
-                            + ((sameUserNameCount == 0) 
-                                ? string.Empty 
+                            + ((sameUserNameCount == 0)
+                                ? string.Empty
                                 : sameUserNameCount.ToString());
 
         var newPassword = HashStringHelper.HashString(GetNewPassword(newUserName, requestModel.DateOfBirth));
