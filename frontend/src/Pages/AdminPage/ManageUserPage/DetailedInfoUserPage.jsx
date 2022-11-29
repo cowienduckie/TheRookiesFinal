@@ -21,7 +21,7 @@ export function DetailedInfoUserPage() {
   }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   const onCancel = () => {
-    navigate("/admin/manage-user");
+    navigate(-1);
   }
 
   return (
