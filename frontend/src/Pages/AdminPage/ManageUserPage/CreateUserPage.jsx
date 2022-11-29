@@ -55,12 +55,12 @@ export function CreateUserPage() {
   };
 
   const layout = {
-    labelCol: { span: 2 },
-    wrapperCol: { span: 6 }
+    labelCol: { span: 7 },
+    wrapperCol: { span: 7 }
   };
 
   const tailLayout = {
-    wrapperCol: { offset: 5 }
+    wrapperCol: { offset: 9 }
   };
 
   return (
