@@ -52,40 +52,33 @@ public class EfContextInitializer
     {
         if (!_context.Users.Any())
         {
-            for (int i = 1; i <= 10; i++)
+            _context.Users.Add(new User
             {
-                var adminCode = i.ToString().PadLeft(4, '0');
-                var userCode = (2 * i).ToString().PadLeft(4, '0');
-                var now = DateTime.Now;
+                StaffCode = "SD0001",
+                FirstName = "Admin",
+                LastName = "Ha Noi",
+                Username = "adminhn",
+                HashedPassword = HashStringHelper.HashString("Admin@123"),
+                DateOfBirth = DateTime.Now.AddYears(-18),
+                Gender = Gender.Male,
+                JoinedDate = DateTime.Now,
+                Role = UserRole.Admin,
+                Location = Location.HaNoi,
+            });
 
-                _context.Users.Add(new User
-                {
-                    StaffCode = $"SD{adminCode}",
-                    FirstName = "Admin",
-                    LastName = adminCode,
-                    Username = $"admin{i}",
-                    HashedPassword = HashStringHelper.HashString("Admin@123"),
-                    DateOfBirth = now.AddYears(-18),
-                    Gender = i % 2 == 0 ? Gender.Female : Gender.Male,
-                    JoinedDate = now,
-                    Role = UserRole.Admin,
-                    Location = i % 2 == 0 ? Location.HaNoi : Location.HCMCity,
-                });
-
-                _context.Users.Add(new User
-                {
-                    StaffCode = $"SD{userCode}",
-                    FirstName = "Staff",
-                    LastName = userCode,
-                    Username = $"staff{i}",
-                    HashedPassword = HashStringHelper.HashString("Staff@123"),
-                    DateOfBirth = now.AddYears(-18),
-                    Gender = i % 2 == 0 ? Gender.Male : Gender.Female,
-                    JoinedDate = now,
-                    Role = UserRole.Staff,
-                    Location = i % 2 == 0 ? Location.HaNoi : Location.HCMCity,
-                });
-            }
+            _context.Users.Add(new User
+            {
+                StaffCode = "SD0002",
+                FirstName = "Admin",
+                LastName = "Ho Chi Minh",
+                Username = "adminhcm",
+                HashedPassword = HashStringHelper.HashString("Admin@123"),
+                DateOfBirth = DateTime.Now.AddYears(-18),
+                Gender = Gender.Female,
+                JoinedDate = DateTime.Now,
+                Role = UserRole.Admin,
+                Location = Location.HCMCity,
+            });
 
             await _context.SaveChangesAsync();
         }
