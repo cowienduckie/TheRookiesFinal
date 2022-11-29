@@ -37,6 +37,3 @@ build
 *.njsproj
 *.sln
 *.sw?
-
-# Custom ignore
-src/index.css

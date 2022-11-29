@@ -16,8 +16,8 @@
     "trailingComma": "none"
   },
   "scripts": {
-    "start": "npx tailwindcss build -i src/tailwind.css -o src/index.css && react-scripts start",
-    "build": "npx tailwindcss build -i src/tailwind.css -o src/index.css && react-scripts build",
+    "start": "npx tailwindcss build -o src/tailwind.css -i src/index.css && react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
