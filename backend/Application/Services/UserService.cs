@@ -1,5 +1,4 @@
 using Application.Common.Models;
-using Application.DTOs.Users;
 using Application.DTOs.Users.Authentication;
 using Application.DTOs.Users.ChangePassword;
 using Application.DTOs.Users.GetListUsers;
@@ -11,12 +10,8 @@ using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
-using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interfaces;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text.RegularExpressions;
-using System.Reflection.Metadata.Ecma335;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Application.Services;
 
@@ -92,26 +87,46 @@ public class UserService : BaseService, IUserService
         var user = new User();
 
         var responseModel = new CreateUserResponse(user);
+        var userAge = GetAge(requestModel.DateOfBirth);
 
-        if (GetAge(requestModel.DateOfBirth) < 18)
+        if (userAge < Settings.MinimumStaffAge)
         {
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidAge, responseModel);
         }
 
-        if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) != -1
-            || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
+        bool isJoinedDateAfterDOB = DateTime.Compare(requestModel.JoinedDate, requestModel.DateOfBirth) > 0;
+
+        if (!isJoinedDateAfterDOB ||
+            requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || 
+            requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
         }
 
-        var latestStaffCode = userRepository.ListAsync(user => user.IsDeleted == false).Result.OrderByDescending(user => user.StaffCode).First().StaffCode;
+        var latestStaffCode = userRepository
+                                .ListAsync(user => user.IsDeleted == false)
+                                .Result
+                                .OrderByDescending(user => user.StaffCode)
+                                .First()
+                                .StaffCode;
 
-        var sameUserNameCount = userRepository.ListAsync(user => user.IsDeleted == false).Result
-            .Where(user => CheckValidUserName(requestModel.FirstName, requestModel.LastName, user.Username)).Count();
+        var sameUserNameCount = userRepository
+                                    .ListAsync(user => user.IsDeleted == false)
+                                    .Result
+                                    .Where(user => CheckValidUserName(requestModel.FirstName, 
+                                                                        requestModel.LastName, 
+                                                                        user.Username))
+                                    .Count();
 
-        var newStaffCode = (latestStaffCode == null) ? "SD0001" : GetNewStaffCode(latestStaffCode);
+        var newStaffCode = (latestStaffCode == null) 
+                            ? "SD0001" 
+                            : GetNewStaffCode(latestStaffCode);
+
         var newUserName = GetNewUserNameWithoutNumber(requestModel.FirstName, requestModel.LastName)
-            + ((sameUserNameCount == 0) ? "" : sameUserNameCount.ToString());
+                            + ((sameUserNameCount == 0) 
+                                ? string.Empty 
+                                : sameUserNameCount.ToString());
+
         var newPassword = HashStringHelper.HashString(GetNewPassword(newUserName, requestModel.DateOfBirth));
 
         user = new User
@@ -179,7 +194,7 @@ public class UserService : BaseService, IUserService
                                 .Select(u => new GetUserResponse(u))
                                 .AsQueryable();
 
-        var validSortFields = new[]
+        var validSortFields = new []
         {
             ModelFields.StaffCode,
             ModelFields.FullName,
@@ -188,12 +203,12 @@ public class UserService : BaseService, IUserService
             ModelFields.Role
         };
 
-        var validFilterFields = new[]
+        var validFilterFields = new []
         {
             ModelFields.Role
         };
 
-        var searchFields = new[]
+        var searchFields = new []
         {
             ModelFields.FullName,
             ModelFields.StaffCode
@@ -217,7 +232,7 @@ public class UserService : BaseService, IUserService
         return new Response<GetListUsersResponse>(true, response);
     }
 
-    public static int GetAge(DateTime birthDate)
+    private static int GetAge(DateTime birthDate)
     {
         var today = DateTime.Now;
 
@@ -228,45 +243,27 @@ public class UserService : BaseService, IUserService
         return age;
     }
 
-    public static string GetNewStaffCode(string previousStaffCode)
+    private static string GetNewStaffCode(string previousStaffCode)
     {
-        var prefix = "SD";
-
         var number = Regex.Match(previousStaffCode, @"\d+").Value;
 
         var nextStaffCodeNumber = (number == "" || number == null) ? 1 : Convert.ToInt32(number) + 1;
 
-        return prefix + nextStaffCodeNumber.ToString().PadLeft(4, '0');
+        return Settings.StaffCodePrefix + nextStaffCodeNumber.ToString().PadLeft(4, '0');
     }
 
-    public static string GetNewUserName(string firstName, string lastName, string previousUserName)
-    {
-        var userName = GetNewUserNameWithoutNumber(firstName, lastName);
-
-        if (previousUserName != null)
-        {
-            return userName.ToLower() + "1";
-        }
-
-        var previousNumber = Regex.Match(previousUserName, @"\d+").Value;
-
-        var number = Convert.ToInt32(previousNumber) + 1;
-
-        return userName.ToLower() + number;
-    }
-
-    public static bool CheckValidUserName(string firstName, string lastName, string username)
+    private static bool CheckValidUserName(string firstName, string lastName, string username)
     {
         var previousUserNameWithoutNumber = Regex.Match(username, @"[a-zA-Z]+").Value;
 
-        return (previousUserNameWithoutNumber == GetNewUserNameWithoutNumber(firstName, lastName));
+        return previousUserNameWithoutNumber == GetNewUserNameWithoutNumber(firstName, lastName);
     }
 
-    public static string GetNewUserNameWithoutNumber(string firstName, string lastName)
+    private static string GetNewUserNameWithoutNumber(string firstName, string lastName)
     {
-        var fullname = firstName + " " + lastName;
+        var fullName = firstName + " " + lastName;
 
-        var nameWordArray = fullname.Split(" ");
+        var nameWordArray = fullName.Split(" ");
 
         var userName = nameWordArray[nameWordArray.Length - 1];
 
@@ -278,7 +275,7 @@ public class UserService : BaseService, IUserService
         return userName.ToLower();
     }
 
-    public static string GetNewPassword(string userName, DateTime dateOfBirth)
+    private static string GetNewPassword(string userName, DateTime dateOfBirth)
     {
         return userName.ToLower() + "@" + dateOfBirth.ToString("ddMMyyyy");
     }
