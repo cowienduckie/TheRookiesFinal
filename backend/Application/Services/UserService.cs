@@ -264,7 +264,7 @@ public class UserService : BaseService, IUserService
 
         var userName = nameWordArray[0];
 
-        for (int i = 1; i < nameWordArray.Length - 1; i++)
+        for (int i = 1; i < nameWordArray.Length; i++)
         {
             userName += nameWordArray[i].Substring(0, 1);
         }
