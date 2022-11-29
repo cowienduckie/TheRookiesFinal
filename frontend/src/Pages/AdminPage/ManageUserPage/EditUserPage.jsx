@@ -17,12 +17,12 @@ dayjs.extend(customParseFormat);
 export function EditUserPage() {
   const navigate = useNavigate();
   const layout = {
-    labelCol: { span: 2 },
-    wrapperCol: { span: 5 }
+    labelCol: { span: 7 },
+    wrapperCol: { span: 7 }
   };
 
   const tailLayout = {
-    wrapperCol: { offset: 3 }
+    wrapperCol: { offset: 9 }
   };
 
   const handleCancel = () => {
@@ -140,6 +140,7 @@ export function EditUserPage() {
         </Form.Item>
         <Form.Item
           label="Type"
+          name="type"
           rules={[{ required: true, message: "Please pick an user type!" }]}
         >
           <Select>
