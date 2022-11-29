@@ -14,7 +14,7 @@ public class UserInternalModel
 
     public Guid Id { get; }
 
-    public UserRoles Role { get; }
+    public UserRole Role { get; }
 
-    public Locations Location { get; }
+    public Location Location { get; }
 }

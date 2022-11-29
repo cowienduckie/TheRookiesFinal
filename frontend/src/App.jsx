@@ -14,6 +14,8 @@ import {
   ManageRequestForReturningPage,
   ManageUserPage,
   ReportPage,
+  UserListPage,
+  DetailedInfoUserPage
 } from "./Pages";
 
 function App() {
@@ -28,9 +30,14 @@ function App() {
         <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
+            <Route index={true} element={<UserListPage />} />
             <Route
               path="/admin/manage-user/create-user"
               element={<CreateUserPage />}
+            />
+            <Route
+              path="/admin/manage-user/:id"
+              element={<DetailedInfoUserPage />}
             />
           </Route>
           <Route
@@ -62,8 +69,8 @@ function App() {
       />
       <Route path="/logout" element={<LogoutPage />} />
       <Route
-        path="/admin/manage-user/create-user"
-        element={<CreateUserPage />}
+        path="/admin/manage-user/:id"
+        element={<DetailedInfoUserPage />}
       />
     </Routes>
   );
