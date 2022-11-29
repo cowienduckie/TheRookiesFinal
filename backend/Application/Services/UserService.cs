@@ -262,9 +262,9 @@ public class UserService : BaseService, IUserService
 
         var nameWordArray = fullName.Split(" ");
 
-        var userName = nameWordArray[nameWordArray.Length - 1];
+        var userName = nameWordArray[0];
 
-        for (int i = 0; i < nameWordArray.Length - 1; i++)
+        for (int i = 1; i < nameWordArray.Length; i++)
         {
             userName += nameWordArray[i].Substring(0, 1);
         }

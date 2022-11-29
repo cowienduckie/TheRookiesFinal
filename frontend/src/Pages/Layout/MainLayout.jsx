@@ -16,7 +16,7 @@ export function MainLayout() {
       navigate("/login");
     }
 
-    if(authContext.isFirstTimeLogin) {
+    if (authContext.isFirstTimeLogin) {
       navigate("/change-password-first-time");
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -29,9 +29,9 @@ export function MainLayout() {
     { name: "Manage Assignment", path: "/admin/manage-assignment" },
     {
       name: "Manage Returning",
-      path: "/admin/manage-returning",
+      path: "/admin/manage-returning"
     },
-    { name: "Report", path: "/admin/report" },
+    { name: "Report", path: "/admin/report" }
   ];
 
   const staffPages = [];
@@ -57,7 +57,9 @@ export function MainLayout() {
             <Menu
               theme="light"
               mode="vertical"
-              selectedKeys={location.pathname}
+              selectedKeys={
+                "/" + location.pathname.split("/").slice(1, 3).join("/")
+              }
             >
               <Menu.Item className="menuItem" key="/">
                 <Link to="/">Home</Link>

@@ -2,7 +2,6 @@ using API.Attributes;
 using Application.Common.Models;
 using Application.DTOs.Users.GetUser;
 using Application.DTOs.Users.GetListUsers;
-using Application.Common.Models;
 using Application.DTOs.Users.CreateUser;
 using Application.Services.Interfaces;
 using Domain.Shared.Constants;

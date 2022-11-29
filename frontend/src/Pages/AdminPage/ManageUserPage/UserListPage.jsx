@@ -2,7 +2,7 @@ import { Button, Select, Table } from "antd";
 import { FilterFilled, EditOutlined, CloseOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getUserList } from "../../../Apis/UserApis";
 import { queriesToString } from "../../../Helpers/ApiHelper";
 import {
@@ -196,9 +196,11 @@ export function UserListPage() {
         </div>
         <div className="w-1/2 p-0 flex flex-row justify-end">
           <Search className="w-1/3 mr-3" onSearch={onSearch} />
-          <Button className="ml-3" danger>
-            Create New User
-          </Button>
+          <Link to="/admin/manage-user/create-user">
+            <Button className="ml-3" danger>
+              Create New User
+            </Button>
+          </Link>
         </div>
       </div>
       <Table
