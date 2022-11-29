@@ -30,13 +30,13 @@ public class CreateUserResponse
 
     public DateTime DateOfBirth { get; }
 
-    public Genders Gender { get; }
+    public Gender Gender { get; }
 
     public DateTime JoinedDate { get; }
 
-    public UserRoles Role { get; }
+    public UserRole Role { get; }
 
-    public Locations Location { get; }
+    public Location Location { get; }
 
     public bool IsFirstTimeLogIn { get; }
 }

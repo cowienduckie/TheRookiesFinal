@@ -15,12 +15,12 @@ public class CreateUserRequest
     public DateTime DateOfBirth { get; set; }
 
     [Required]
-    public Genders Gender { get; set; }
+    public Gender Gender { get; set; }
 
     [Required]
     public DateTime JoinedDate { get; set; }
 
-    public UserRoles Role { get; set; }
+    public UserRole Role { get; set; }
 
-    public Locations Location { get; set; }
+    public Location Location { get; set; }
 }

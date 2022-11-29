@@ -196,22 +196,22 @@ public class UserService : BaseService, IUserService
 
         var validSortFields = new []
         {
-            ModelFields.StaffCode,
-            ModelFields.FullName,
-            ModelFields.Username,
-            ModelFields.JoinedDate,
-            ModelFields.Role
+            ModelField.StaffCode,
+            ModelField.FullName,
+            ModelField.Username,
+            ModelField.JoinedDate,
+            ModelField.Role
         };
 
         var validFilterFields = new []
         {
-            ModelFields.Role
+            ModelField.Role
         };
 
         var searchFields = new []
         {
-            ModelFields.FullName,
-            ModelFields.StaffCode
+            ModelField.FullName,
+            ModelField.StaffCode
         };
 
         var processedList = users.FilterByField(validFilterFields,

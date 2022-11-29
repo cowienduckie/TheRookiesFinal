@@ -6,9 +6,9 @@ public class FilterQuery
 {
     public FilterQuery()
     {
-        FilterField = ModelFields.None;
+        FilterField = ModelField.None;
     }
 
-    public ModelFields FilterField { get; set; }
+    public ModelField FilterField { get; set; }
     public string? FilterValue { get; set; }
 }

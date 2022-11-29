@@ -7,9 +7,9 @@ public static class GetListHelper
 {
     public static IQueryable<T> SortByField<T>(
         this IQueryable<T> source,
-        IEnumerable<ModelFields> validSortFields,
-        ModelFields sortField,
-        SortDirections sortDirection) where T : class
+        IEnumerable<ModelField> validSortFields,
+        ModelField sortField,
+        SortDirection sortDirection) where T : class
     {
         if (!validSortFields.Contains(sortField))
         {
@@ -25,15 +25,15 @@ public static class GetListHelper
 
         return sortDirection switch
         {
-            SortDirections.Ascending => source.OrderBy(entity => prop.GetValue(entity)),
-            SortDirections.Descending => source.OrderByDescending(entity => prop.GetValue(entity)),
+            SortDirection.Ascending => source.OrderBy(entity => prop.GetValue(entity)),
+            SortDirection.Descending => source.OrderByDescending(entity => prop.GetValue(entity)),
             _ => source
         };
     }
 
     public static IQueryable<T> SearchByField<T>(
         this IQueryable<T> source,
-        IEnumerable<ModelFields> searchFields,
+        IEnumerable<ModelField> searchFields,
         string? searchText) where T : class
     {
         if (string.IsNullOrEmpty(searchText))
@@ -61,8 +61,8 @@ public static class GetListHelper
 
     public static IQueryable<T> FilterByField<T>(
         this IQueryable<T> source,
-        IEnumerable<ModelFields> validFilterFields,
-        ModelFields filterField,
+        IEnumerable<ModelField> validFilterFields,
+        ModelField filterField,
         string? filterValue) where T : class
     {
         if (string.IsNullOrEmpty(filterValue) ||

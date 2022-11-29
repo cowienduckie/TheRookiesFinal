@@ -66,10 +66,10 @@ public class EfContextInitializer
                     Username = $"admin{i}",
                     HashedPassword = HashStringHelper.HashString("Admin@123"),
                     DateOfBirth = now.AddYears(-18),
-                    Gender = i % 2 == 0 ? Genders.Female : Genders.Male,
+                    Gender = i % 2 == 0 ? Gender.Female : Gender.Male,
                     JoinedDate = now,
-                    Role = UserRoles.Admin,
-                    Location = i % 2 == 0 ? Locations.HaNoi : Locations.HCMCity,
+                    Role = UserRole.Admin,
+                    Location = i % 2 == 0 ? Location.HaNoi : Location.HCMCity,
                 });
 
                 _context.Users.Add(new User
@@ -80,10 +80,10 @@ public class EfContextInitializer
                     Username = $"staff{i}",
                     HashedPassword = HashStringHelper.HashString("Staff@123"),
                     DateOfBirth = now.AddYears(-18),
-                    Gender = i % 2 == 0 ? Genders.Male : Genders.Female,
+                    Gender = i % 2 == 0 ? Gender.Male : Gender.Female,
                     JoinedDate = now,
-                    Role = UserRoles.Staff,
-                    Location = i % 2 == 0 ? Locations.HaNoi : Locations.HCMCity,
+                    Role = UserRole.Staff,
+                    Location = i % 2 == 0 ? Location.HaNoi : Location.HCMCity,
                 });
             }
 
