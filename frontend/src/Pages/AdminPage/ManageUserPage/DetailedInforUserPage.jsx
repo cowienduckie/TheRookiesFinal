@@ -21,12 +21,12 @@ export function DetailedInforUserPage() {
   return (
     <>
       <Modal open={isModalOpen} closable={false} footer={false}>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <h1 className="text-2xl text-red-600 font-bold">
             Detail User Information
           </h1>
           <button
-            className="text-red-600"
+            className="text-red-600 border-solid border-2 border-red-600 pl-1 pr-1 pb-1"
             onClick={() => {
               setIsModalOpen(false);
             }}
