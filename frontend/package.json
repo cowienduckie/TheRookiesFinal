@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^4.8.0",
     "antd": "^5.0.1",
     "axios": "^1.2.0",
     "react": "^18.2.0",
@@ -15,7 +16,7 @@
     "trailingComma": "none"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npx tailwindcss build -o src/tailwind.css -i src/index.css && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

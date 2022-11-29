@@ -16,7 +16,7 @@ export function DropdownLayout() {
           <p className="my-2 mx-5">Change Password</p>
         </Link>
       ),
-      key: "0",
+      key: "0"
     },
     {
       label: (
@@ -24,8 +24,8 @@ export function DropdownLayout() {
           <p className="my-2 mx-5">Logout</p>
         </Link>
       ),
-      key: "1",
-    },
+      key: "1"
+    }
   ];
 
   return (
@@ -33,7 +33,8 @@ export function DropdownLayout() {
       <div className="cursor-pointer">
         <Space>
           <p className="text-white">
-            {authContext.username} <CaretDownOutlined />
+            {authContext.username}{" "}
+            <CaretDownOutlined className="align-middle" />
           </p>
         </Space>
       </div>
