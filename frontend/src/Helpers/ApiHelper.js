@@ -8,7 +8,7 @@ export async function callApi(method, url, data = null) {
     method: method,
     url: url,
     headers: { Authorization: localStorage.getItem(TOKEN_KEY) },
-    data: data,
+    data: data
   })
     .then((result) => {
       response = result.data.data;
@@ -16,9 +16,22 @@ export async function callApi(method, url, data = null) {
     .catch((error) => {
       throw new Response("", {
         status: error.response.data.status,
-        statusText: error.response.data.message,
+        statusText: error.response.data.message
       });
     });
 
   return response;
+}
+
+export function queriesToString(queries) {
+  return (
+    "?" +
+    `pageIndex=${queries.pageIndex}&` +
+    `pageSize=${queries.pageSize}&` +
+    `sortField=${queries.sortField}&` +
+    `sortDirection=${queries.sortDirection}&` +
+    `filterField=${queries.filterField}&` +
+    `filterValue=${queries.filterValue}&` +
+    `searchValue=${queries.searchValue}&`
+  );
 }
