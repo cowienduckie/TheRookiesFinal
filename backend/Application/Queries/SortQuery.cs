@@ -6,10 +6,10 @@ public class SortQuery
 {
     public SortQuery()
     {
-        SortField = ModelFields.None;
-        SortDirection = SortDirections.Ascending;
+        SortField = ModelField.None;
+        SortDirection = Domain.Shared.Enums.SortDirection.Ascending;
     }
 
-    public ModelFields SortField { get; set; }
-    public SortDirections SortDirection { get; set; }
+    public ModelField SortField { get; set; }
+    public SortDirection SortDirection { get; set; }
 }
