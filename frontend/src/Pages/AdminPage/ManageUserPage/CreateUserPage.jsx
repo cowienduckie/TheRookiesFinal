@@ -66,7 +66,7 @@ export function CreateUserPage() {
   return (
     <>
       <h1 className="text-2xl text-red-600 font-bold mb-5">Create New User</h1>
-      <Form {...layout} form={form} name="nest-messages" onFinish={onFinish}>
+      <Form {...layout} form={form} name="formCreateUser" onFinish={onFinish}>
         <Form.Item
           name="firstName"
           label="First Name"
