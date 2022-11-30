@@ -446,10 +446,4 @@ public class UserServiceTests
             Assert.That(result.Message, Is.EqualTo("Success"));
         });
     }
-
-    [Test]
-    public async Task EditUserAsync_ValidInputs_ReturnsSuccessResponse()
-    {
-
-    }
 }
