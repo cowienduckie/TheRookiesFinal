@@ -73,6 +73,22 @@ export function CreateUserPage() {
     wrapperCol: { offset: 9 }
   };
 
+  const [loadings, setLoadings] = useState([]);
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 2000);
+  };
+
   return (
     <>
       <h1 className="mb-5 text-2xl font-bold text-red-600">Create New User</h1>
@@ -176,8 +192,7 @@ export function CreateUserPage() {
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (
-                  getFieldValue("dateOfBirth") === undefined 
-                  ||
+                  getFieldValue("dateOfBirth") === undefined ||
                   getFieldValue("joinedDate") > getFieldValue("dateOfBirth")
                 ) {
                   return Promise.resolve();
@@ -240,6 +255,8 @@ export function CreateUserPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
+                onClick={() => enterLoading(1)}
+                loading={loadings[1]}
               >
                 Save
               </Button>
