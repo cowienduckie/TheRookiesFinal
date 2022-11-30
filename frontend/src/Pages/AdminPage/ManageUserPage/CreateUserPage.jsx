@@ -182,7 +182,6 @@ export function CreateUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                console.log(getFieldValue("dateOfBirth"));
                 return Promise.reject(new Error(JOINED_DATE_NOT_LATER_DOB));
               }
             }),
