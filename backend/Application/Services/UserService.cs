@@ -231,7 +231,7 @@ public class UserService : BaseService, IUserService
 
     private static int GetAge(DateTime birthDate)
     {
-        var today = DateTime.Now;
+        var today = DateTime.Now.ToLocalTime();
 
         var age = today.Year - birthDate.Year;
 

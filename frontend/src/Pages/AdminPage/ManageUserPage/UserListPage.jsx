@@ -170,7 +170,7 @@ export function UserListPage() {
 
   return (
     <>
-      <h1 className="font-bold text-red-600 text-2xl">USER LIST</h1>
+      <h1 className="font-bold text-red-600 text-2xl">User List</h1>
       <div className="flex flex-row py-5 w-full justify-between">
         <div className="w-1/2 p-0">
           <Select
@@ -197,7 +197,7 @@ export function UserListPage() {
         <div className="w-1/2 p-0 flex flex-row justify-end">
           <Search className="w-1/3 mr-3" onSearch={onSearch} />
           <Link to="/admin/manage-user/create-user">
-            <Button className="ml-3" danger>
+            <Button className="ml-3" type="primary" danger>
               Create New User
             </Button>
           </Link>
