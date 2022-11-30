@@ -13,7 +13,6 @@ using Application.DTOs.Users.ChangePassword;
 namespace API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(UserRole.Admin)]
 [ApiController]
 public class UsersController : BaseController
 {
@@ -23,7 +22,8 @@ public class UsersController : BaseController
     {
         _userService = userService;
     }
-
+    
+    [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetUserResponse>>> GetById(Guid id)
     {
@@ -54,7 +54,8 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-
+    
+    [Authorize(UserRole.Admin)]
     [HttpGet]
     public async Task<ActionResult<Response<GetListUsersResponse>>> GetList(
         [FromQuery] PagingQuery pagingQuery,
@@ -94,7 +95,8 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-
+    
+    [Authorize(UserRole.Admin)]
     [HttpPost]
     public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
     {
@@ -122,6 +124,7 @@ public class UsersController : BaseController
         }
     }
 
+    [Authorize]
     [HttpPut("change-password")]
     public async Task<ActionResult<Response>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
     {
