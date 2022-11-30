@@ -7,9 +7,16 @@ export function DisableUserPage() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const assigment = true;
+
+  const handleOnclick=()=>{
+    setIsModalOpen(false);
+    navigate(-1);
+  }
+
   const onCancel = () => {
     navigate(-1);
   };
+
   return (
     <>
       {assigment ? (
@@ -25,35 +32,30 @@ export function DisableUserPage() {
             </h1>
           </div>
           <Divider />
-          <div className="pl-12 pb-5">
+          <div className="text-xl">
             <p>There are valid assignments belonging to this user.</p>
-            <p>Please close all assignments before disabling user.</p>
+            <p className="text-xl mt-2 mb-2">Please close all assignments before disabling user.</p>
           </div>
         </Modal>
       ) : (
-        <Modal open={isModalOpen} closable={false} footer={false}>
-          <div className="flex content-center justify-between pl-12">
-            <h1 className="text-2xl font-bold text-red-600">Are you sure?</h1>
+        <Modal open={isModalOpen} closable={false} footer={false} width={400}>
+          <div className="flex content-center justify-between">
+            <h1 className="pl-5 text-2xl font-bold text-red-600">Are you sure?</h1>
           </div>
           <Divider />
-          <div className="pl-12 pb-5">
-            <p className="mb-5">Do you want to disable this user?</p>
-            <Space>
+          <div className="pl-5 pb-5">
+            <p className="mb-5 text-xl">Do you want to disable this user?</p>
+            <Space className="mt-5">
               <Button
                 type="primary"
                 danger
-                onClick={() => {
-                  setIsModalOpen(false);
-                  navigate("/admin/manage-user");
-                }}
+                onClick={handleOnclick}
+                className="mr-5"
               >
                 Disable
               </Button>
               <Button
-                onClick={() => {
-                  setIsModalOpen(false);
-                  navigate("/admin/manage-user");
-                }}
+                onClick={handleOnclick}
               >
                 Cancel
               </Button>
