@@ -232,25 +232,25 @@ public class UserService : BaseService, IUserService
 
         var user = await userRepository.GetAsync(user => user.Id == requestModel.Id);
 
-        if (user == null)
+        var userAge = UserNameHelper.GetAge(requestModel.DateOfBirth);
+
+        if (userAge < Settings.MinimumStaffAge)
         {
-            return new Response<EditUserResponse>(false, ErrorMessages.BadRequest);
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidAge);
+        }
+
+        bool isJoinedDateAfterDob = DateTime.Compare(requestModel.JoinedDate, requestModel.DateOfBirth) > 0;
+
+        if (!isJoinedDateAfterDob ||
+            requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday ||
+            requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidJoinedDate);
         }
 
         if (user.Location != requestModel.AdminLocation)
         {
             return new Response<EditUserResponse>(false, ErrorMessages.InvalidLocation);
-        }
-
-        if (GetAge(requestModel.DateOfBirth) < 18)
-        {
-            return new Response<EditUserResponse>(false, ErrorMessages.InvalidAge);
-        }
-
-        if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) > 0
-            || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
-        {
-            return new Response<EditUserResponse>(false, ErrorMessages.InvalidJoinedDate);
         }
 
         user.DateOfBirth = requestModel.DateOfBirth;
@@ -263,16 +263,5 @@ public class UserService : BaseService, IUserService
         await UnitOfWork.SaveChangesAsync();
 
         return new Response<EditUserResponse>(true, "Success");
-    }
-
-    private int GetAge(DateTime dateOfBirth)
-    {
-        var today = DateTime.Now;
-
-        var age = today.Year - dateOfBirth.Year;
-
-        if (today.Month < dateOfBirth.Month || (today.Month == dateOfBirth.Month && today.Day < dateOfBirth.Day)) { age--; }
-
-        return age;
     }
 }

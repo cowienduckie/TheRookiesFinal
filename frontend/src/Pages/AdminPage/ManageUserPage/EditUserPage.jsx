@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect , useState} from "react";
 import { useNavigate, useParams  } from "react-router-dom";
 import moment from 'moment';
 import {
@@ -8,18 +8,31 @@ import {
   Button,
   Radio,
   Select,
-  ConfigProvider
+  ConfigProvider,
+  Modal
 } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { editUser, getUserById } from "../../../Apis/UserApis";
+import { DOB_REQUIRED, DOB_UNDER_18, GENDER_REQUIRED, JOINED_DATE_NOT_LATER_DOB, JOINED_DATE_NOT_WEEKENDS, JOINED_DATE_REQUIRED, ROLE_REQUIRED } from "../../../Constants/ErrorMessages";
+import {
+  GENDER_FEMALE_ENUM,
+  GENDER_MALE_ENUM,
+  ROLE_ADMIN_ENUM,
+  ROLE_STAFF_ENUM
+} from "../../../Constants/CreateUserConstants";
 dayjs.extend(customParseFormat);
 
 export function EditUserPage() {
   const navigate = useNavigate();
 
   const { userId } = useParams();
+
   const [form] = Form.useForm();
+
+  const dateFormat = "YYYY/MM/DD"
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() =>{
     getUserById(userId).then(res => {
@@ -59,9 +72,10 @@ export function EditUserPage() {
       id: userId
     }
 
-    await editUser(values)
-
-    navigate("/admin/manage-user");
+    await editUser(values).then((data) => {
+      console.log(data);
+      setIsModalOpen(true);
+    });
   };
 
   return (
@@ -78,7 +92,7 @@ export function EditUserPage() {
           name="dateOfBirth"
           label="Date Of Birth"
           rules={[
-            { required: true, message: "Please enter your date of birth" },
+            { required: true, message: DOB_REQUIRED },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (
@@ -89,20 +103,20 @@ export function EditUserPage() {
                   return Promise.resolve();
                 }
                 return Promise.reject(
-                  new Error("User is under 18. Please select a different date")
+                  new Error(DOB_UNDER_18)
                 );
               }
             })
           ]}
         >
-          <DatePicker style={{ width: "100%" }} disabledDate={disabledDate} />
+          <DatePicker style={{ width: "100%" }} disabledDate={disabledDate} format={dateFormat}/>
         </Form.Item>
 
         <Form.Item
           name="gender"
           label="Gender"
           className="text-red-600"
-          rules={[{ required: true, message: "Please pick your gender!" }]}
+          rules={[{ required: true, message: GENDER_REQUIRED}]}
         >
           <Radio.Group>
             <ConfigProvider
@@ -114,8 +128,8 @@ export function EditUserPage() {
                 }
               }}
             >
-              <Radio value="1"> Female </Radio>
-              <Radio value="0"> Male </Radio>
+              <Radio value = {GENDER_FEMALE_ENUM}> Female </Radio>
+              <Radio value = {GENDER_MALE_ENUM}> Male </Radio>
             </ConfigProvider>
           </Radio.Group>
         </Form.Item>
@@ -123,7 +137,7 @@ export function EditUserPage() {
           name="joinedDate"
           label="Joined Date"
           rules={[
-            { required: true, message: "Please enter your joined date" },
+            { required: true, message: JOINED_DATE_REQUIRED },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (
@@ -132,11 +146,7 @@ export function EditUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error(
-                    "Joined date is not later than Date of Birth. Please select a different date"
-                  )
-                );
+                return Promise.reject(new Error( JOINED_DATE_NOT_LATER_DOB));
               }
             }),
             ({ getFieldValue }) => ({
@@ -148,25 +158,21 @@ export function EditUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error(
-                    "Joined date is Saturday or Sunday. Please select a different date"
-                  )
-                );
+                return Promise.reject(new Error(JOINED_DATE_NOT_WEEKENDS));
               }
             })
           ]}
         >
-          <DatePicker style={{ width: "100%" }} disabledDate={disabledDate} />
+          <DatePicker style={{ width: "100%" }} disabledDate={disabledDate} format={dateFormat}/>
         </Form.Item>
         <Form.Item
           label="Type"
           name="role"
-          rules={[{ required: true, message: "Please pick an user type!" }]}
+          rules={[{ required: true, message: ROLE_REQUIRED }]}
         >
           <Select>
-            <Select.Option value="1">Staff</Select.Option>
-            <Select.Option value="0">Admin</Select.Option>
+            <Select.Option value={ROLE_ADMIN_ENUM}>Admin</Select.Option>
+            <Select.Option value={ROLE_STAFF_ENUM}>Staff</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout}>
@@ -178,6 +184,27 @@ export function EditUserPage() {
           </Button>
         </Form.Item>
       </Form>
+
+      <Modal
+        open={isModalOpen}
+        onOk={handleCancel}
+        onCancel={handleCancel}
+        closable={handleCancel}
+        footer={[]}
+      >
+        <h1 className="text-2xl text-red-600 font-bold mb-5">
+          Create User Success
+        </h1>
+        <p className="mb-8">User has been edited successfully!</p>
+        <Button
+          className="content-end"
+          danger
+          key="back"
+          onClick={handleCancel}
+        >
+          Close
+        </Button>
+      </Modal>
     </>
   );
 }
