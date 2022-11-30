@@ -39,12 +39,11 @@ export function EditUserPage() {
       form.setFieldValue("firstName", res.firstName);
       form.setFieldValue("lastName", res.lastName);
       form.setFieldValue("gender", res.gender === "Male" ? "0" : "1");
-      form.setFieldValue("dateOfBirth", moment(res.dateOfBirth, "DD/MM/YYYY"));
+      form.setFieldValue("dateOfBirth", dayjs(res.dateOfBirth, "DD/MM/YYYY"));
       form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
-      form.setFieldValue("joinedDate", moment(res.joinedDate, "DD/MM/YYYY"));
+      form.setFieldValue("joinedDate", dayjs(res.joinedDate, "DD/MM/YYYY"));
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
     labelCol: { span: 7 },
@@ -73,7 +72,6 @@ export function EditUserPage() {
     }
 
     await editUser(values).then((data) => {
-      console.log(data);
       setIsModalOpen(true);
     });
   };
