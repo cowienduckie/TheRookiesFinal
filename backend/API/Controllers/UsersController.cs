@@ -9,6 +9,7 @@ using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Application.Queries;
 using Application.DTOs.Users.ChangePassword;
+using Application.DTOs.Users.EditUser;
 
 namespace API.Controllers;
 
@@ -22,7 +23,7 @@ public class UsersController : BaseController
     {
         _userService = userService;
     }
-    
+
     [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetUserResponse>>> GetById(Guid id)
@@ -54,7 +55,7 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-    
+
     [Authorize(UserRole.Admin)]
     [HttpGet]
     public async Task<ActionResult<Response<GetListUsersResponse>>> GetList(
@@ -95,7 +96,7 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-    
+
     [Authorize(UserRole.Admin)]
     [HttpPost]
     public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
@@ -138,6 +139,33 @@ public class UsersController : BaseController
             requestModel.Id = CurrentUser?.Id;
 
             var response = await _userService.ChangePasswordAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<Response>> Edit([FromBody] EditUserRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.AdminLocation = CurrentUser.Location;
+
+            var response = await _userService.EditUserAsync(requestModel);
 
             if (!response.IsSuccess)
             {

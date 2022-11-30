@@ -18,3 +18,7 @@ export async function getUserById(id) {
 export async function changePassword(data) {
   return await callApi("put", url + "/change-password", data);
 }
+
+export async function editUser(editModel) {
+  return await callApi("put", url , editModel);
+}

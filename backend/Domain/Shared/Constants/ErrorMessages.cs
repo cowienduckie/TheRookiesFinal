@@ -11,4 +11,5 @@ public static class ErrorMessages
     public const string WrongOldPassword = "Old password is wrong!";
     public const string InvalidAge = "User's age is invalid!";
     public const string InvalidJoinedDate = "Joined date is invalid!";
+    public const string InvalidLocation = "Loaction is invalid!";
 }
