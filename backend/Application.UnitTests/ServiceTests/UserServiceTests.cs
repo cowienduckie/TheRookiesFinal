@@ -553,8 +553,8 @@ public class UserServiceTests
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                    It.IsAny<Expression<Func<User, bool>>>(),
+                                    It.IsAny<CancellationToken>()))
             .ReturnsAsync(new User());
 
         var result = await _userService.DisableUserAsync(new DisableUserRequest());
@@ -582,14 +582,14 @@ public class UserServiceTests
 
         assignmentRepository
             .Setup(ar => ar.ListAsync(
-                It.IsAny<Expression<Func<Assignment, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                    It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                    It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Assignment>());
 
         _userRepository
             .Setup(ur => ur.GetAsync(
-                It.IsAny<Expression<Func<User, bool>>>(),
-                It.IsAny<CancellationToken>()))
+                                    It.IsAny<Expression<Func<User, bool>>>(),
+                                    It.IsAny<CancellationToken>()))
             .ReturnsAsync(new User());
 
         var result = await _userService.DisableUserAsync(new DisableUserRequest());
