@@ -8,11 +8,11 @@ using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Application.Queries;
+using Application.DTOs.Users.ChangePassword;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(UserRole.Admin)]
 [ApiController]
 public class UsersController : BaseController
 {
@@ -22,7 +22,8 @@ public class UsersController : BaseController
     {
         _userService = userService;
     }
-
+    
+    [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetUserResponse>>> GetById(Guid id)
     {
@@ -53,7 +54,8 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-
+    
+    [Authorize(UserRole.Admin)]
     [HttpGet]
     public async Task<ActionResult<Response<GetListUsersResponse>>> GetList(
         [FromQuery] PagingQuery pagingQuery,
@@ -93,9 +95,38 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-
-    [HttpPost("create")]
+    
+    [Authorize(UserRole.Admin)]
+    [HttpPost]
     public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response<CreateUserResponse>(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.Location = CurrentUser.Location;
+
+            var response = await _userService.CreateUserAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize]
+    [HttpPut("change-password")]
+    public async Task<ActionResult<Response>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
     {
         try
         {
@@ -104,9 +135,9 @@ public class UsersController : BaseController
                 return BadRequest(new Response(false, ErrorMessages.BadRequest));
             }
 
-            requestModel.Location = CurrentUser.Location;
+            requestModel.Id = CurrentUser?.Id;
 
-            var response = await _userService.CreateUserAsync(requestModel);
+            var response = await _userService.ChangePasswordAsync(requestModel);
 
             if (!response.IsSuccess)
             {

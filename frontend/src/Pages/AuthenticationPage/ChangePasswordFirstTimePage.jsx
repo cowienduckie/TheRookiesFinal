@@ -1,7 +1,7 @@
 import { Button, Divider, Form, Input, Modal } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { changePassword } from "../../Apis/Accounts";
+import { changePassword } from "../../Apis/UserApis";
 import { AuthContext } from "../../Contexts/AuthContext";
 import {
   PASSWORD_REQUIRED,

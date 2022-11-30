@@ -1,6 +1,6 @@
 export { AdminPage } from "./AdminPage";
 
-export { ManageUserPage, CreateUserPage, UserListPage } from "./ManageUserPage";
+export { ManageUserPage, CreateUserPage, UserListPage, DetailedInfoUserPage } from "./ManageUserPage";
 
 export { ManageAssetPage } from "./ManageAssetPage";
 

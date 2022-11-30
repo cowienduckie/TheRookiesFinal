@@ -101,7 +101,7 @@ public class UserService : BaseService, IUserService
             requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
-        }
+        } 
 
         var latestStaffCode = userRepository
                                 .ListAsync(u => !u.IsDeleted)
