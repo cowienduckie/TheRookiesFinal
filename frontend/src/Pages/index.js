@@ -13,7 +13,8 @@ export {
   ReportPage,
   CreateUserPage,
   UserListPage,
-  DetailedInfoUserPage
+  DetailedInfoUserPage,
+  DisableUserPage
 } from "./AdminPage";
 
 export {

@@ -15,7 +15,8 @@ import {
   ManageUserPage,
   ReportPage,
   UserListPage,
-  DetailedInfoUserPage
+  DetailedInfoUserPage,
+  DisableUserPage
 } from "./Pages";
 
 function App() {
@@ -38,6 +39,10 @@ function App() {
             <Route
               path="/admin/manage-user/:id"
               element={<DetailedInfoUserPage />}
+            />
+            <Route
+              path="/admin/manage-user/disable/:id"
+              element={<DisableUserPage />}
             />
           </Route>
           <Route
@@ -72,6 +77,10 @@ function App() {
         path="/admin/manage-user/:id"
         element={<DetailedInfoUserPage />}
       />
+      <Route
+              path="/admin/manage-user/disable/:id"
+              element={<DisableUserPage />}
+            />
     </Routes>
   );
 
