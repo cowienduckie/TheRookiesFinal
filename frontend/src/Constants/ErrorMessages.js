@@ -17,15 +17,17 @@ export const PASSWORD_COMPARED =
   "The new password cannot match the old password!";
 export const PASSWORD_ONLY_ALLOW = "Please enter a valid value!";
 export const NAME_ONLY_ALLOW =
-  "Please enter valid name field value: A to Z, a to z and Space!";
+  "Name should only contain alphabetic: A to Z or a to z and one space between words";
 export const FIRST_NAME_REQUIRED = "Please enter your first name!";
 export const LAST_NAME_REQUIRED = "Please enter your last name!";
 export const DOB_UNDER_18 = "User is under 18. Please select a different date!";
 export const DOB_REQUIRED = "Please enter your date of birth!";
-export const GENDER_REQUIRED = "Please pick your gender!";
+export const GENDER_REQUIRED = "Please select user gender!";
 export const JOINED_DATE_REQUIRED = "Please enter your joined date!";
 export const JOINED_DATE_NOT_LATER_DOB =
-  "Joined date is not later than Date of Birth. Please select a different date!";
+  "Joined date must later than Date of Birth. Please select a different date!";
 export const JOINED_DATE_NOT_WEEKENDS =
-  "Joined date is Saturday or Sunday. Please select a different date!";
-export const ROLE_REQUIRED = "Please pick an user type!";
+  "Joined date must not be Saturday or Sunday. Please select a different date!";
+export const ROLE_REQUIRED = "Please select user type!";
+export const NAME_MAX_LENGTH =
+  "Input value for name must be below 255 characters!";
