@@ -12,6 +12,8 @@ using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
 using Infrastructure.Persistence.Interfaces;
 using System.Text.RegularExpressions;
+using Application.DTOs.Users.DisableUser;
+using Domain.Entities.Assignments;
 
 namespace Application.Services;
 
@@ -77,7 +79,7 @@ public class UserService : BaseService, IUserService
         await userRepository.UpdateAsync(user);
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response(true, "Success");
+        return new Response(true, Messages.ActionSuccess);
     }
 
     public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserRequest requestModel)
@@ -101,7 +103,7 @@ public class UserService : BaseService, IUserService
             requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate, responseModel);
-        } 
+        }
 
         var latestStaffCode = userRepository
                                 .ListAsync(u => !u.IsDeleted)
@@ -147,7 +149,7 @@ public class UserService : BaseService, IUserService
         await userRepository.AddAsync(user);
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response<CreateUserResponse>(true, "Success", responseModel);
+        return new Response<CreateUserResponse>(true, Messages.ActionSuccess, responseModel);
     }
 
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
@@ -227,6 +229,57 @@ public class UserService : BaseService, IUserService
         var response = new GetListUsersResponse(paginatedList);
 
         return new Response<GetListUsersResponse>(true, response);
+    }
+
+    public async Task<Response> IsAbleToDisableUser(Guid id)
+    {
+        var isAnyValidAssignment = await IsAnyValidAssignmentBelongsToUser(id);
+
+        if (isAnyValidAssignment)
+        {
+            return new Response(false, ErrorMessages.CannotDisableUser);
+        }
+
+        return new Response(true, Messages.CanDisableUser);
+    }
+
+    public async Task<Response> DisableUserAsync(DisableUserRequest request)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(u => !u.IsDeleted &&
+                                                      u.Id == request.Id &&
+                                                      u.Location == request.Location);
+
+        if (user == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
+
+        var isAnyValidAssignment = await IsAnyValidAssignmentBelongsToUser(request.Id);
+
+        if (isAnyValidAssignment)
+        {
+            return new Response(false, ErrorMessages.CannotDisableUser);
+        }
+
+        user.IsDeleted = true;
+
+        await userRepository.UpdateAsync(user);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response(true, Messages.ActionSuccess);
+    }
+
+    private async Task<bool> IsAnyValidAssignmentBelongsToUser(Guid userId)
+    {
+        var assignmentRepository = UnitOfWork.AsyncRepository<Assignment>();
+
+        var assignments = await assignmentRepository.ListAsync(a => !a.IsDeleted &&
+                                                                    a.AssignedTo == userId &&
+                                                                    a.State != AssignmentState.Declined);
+
+        return assignments.Any();
     }
 
     private static int GetAge(DateTime birthDate)
