@@ -11,9 +11,9 @@ public class CreateUserResponse
         StaffCode = user.StaffCode;
         FirstName = user.FirstName;
         LastName = user.LastName;
-        DateOfBirth = user.DateOfBirth;
+        DateOfBirth = user.DateOfBirth.ToLocalTime();
         Gender = user.Gender;
-        JoinedDate = user.JoinedDate;
+        JoinedDate = user.JoinedDate.ToLocalTime();
         Role = user.Role;
         Location = user.Location;
         IsFirstTimeLogIn = user.IsFirstTimeLogIn;
