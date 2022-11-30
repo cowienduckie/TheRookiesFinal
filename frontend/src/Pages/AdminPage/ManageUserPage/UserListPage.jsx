@@ -158,10 +158,12 @@ export function UserListPage() {
       key: "actions",
       render: (_, record) => (
         <div className="max-w-fit p-0">
-          <Button
-            className="mr-2"
-            icon={<EditOutlined className="align-middle" />}
-          />
+          <Link to = {`/admin/manage-user/edit-user/${record.id}`} >
+            <Button
+              className="mr-2"
+              icon={<EditOutlined className="align-middle" />}
+            />
+          </Link>
           <Button
             className="ml-2"
             danger
