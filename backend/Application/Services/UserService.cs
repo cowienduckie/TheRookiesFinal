@@ -12,6 +12,7 @@ using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
 using Infrastructure.Persistence.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Application.Services;
 
@@ -225,51 +226,53 @@ public class UserService : BaseService, IUserService
         return new Response<GetListUsersResponse>(true, response);
     }
 
-    private static int GetAge(DateTime birthDate)
+    public async Task<Response<EditUserResponse>> EditUserAsync(EditUserRequest requestModel)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(user => user.Id == requestModel.Id);
+
+        if (user == null)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.BadRequest);
+        }
+
+        if (user.Location != requestModel.AdminLocation)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidLocation);
+        }
+
+        if (GetAge(requestModel.DateOfBirth) < 18)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidAge);
+        }
+
+        if (DateTime.Compare(requestModel.DateOfBirth, requestModel.JoinedDate) > 0
+            || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday || requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
+        {
+            return new Response<EditUserResponse>(false, ErrorMessages.InvalidJoinedDate);
+        }
+
+        user.DateOfBirth = requestModel.DateOfBirth;
+        user.Gender = requestModel.Gender;
+        user.JoinedDate = requestModel.JoinedDate;
+        user.Role = requestModel.Role;
+
+        await userRepository.UpdateAsync(user);
+
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response<EditUserResponse>(true, "Success");
+    }
+
+    private int GetAge(DateTime dateOfBirth)
     {
         var today = DateTime.Now;
 
-        var age = today.Year - birthDate.Year;
+        var age = today.Year - dateOfBirth.Year;
 
-        if (today.Month < birthDate.Month || (today.Month == birthDate.Month && today.Day < birthDate.Day)) { age--; }
+        if (today.Month < dateOfBirth.Month || (today.Month == dateOfBirth.Month && today.Day < dateOfBirth.Day)) { age--; }
 
         return age;
-    }
-
-    private static string GetNewStaffCode(string previousStaffCode)
-    {
-        var number = Regex.Match(previousStaffCode, @"\d+").Value;
-
-        var nextStaffCodeNumber = (number == "" || number == null) ? 1 : Convert.ToInt32(number) + 1;
-
-        return Settings.StaffCodePrefix + nextStaffCodeNumber.ToString().PadLeft(4, '0');
-    }
-
-    private static bool CheckValidUserName(string firstName, string lastName, string username)
-    {
-        var previousUserNameWithoutNumber = Regex.Match(username, @"[a-zA-Z]+").Value;
-
-        return previousUserNameWithoutNumber == GetNewUserNameWithoutNumber(firstName, lastName);
-    }
-
-    private static string GetNewUserNameWithoutNumber(string firstName, string lastName)
-    {
-        var fullName = firstName + " " + lastName;
-
-        var nameWordArray = fullName.Split(" ");
-
-        var userName = nameWordArray[0];
-
-        for (int i = 1; i < nameWordArray.Length; i++)
-        {
-            userName += nameWordArray[i].Substring(0, 1);
-        }
-
-        return userName.ToLower();
-    }
-
-    private static string GetNewPassword(string userName, DateTime dateOfBirth)
-    {
-        return userName.ToLower() + "@" + dateOfBirth.ToString("ddMMyyyy");
     }
 }
