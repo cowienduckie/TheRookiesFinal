@@ -74,8 +74,8 @@ function App() {
       />
       <Route path="/logout" element={<LogoutPage />} />
       <Route
-        path="/admin/manage-user/create-user"
-        element={<CreateUserPage />}
+        path="/admin/manage-user/:id"
+        element={<DetailedInfoUserPage />}
       />
     </Routes>
   );

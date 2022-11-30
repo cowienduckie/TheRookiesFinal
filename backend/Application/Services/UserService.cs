@@ -101,18 +101,14 @@ public class UserService : BaseService, IUserService
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate);
         }
 
-        var validUserList = await userRepository
-                                .ListAsync(u => !u.IsDeleted);
+        var validUserList = await userRepository.ListAsync(u => !u.IsDeleted);
 
-        var latestStaffCode = validUserList
-                                .OrderByDescending(u => u.StaffCode)
-                                .First()
-                                .StaffCode;
+        var latestStaffCode = validUserList.OrderByDescending(u => u.StaffCode).First().StaffCode;
 
         var sameUserNameCount = validUserList
                                     .Count(u => UserNameHelper.CheckValidUserName(requestModel.FirstName,
-                                                                    requestModel.LastName,
-                                                                    u.Username));
+                                                                                  requestModel.LastName,
+                                                                                  u.Username));
 
         var newStaffCode = UserNameHelper.GetNewStaffCode(latestStaffCode);
 
@@ -226,17 +222,17 @@ public class UserService : BaseService, IUserService
         return new Response<GetListUsersResponse>(true, response);
     }
 
-    public async Task<Response<EditUserResponse>> EditUserAsync(EditUserRequest requestModel)
+    public async Task<Response> EditUserAsync(EditUserRequest requestModel)
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(user => user.Id == requestModel.Id);
+        var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
 
         var userAge = UserNameHelper.GetAge(requestModel.DateOfBirth);
 
         if (userAge < Settings.MinimumStaffAge)
         {
-            return new Response<EditUserResponse>(false, ErrorMessages.InvalidAge);
+            return new Response(false, ErrorMessages.InvalidAge);
         }
 
         bool isJoinedDateAfterDob = DateTime.Compare(requestModel.JoinedDate, requestModel.DateOfBirth) > 0;
@@ -245,12 +241,12 @@ public class UserService : BaseService, IUserService
             requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday ||
             requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
-            return new Response<EditUserResponse>(false, ErrorMessages.InvalidJoinedDate);
+            return new Response(false, ErrorMessages.InvalidJoinedDate);
         }
 
         if (user.Location != requestModel.AdminLocation)
         {
-            return new Response<EditUserResponse>(false, ErrorMessages.InvalidLocation);
+            return new Response(false, ErrorMessages.InvalidLocation);
         }
 
         user.DateOfBirth = requestModel.DateOfBirth;
@@ -262,6 +258,6 @@ public class UserService : BaseService, IUserService
 
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response<EditUserResponse>(true, "Success");
+        return new Response(true, "Success");
     }
 }

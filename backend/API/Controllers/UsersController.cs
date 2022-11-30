@@ -23,7 +23,7 @@ public class UsersController : BaseController
     {
         _userService = userService;
     }
-    
+
     [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetUserResponse>>> GetById(Guid id)
@@ -55,7 +55,7 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-    
+
     [Authorize(UserRole.Admin)]
     [HttpGet]
     public async Task<ActionResult<Response<GetListUsersResponse>>> GetList(
@@ -96,7 +96,7 @@ public class UsersController : BaseController
             return HandleException(exception);
         }
     }
-    
+
     [Authorize(UserRole.Admin)]
     [HttpPost]
     public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
@@ -154,8 +154,7 @@ public class UsersController : BaseController
     }
 
     [HttpPut]
-    public async Task<ActionResult<Response<EditUserResponse>>> Update(
-        [FromBody] EditUserRequest requestModel) 
+    public async Task<ActionResult<Response>> Edit([FromBody] EditUserRequest requestModel)
     {
         try
         {
@@ -170,13 +169,13 @@ public class UsersController : BaseController
 
             if (!response.IsSuccess)
             {
-               return BadRequest(response);
+                return BadRequest(response);
             }
 
             return Ok(response);
         }
-            catch (Exception exception)
-            {
+        catch (Exception exception)
+        {
             return HandleException(exception);
         }
     }

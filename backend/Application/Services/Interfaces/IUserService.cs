@@ -16,5 +16,5 @@ public interface IUserService
     Task<Response<GetUserResponse>> GetAsync(GetUserRequest request);
     Task<Response<GetListUsersResponse>> GetListAsync(GetListUsersRequest request);
     Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserRequest requestModel);
-    Task<Response<EditUserResponse>> EditUserAsync(EditUserRequest requestModel);
+    Task<Response> EditUserAsync(EditUserRequest requestModel);
 }

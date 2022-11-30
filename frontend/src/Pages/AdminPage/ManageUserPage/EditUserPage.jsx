@@ -1,6 +1,5 @@
 import React, { useEffect , useState} from "react";
 import { useNavigate, useParams  } from "react-router-dom";
-import moment from 'moment';
 import {
   DatePicker,
   Form,
@@ -21,6 +20,7 @@ import {
   ROLE_ADMIN_ENUM,
   ROLE_STAFF_ENUM
 } from "../../../Constants/CreateUserConstants";
+
 dayjs.extend(customParseFormat);
 
 export function EditUserPage() {
@@ -55,7 +55,7 @@ export function EditUserPage() {
   };
 
   const handleCancel = () => {
-    navigate("/admin/manage-user");
+    navigate(-1);
   };
 
   const disabledDate = (current) => {
@@ -191,7 +191,7 @@ export function EditUserPage() {
         footer={[]}
       >
         <h1 className="text-2xl text-red-600 font-bold mb-5">
-          Create User Success
+          Edit User Success
         </h1>
         <p className="mb-8">User has been edited successfully!</p>
         <Button
