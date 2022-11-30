@@ -5,7 +5,6 @@ using Application.DTOs.Users.EditUser;
 using Application.DTOs.Users.GetListUsers;
 using Application.DTOs.Users.GetUser;
 using Application.DTOs.Users.CreateUser;
-using Domain.Shared.Enums;
 
 namespace Application.Services.Interfaces;
 

@@ -8,6 +8,8 @@ using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Application.Queries;
+using Application.DTOs.Users.ChangePassword;
+using Application.DTOs.Users.EditUser;
 
 namespace API.Controllers;
 
@@ -149,30 +151,30 @@ public class UsersController : BaseController
     }
 
     [HttpPut]
-        public async Task<ActionResult<Response<EditUserResponse>>> Update(
+    public async Task<ActionResult<Response<EditUserResponse>>> Update(
         [FromBody] EditUserRequest requestModel) 
+    {
+        try
         {
-            try
+            if (CurrentUser == null)
             {
-                if (CurrentUser == null)
-                {
-                    return BadRequest(new Response(false, ErrorMessages.BadRequest));
-                }
-
-                requestModel.AdminLocation = CurrentUser.Location;
-
-                var response = await _userService.EditUserAsync(requestModel);
-
-                if (!response.IsSuccess)
-                {
-                    return BadRequest(response);
-                }
-
-                return Ok(response);
+                return BadRequest(new Response(false, ErrorMessages.BadRequest));
             }
+
+            requestModel.AdminLocation = CurrentUser.Location;
+
+            var response = await _userService.EditUserAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+               return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
             catch (Exception exception)
             {
-                return HandleException(exception);
-            }
+            return HandleException(exception);
         }
+    }
 }

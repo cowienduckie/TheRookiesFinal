@@ -12,14 +12,14 @@ namespace Application.DTOs.Users.EditUser
         public DateTime DateOfBirth { get; set; }
 
         [Required]
-        public Genders Gender { get; set; }
+        public Gender Gender { get; set; }
 
         [Required]
         public DateTime JoinedDate { get; set; }
 
         [Required]
-        public UserRoles Role { get; set; }
+        public UserRole Role { get; set; }
 
-        public Locations AdminLocation { get; set; }
+        public Location AdminLocation { get; set; }
     }
 }
