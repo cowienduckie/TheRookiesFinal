@@ -1,4 +1,4 @@
-import { callApi } from "../Helpers/ApiHelper";
+import { callApi, callApiTakeSuccessWrapper } from "../Helpers/ApiHelper";
 import { API_BASE_URL } from "../Constants/SystemConstants";
 
 const url = `${API_BASE_URL}/api/users`;
@@ -21,4 +21,14 @@ export async function changePassword(data) {
 
 export async function editUser(editModel) {
   return await callApi("put", url , editModel);
+}
+export async function checkCanDisableUser(id) {
+  return await callApiTakeSuccessWrapper(
+    "get",
+    `${url}/disable-availability/${id}`
+  );
+}
+
+export async function disableUser(data) {
+  return await callApiTakeSuccessWrapper("put", `${url}/disability`, data);
 }

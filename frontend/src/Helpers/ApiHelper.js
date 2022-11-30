@@ -23,6 +23,28 @@ export async function callApi(method, url, data = null) {
   return response;
 }
 
+export async function callApiTakeSuccessWrapper(method, url, data = null) {
+  let response = undefined;
+
+  await axios({
+    method: method,
+    url: url,
+    headers: { Authorization: localStorage.getItem(TOKEN_KEY) },
+    data: data
+  })
+    .then((result) => {
+      response = result.data;
+    })
+    .catch((error) => {
+      throw new Response("", {
+        status: error.response.data.status,
+        statusText: error.response.data.message
+      });
+    });
+
+  return response;
+}
+
 export function queriesToString(queries) {
   return (
     "?" +
