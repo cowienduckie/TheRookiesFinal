@@ -476,7 +476,7 @@ public class UserServiceTests
     }
 
     [Test]
-    public async Task CreateUserAsync_InvalidJoinedDate_ReturnsInvalidJoinedDate()
+    public async Task CreateUserAsync_InvalidJoinedDateWeekend_ReturnsInvalidJoinedDate()
     {
         var hashedPassword = HashStringHelper.HashString(Constants.Password);
         var user = new User
@@ -490,6 +490,59 @@ public class UserServiceTests
             DateOfBirth = new DateTime(2002, 10, 5),
             Gender = Constants.NewGender,
             JoinedDate = new DateTime(2022, 12, 3),
+            Role = Constants.Role,
+            Location = Constants.NewLocation,
+            IsFirstTimeLogIn = true,
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new CreateUserRequest
+        {
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            DateOfBirth = user.DateOfBirth,
+            Gender = user.Gender,
+            JoinedDate = user.JoinedDate,
+            Role = user.Role,
+            Location = user.Location
+        };
+
+        var result = await _userService.CreateUserAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response<CreateUserResponse>>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidJoinedDate));
+        });
+    }
+
+    [Test]
+    public async Task CreateUserAsync_InvalidJoinedDateNotWeekend_ReturnsInvalidJoinedDate()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            StaffCode = Constants.StaffCode,
+            FirstName = Constants.FirstName,
+            LastName = Constants.LastName,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            DateOfBirth = new DateTime(2002, 10, 5),
+            Gender = Constants.NewGender,
+            JoinedDate = new DateTime(2000, 12, 3),
             Role = Constants.Role,
             Location = Constants.NewLocation,
             IsFirstTimeLogIn = true,
