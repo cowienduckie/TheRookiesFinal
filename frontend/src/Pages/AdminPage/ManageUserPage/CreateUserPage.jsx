@@ -66,7 +66,7 @@ export function CreateUserPage() {
   };
 
   const handleCancelModal = () => {
-    navigate("/admin/manage-user", { state: { createdUser } });
+    navigate("/admin/manage-user", { state: { newUser: createdUser } });
   };
 
   const handleCancelForm = () => {

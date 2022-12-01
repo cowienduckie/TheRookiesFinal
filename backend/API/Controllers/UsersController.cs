@@ -200,13 +200,13 @@ public class UsersController : BaseController
 
     [Authorize(UserRole.Admin)]
     [HttpPut]
-    public async Task<ActionResult<Response>> Edit([FromBody] EditUserRequest requestModel)
+    public async Task<ActionResult<Response<GetUserResponse>>> Edit([FromBody] EditUserRequest requestModel)
     {
         try
         {
             if (CurrentUser == null)
             {
-                return BadRequest(new Response(false, ErrorMessages.BadRequest));
+                return BadRequest(new Response<GetUserResponse>(false, ErrorMessages.BadRequest));
             }
 
             requestModel.AdminLocation = CurrentUser.Location;

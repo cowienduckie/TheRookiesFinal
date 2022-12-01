@@ -281,7 +281,7 @@ public class UserService : BaseService, IUserService
         return assignments.Any();
     }
 
-    public async Task<Response> EditUserAsync(EditUserRequest requestModel)
+    public async Task<Response<GetUserResponse>> EditUserAsync(EditUserRequest requestModel)
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
@@ -289,14 +289,14 @@ public class UserService : BaseService, IUserService
 
         if (user == null)
         {
-            return new Response(false, ErrorMessages.NotFound);
+            return new Response<GetUserResponse>(false, ErrorMessages.NotFound);
         }
 
         var userAge = UserNameHelper.GetAge(requestModel.DateOfBirth);
 
         if (userAge < Settings.MinimumStaffAge)
         {
-            return new Response(false, ErrorMessages.InvalidAge);
+            return new Response<GetUserResponse>(false, ErrorMessages.InvalidAge);
         }
 
         bool isJoinedDateAfterDob = DateTime.Compare(requestModel.JoinedDate, requestModel.DateOfBirth) > 0;
@@ -305,12 +305,12 @@ public class UserService : BaseService, IUserService
             requestModel.JoinedDate.DayOfWeek == DayOfWeek.Saturday ||
             requestModel.JoinedDate.DayOfWeek == DayOfWeek.Sunday)
         {
-            return new Response(false, ErrorMessages.InvalidJoinedDate);
+            return new Response<GetUserResponse>(false, ErrorMessages.InvalidJoinedDate);
         }
 
         if (user.Location != requestModel.AdminLocation)
         {
-            return new Response(false, ErrorMessages.InvalidLocation);
+            return new Response<GetUserResponse>(false, ErrorMessages.InvalidLocation);
         }
 
         user.DateOfBirth = requestModel.DateOfBirth;
@@ -319,9 +319,8 @@ public class UserService : BaseService, IUserService
         user.Role = requestModel.Role;
 
         await userRepository.UpdateAsync(user);
-
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response(true, "Success");
+        return new Response<GetUserResponse>(true, "Success", new GetUserResponse(user));
     }
 }
