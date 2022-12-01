@@ -17,6 +17,7 @@ using Application.Helpers;
 using Application.DTOs.Users.EditUser;
 using Domain.Shared.Enums;
 using Microsoft.IdentityModel.Tokens;
+using Application.DTOs.Users.GetUser;
 
 namespace Application.UnitTests.ServiceTests;
 
@@ -633,6 +634,7 @@ public class UserServiceTests
 
             Assert.That(result.Message, Is.EqualTo(ErrorMessages.BadRequest));
         });
+    } 
     
     [Test]
     public async Task EditUserAsync_NullUser_ReturnsNotFound()
@@ -658,7 +660,7 @@ public class UserServiceTests
         {
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result, Is.InstanceOf<Response>());
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
 
             Assert.That(result.IsSuccess, Is.False);
 
@@ -702,7 +704,7 @@ public class UserServiceTests
         {
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result, Is.InstanceOf<Response>());
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
 
             Assert.That(result.IsSuccess, Is.False);
 
@@ -746,7 +748,7 @@ public class UserServiceTests
         {
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result, Is.InstanceOf<Response>());
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
 
             Assert.That(result.IsSuccess, Is.False);
 
@@ -790,7 +792,7 @@ public class UserServiceTests
         {
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result, Is.InstanceOf<Response>());
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
 
             Assert.That(result.IsSuccess, Is.False);
 
@@ -836,7 +838,7 @@ public class UserServiceTests
         {
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result, Is.InstanceOf<Response>());
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
 
             Assert.That(result.IsSuccess, Is.False);
 
@@ -882,7 +884,7 @@ public class UserServiceTests
         {
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result, Is.InstanceOf<Response>());
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
 
             Assert.That(result.IsSuccess, Is.True);
 
@@ -891,8 +893,6 @@ public class UserServiceTests
             Assert.That(result.Message, Is.EqualTo("Success"));
         });
     }
-}
-
 
     [Test]
     public async Task CreateUserAsync_InvalidJoinedDateWeekend_ReturnsInvalidJoinedDate()
