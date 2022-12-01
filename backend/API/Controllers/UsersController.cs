@@ -9,6 +9,7 @@ using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Application.Queries;
 using Application.DTOs.Users.ChangePassword;
+using Application.DTOs.Users.DisableUser;
 using Application.DTOs.Users.EditUser;
 
 namespace API.Controllers;
@@ -125,7 +126,51 @@ public class UsersController : BaseController
         }
     }
 
-    [Authorize]
+    [Authorize(UserRole.Admin)]
+    [HttpGet("disable-availability/{id}")]
+    public async Task<ActionResult<Response>> CheckDisableAvailability(Guid id)
+    {
+        try
+        {
+            var response = await _userService.IsAbleToDisableUser(id);
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPut("disable")]
+    public async Task<ActionResult<Response>> DisableUser([FromBody] DisableUserRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.Location = CurrentUser.Location;
+
+            var response = await _userService.DisableUserAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
     [HttpPut("change-password")]
     public async Task<ActionResult<Response>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
     {

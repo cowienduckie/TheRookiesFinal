@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Domain.Entities.Assignments;
 using Domain.Entities.Users;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Interfaces;
@@ -19,7 +20,7 @@ public class EfContext : DbContext, IEfContext
     }
 
     public virtual DbSet<User> Users => Set<User>();
-
+    public virtual DbSet<Assignment> Assignments => Set<Assignment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
