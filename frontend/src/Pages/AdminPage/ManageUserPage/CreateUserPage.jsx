@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { createUser } from "../../../Apis/UserApis";
 import {
   DOB_REQUIRED,
@@ -33,13 +35,15 @@ import {
   ROLE_STAFF_ENUM
 } from "../../../Constants/CreateUserConstants";
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
 
 export function CreateUserPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const { Option } = Select;
-  const dateFormatList = ["YYYY/MM/DD", "YYYY/MM/DD"];
+  const dateFormat = "YYYY/MM/DD";
 
   const navigate = useNavigate();
 
@@ -55,7 +59,6 @@ export function CreateUserPage() {
       role: parseInt(values.role)
     };
     await createUser(values).then((data) => {
-      console.log(data);
       setIsModalOpen(true);
     });
   };
@@ -158,7 +161,7 @@ export function CreateUserPage() {
           <DatePicker
             disabledDate={disabledDate}
             style={{ width: "100%" }}
-            format={dateFormatList}
+            format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
 
@@ -213,12 +216,11 @@ export function CreateUserPage() {
               }
             })
           ]}
-          onClick={console.log()}
         >
           <DatePicker
             disabledDate={disabledDate}
             style={{ width: "100%" }}
-            format={dateFormatList}
+            format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
 

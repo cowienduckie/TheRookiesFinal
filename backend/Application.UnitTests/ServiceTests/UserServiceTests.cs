@@ -11,6 +11,8 @@ using Domain.Shared.Helpers;
 using Application.DTOs.Users.ChangePassword;
 using Application.UnitTests.Common;
 using System.Data;
+using Application.DTOs.Users.DisableUser;
+using Domain.Entities.Assignments;
 
 namespace Application.UnitTests.ServiceTests;
 
@@ -28,8 +30,8 @@ public class UserServiceTests
         _unitOfWork = new Mock<IUnitOfWork>();
 
         _unitOfWork
-        .Setup(uow => uow.AsyncRepository<User>())
-        .Returns(_userRepository.Object);
+            .Setup(uow => uow.AsyncRepository<User>())
+            .Returns(_userRepository.Object);
 
         _userService = new UserService(_unitOfWork.Object);
     }
@@ -401,7 +403,7 @@ public class UserServiceTests
 
             Assert.That(result.Message, Is.Not.Null);
 
-            Assert.That(result.Message, Is.EqualTo("Success"));
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
         });
     }
 
@@ -443,7 +445,163 @@ public class UserServiceTests
 
             Assert.That(result.Message, Is.Not.Null);
 
-            Assert.That(result.Message, Is.EqualTo("Success"));
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
+        });
+    }
+
+    [Test]
+    public async Task IsAbleToDisableUser_ValidAssignmentsExist_ReturnsNotSuccessResponse()
+    {
+        var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
+
+        _unitOfWork.Setup(uow => uow.AsyncRepository<Assignment>())
+                    .Returns(assignmentRepository.Object);
+
+        assignmentRepository
+                        .Setup(ar => ar.ListAsync(
+                                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                                It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<Assignment>
+                        {
+                            It.IsAny<Assignment>()
+                        });
+
+        var result = await _userService.IsAbleToDisableUser(It.IsAny<Guid>());
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.CannotDisableUser));
+        });
+    }
+
+    [Test]
+    public async Task IsAbleToDisableUser_NoValidAssignmentExists_ReturnsSuccessResponse()
+    {
+        var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
+
+        _unitOfWork
+            .Setup(uow => uow.AsyncRepository<Assignment>())
+            .Returns(assignmentRepository.Object);
+
+        assignmentRepository
+            .Setup(ar => ar.ListAsync(
+                                    It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                    It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Assignment>());
+
+        var result = await _userService.IsAbleToDisableUser(It.IsAny<Guid>());
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.EqualTo(Messages.CanDisableUser));
+        });
+    }
+
+    [Test]
+    public async Task DisableUserAsync_NotFoundUser_ReturnsNotSuccessResponse()
+    {
+        _userRepository
+                    .Setup(ur => ur.GetAsync(
+                                            It.IsAny<Expression<Func<User, bool>>>(),
+                                            It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(null as User);
+
+        var result = await _userService.DisableUserAsync(It.IsAny<DisableUserRequest>());
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.NotFound));
+        });
+    }
+
+    [Test]
+    public async Task DisableUserAsync_ValidAssignmentsExist_ReturnsNotSuccessResponse()
+    {
+        var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
+
+        _unitOfWork
+                .Setup(uow => uow.AsyncRepository<Assignment>())
+                .Returns(assignmentRepository.Object);
+
+        assignmentRepository
+                        .Setup(ar => ar.ListAsync(
+                                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                                It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<Assignment>
+                        {
+                            It.IsAny<Assignment>()
+                        });
+
+        _userRepository
+                    .Setup(ur => ur.GetAsync(
+                                            It.IsAny<Expression<Func<User, bool>>>(),
+                                            It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(new User());
+
+        var result = await _userService.DisableUserAsync(new DisableUserRequest());
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.CannotDisableUser));
+        });
+    }
+
+    [Test]
+    public async Task DisableUserAsync_UserCanDisable_ReturnsSuccessResponse()
+    {
+        var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
+
+        _unitOfWork
+                .Setup(uow => uow.AsyncRepository<Assignment>())
+                .Returns(assignmentRepository.Object);
+
+        assignmentRepository
+                        .Setup(ar => ar.ListAsync(
+                                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                                It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<Assignment>());
+
+        _userRepository
+                    .Setup(ur => ur.GetAsync(
+                                            It.IsAny<Expression<Func<User, bool>>>(),
+                                            It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(new User());
+
+        var result = await _userService.DisableUserAsync(new DisableUserRequest());
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
         });
     }
 }

@@ -13,6 +13,8 @@ using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
 using Infrastructure.Persistence.Interfaces;
 using System.Text.RegularExpressions;
+using Application.DTOs.Users.DisableUser;
+using Domain.Entities.Assignments;
 
 namespace Application.Services;
 
@@ -78,7 +80,7 @@ public class UserService : BaseService, IUserService
         await userRepository.UpdateAsync(user);
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response(true, "Success");
+        return new Response(true, Messages.ActionSuccess);
     }
 
     public async Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserRequest requestModel)
@@ -140,7 +142,7 @@ public class UserService : BaseService, IUserService
         await userRepository.AddAsync(user);
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response<CreateUserResponse>(true, "Success", responseModel);
+        return new Response<CreateUserResponse>(true, Messages.ActionSuccess, responseModel);
     }
 
     public async Task<UserInternalModel?> GetInternalModelByIdAsync(Guid id)
@@ -223,11 +225,67 @@ public class UserService : BaseService, IUserService
         return new Response<GetListUsersResponse>(true, response);
     }
 
+    public async Task<Response> IsAbleToDisableUser(Guid id)
+    {
+        var hasValidAssignment = await HasValidAssignment(id);
+
+        if (hasValidAssignment)
+        {
+            return new Response(false, ErrorMessages.CannotDisableUser);
+        }
+
+        return new Response(true, Messages.CanDisableUser);
+    }
+
+    public async Task<Response> DisableUserAsync(DisableUserRequest request)
+    {
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var user = await userRepository.GetAsync(u => !u.IsDeleted &&
+                                                      u.Id == request.Id &&
+                                                      u.Location == request.Location);
+
+        if (user == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
+
+        var hasValidAssignment = await HasValidAssignment(request.Id);
+
+        if (hasValidAssignment)
+        {
+            return new Response(false, ErrorMessages.CannotDisableUser);
+        }
+
+        user.IsDeleted = true;
+
+        await userRepository.UpdateAsync(user);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response(true, Messages.ActionSuccess);
+    }
+
+    private async Task<bool> HasValidAssignment(Guid userId)
+    {
+        var assignmentRepository = UnitOfWork.AsyncRepository<Assignment>();
+
+        var assignments = await assignmentRepository.ListAsync(a => !a.IsDeleted &&
+                                                                    a.AssignedTo == userId &&
+                                                                    a.State != AssignmentState.Declined);
+
+        return assignments.Any();
+    }
+
     public async Task<Response> EditUserAsync(EditUserRequest requestModel)
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Id == requestModel.Id);
+
+        if (user == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
 
         var userAge = UserNameHelper.GetAge(requestModel.DateOfBirth);
 
