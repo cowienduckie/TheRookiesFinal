@@ -453,8 +453,6 @@ public class UserServiceTests
     [Test]
     public async Task CreateUserAsync_NullUser_ReturnsBadRequest()
     {
-        var hashedPassword = HashStringHelper.HashString(Constants.NewCreatePassword);
-
         _userRepository
             .Setup(ur => ur.GetAsync(
                                 It.IsAny<Expression<Func<User, bool>>>(),
@@ -606,22 +604,22 @@ public class UserServiceTests
         var request = new CreateUserRequest
         {
             FirstName = Constants.FirstName,
-            LastName = user.LastName,
-            DateOfBirth = user.DateOfBirth,
-            Gender = user.Gender,
-            JoinedDate = user.JoinedDate,
-            Role = user.Role,
-            Location = user.Location
+            LastName = Constants.LastName,
+            DateOfBirth = new DateTime(2002, 10, 5),
+            Gender = Constants.NewGender,
+            JoinedDate = new DateTime(2022, 12, 1),
+            Role = Constants.Role,
+            Location = Constants.NewLocation
         };
 
         var listUser = new List<User>();
         listUser.Add(new User
         {
             Id = Guid.NewGuid(),
-            StaffCode = Constants.StaffCode,
+            StaffCode = "SD0001",
             FirstName = "John",
             LastName = "Major",
-            Username = Constants.NewUserName,
+            Username = "majorj",
             HashedPassword = hashedPassword,
             DateOfBirth = new DateTime(2002, 10, 5),
             Gender = Constants.NewGender,
@@ -633,10 +631,10 @@ public class UserServiceTests
         listUser.Add(new User
         {
             Id = Guid.NewGuid(),
-            StaffCode = Constants.StaffCode,
+            StaffCode = "SD0002",
             FirstName = "Theresa",
             LastName = "May",
-            Username = Constants.NewUserName,
+            Username = "mayt",
             HashedPassword = hashedPassword,
             DateOfBirth = new DateTime(2002, 10, 5),
             Gender = Constants.NewGender,
@@ -658,9 +656,6 @@ public class UserServiceTests
                                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(listUser);
 
-        //_userNameHelper.Setup(u => UserNameHelper.GetNewUserNameWithoutNumber(Constants.FirstName, Constants.LastName))
-        //    .Returns("namefl");
-
         var result = await _userService.CreateUserAsync(request);
 
         Assert.Multiple(() =>
@@ -674,6 +669,28 @@ public class UserServiceTests
             Assert.That(result.Message, Is.Not.Null);
 
             Assert.That(result.Message, Is.EqualTo("Success"));
+
+            Assert.That(result.Data, Is.Not.Null);
+
+            Assert.That(result.Data, Is.InstanceOf<CreateUserResponse>());
+
+            Assert.That(result.Data?.FirstName, Is.EqualTo(Constants.FirstName));
+
+            Assert.That(result.Data?.LastName, Is.EqualTo(Constants.LastName));
+
+            Assert.That(result.Data?.StaffCode, Is.EqualTo("SD0003"));
+
+            Assert.That(result.Data?.DateOfBirth, Is.EqualTo(new DateTime(2002, 10, 5)));
+
+            Assert.That(result.Data?.Gender, Is.EqualTo(Constants.NewGender));
+
+            Assert.That(result.Data?.JoinedDate, Is.EqualTo(new DateTime(2022, 12, 1)));
+
+            Assert.That(result.Data?.Role, Is.EqualTo(Constants.Role));
+
+            Assert.That(result.Data?.Location, Is.EqualTo(Constants.NewLocation));
+
+            Assert.That(result.Data?.IsFirstTimeLogIn, Is.EqualTo(true));
         });
     }
 }
