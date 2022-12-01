@@ -13,4 +13,5 @@ public static class ErrorMessages
     public const string InvalidJoinedDate = "Joined date is invalid!";
     public const string CannotDisableUser =
         "There are valid assignments belongings to this user. Please close all assignments before disabling user.";
+    public const string InvalidLocation = "Location is invalid!";
 }

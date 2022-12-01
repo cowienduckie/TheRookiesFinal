@@ -158,10 +158,12 @@ export function UserListPage() {
       key: "actions",
       render: (_, record) => (
         <div className="max-w-fit p-0">
-          <Button
-            className="mr-2"
-            icon={<EditOutlined className="align-middle" />}
-          />
+          <Link to = {`/admin/manage-user/edit-user/${record.id}`} >
+            <Button
+              className="mr-2"
+              icon={<EditOutlined className="align-middle" />}
+            />
+          </Link>
           <Link 
             to={`/admin/manage-user/disable/${record.id}`}
             state={{ background: location }}
@@ -179,8 +181,8 @@ export function UserListPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-red-600">USER LIST</h1>
-      <div className="flex w-full flex-row justify-between py-5">
+      <h1 className="font-bold text-red-600 text-2xl">User List</h1>
+      <div className="flex flex-row py-5 w-full justify-between">
         <div className="w-1/2 p-0">
           <Select
             className="w-3/12"
@@ -204,7 +206,7 @@ export function UserListPage() {
         <div className="flex w-1/2 flex-row justify-end p-0">
           <Search className="mr-3 w-1/3" onSearch={onSearch} />
           <Link to="/admin/manage-user/create-user">
-            <Button className="ml-3" danger>
+            <Button className="ml-3" type="primary" danger>
               Create New User
             </Button>
           </Link>
