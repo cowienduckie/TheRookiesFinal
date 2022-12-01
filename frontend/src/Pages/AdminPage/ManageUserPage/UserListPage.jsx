@@ -15,7 +15,9 @@ import {
 
 function useLoader() {
   const { search, state } = useLocation();
+  const navigate  = useNavigate();
   const createdUser = state && state.createdUser;
+  const isReload = state && state.isReload;
 
   const [queries, setQueries] = useState({
     pageIndex: "",
@@ -73,7 +75,21 @@ function useLoader() {
   if (!!createdUser &&
       pagedData.items.length > 0 &&
       pagedData.items[0].id !== createdUser.id) {
+    const duplicateId =  pagedData.items.findIndex((value) => value.id === createdUser.id)
+
+    if (duplicateId >= 0) {
+      pagedData.items.splice(duplicateId, 1);
+    }
+
     pagedData.items.unshift(createdUser);
+    window.history.replaceState({}, "");
+  }
+
+  if (!!isReload) {
+    if (isReload) {
+      navigate(0);
+    }
+
     window.history.replaceState({}, "");
   }
 
