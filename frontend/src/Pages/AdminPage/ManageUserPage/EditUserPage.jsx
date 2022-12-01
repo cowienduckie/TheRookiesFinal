@@ -54,7 +54,7 @@ export function EditUserPage() {
       form.setFieldValue("dateOfBirth", dayjs.utc(res.dateOfBirth, "DD/MM/YYYY"));
       form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
       form.setFieldValue("joinedDate", dayjs().utc(res.dateOfBirth, "DD/MM/YYYY"));
-    });;
+    });
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
@@ -194,7 +194,7 @@ export function EditUserPage() {
           <DatePicker
             style={{ width: "100%" }}
             disabledDate={disabledDate}
-            format={(date) => date.utc().format(dateFormat)}
+            format={dateFormat}
           />
         </Form.Item>
         <Form.Item
