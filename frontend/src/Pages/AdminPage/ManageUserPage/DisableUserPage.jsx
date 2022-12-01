@@ -24,10 +24,11 @@ export function DisableUserPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDisable = async () => {
-    await disableUser({ id });
-
-    setIsModalOpen(false);
-    navigate(-1);
+    await disableUser({ id })
+      .finally(() => {
+        setIsModalOpen(false);
+        navigate("/admin/manage-user", { state: { isReload: true } });
+      })
   };
 
   const handleOnclick = () => {
