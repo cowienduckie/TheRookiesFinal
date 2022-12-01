@@ -12,6 +12,8 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { editUser, getUserById } from "../../../Apis/UserApis";
 import {
   DOB_REQUIRED,
@@ -29,6 +31,8 @@ import {
   ROLE_STAFF_ENUM
 } from "../../../Constants/CreateUserConstants";
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
 
 export function EditUserPage() {
@@ -47,11 +51,11 @@ export function EditUserPage() {
       form.setFieldValue("firstName", res.firstName);
       form.setFieldValue("lastName", res.lastName);
       form.setFieldValue("gender", res.gender === "Male" ? "0" : "1");
-      form.setFieldValue("dateOfBirth", dayjs(res.dateOfBirth, "DD/MM/YYYY"));
+      form.setFieldValue("dateOfBirth", dayjs.utc(res.dateOfBirth, "DD/MM/YYYY"));
       form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
-      form.setFieldValue("joinedDate", dayjs(res.joinedDate, "DD/MM/YYYY"));
-    });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      form.setFieldValue("joinedDate", dayjs().utc(res.dateOfBirth, "DD/MM/YYYY"));
+    });;
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
     labelCol: { span: 7 },
@@ -190,7 +194,7 @@ export function EditUserPage() {
           <DatePicker
             style={{ width: "100%" }}
             disabledDate={disabledDate}
-            format={dateFormat}
+            format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
         <Form.Item
