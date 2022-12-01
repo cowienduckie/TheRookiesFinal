@@ -1,31 +1,27 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
+  DatePicker,
   Form,
   Input,
   Button,
-  DatePicker,
   Radio,
   Select,
   ConfigProvider,
   Modal
 } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { createUser } from "../../../Apis/UserApis";
+import { editUser, getUserById } from "../../../Apis/UserApis";
 import {
   DOB_REQUIRED,
   DOB_UNDER_18,
-  FIRST_NAME_REQUIRED,
   GENDER_REQUIRED,
   JOINED_DATE_NOT_LATER_DOB,
   JOINED_DATE_NOT_WEEKENDS,
   JOINED_DATE_REQUIRED,
-  LAST_NAME_REQUIRED,
-  NAME_MAX_LENGTH,
-  NAME_ONLY_ALLOW,
   ROLE_REQUIRED
 } from "../../../Constants/ErrorMessages";
 import {
@@ -39,33 +35,27 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
 
-export function CreateUserPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form] = Form.useForm();
-  const { Option } = Select;
-  const dateFormat = "YYYY/MM/DD";
-
+export function EditUserPage() {
   const navigate = useNavigate();
 
-  const disabledDate = (current) => {
-    return current && current > dayjs().endOf("day");
-  };
+  const { userId } = useParams();
 
-  const onFinish = async (values) => {
-    values = {
-      ...values,
-      firstName: values.firstName.trim(),
-      gender: parseInt(values.gender),
-      role: parseInt(values.role)
-    };
-    await createUser(values).then((data) => {
-      setIsModalOpen(true);
+  const [form] = Form.useForm();
+
+  const dateFormat = "YYYY/MM/DD";
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    getUserById(userId).then((res) => {
+      form.setFieldValue("firstName", res.firstName);
+      form.setFieldValue("lastName", res.lastName);
+      form.setFieldValue("gender", res.gender === "Male" ? "0" : "1");
+      form.setFieldValue("dateOfBirth", dayjs.utc(res.dateOfBirth, "DD/MM/YYYY"));
+      form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
+      form.setFieldValue("joinedDate", dayjs().utc(res.dateOfBirth, "DD/MM/YYYY"));
     });
-  };
-
-  const handleCancel = () => {
-    navigate("/admin/manage-user");
-  };
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
     labelCol: { span: 7 },
@@ -92,53 +82,38 @@ export function CreateUserPage() {
     }, 2000);
   };
 
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
+  const disabledDate = (current) => {
+    return current && current > dayjs().endOf("day");
+  };
+
+  const onFinish = async (values) => {
+    console.log(values);
+    values = {
+      ...values,
+      role: parseInt(values.role),
+      gender: parseInt(values.gender),
+      id: userId
+    };
+
+    await editUser(values).then((data) => {
+      setIsModalOpen(true);
+    });
+  };
+
   return (
     <>
-      <h1 className="mb-5 text-2xl font-bold text-red-600">Create New User</h1>
-      <Form
-        {...layout}
-        form={form}
-        name="formCreateUser"
-        onFinish={onFinish}
-        initialValues={{ gender: GENDER_FEMALE_ENUM }}
-      >
-        <Form.Item
-          name="firstName"
-          label="First Name"
-          rules={[
-            { required: true, message: FIRST_NAME_REQUIRED },
-            {
-              pattern: /^([a-zA-Z]+\s)*[a-zA-Z]+$/,
-              message: NAME_ONLY_ALLOW
-            },
-            {
-              min: 1,
-              max: 255,
-              message: NAME_MAX_LENGTH
-            }
-          ]}
-        >
-          <Input />
+      <Form {...layout} onFinish={onFinish} form={form}>
+        <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
+        <Form.Item label="First Name" name="firstName">
+          <Input disabled />
         </Form.Item>
-        <Form.Item
-          name="lastName"
-          label="Last Name"
-          rules={[
-            { required: true, message: LAST_NAME_REQUIRED },
-            {
-              pattern: /^([a-zA-Z]+\s)*[a-zA-Z]+$/,
-              message: NAME_ONLY_ALLOW
-            },
-            {
-              min: 1,
-              max: 255,
-              message: NAME_MAX_LENGTH
-            }
-          ]}
-        >
-          <Input />
+        <Form.Item label="Last Name" name="lastName">
+          <Input disabled />
         </Form.Item>
-
         <Form.Item
           name="dateOfBirth"
           label="Date Of Birth"
@@ -159,8 +134,8 @@ export function CreateUserPage() {
           ]}
         >
           <DatePicker
-            disabledDate={disabledDate}
             style={{ width: "100%" }}
+            disabledDate={disabledDate}
             format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
@@ -176,17 +151,16 @@ export function CreateUserPage() {
               theme={{
                 components: {
                   Radio: {
-                    colorPrimary: "#FF0000"
+                    colorPrimary: "#cf1322"
                   }
                 }
               }}
             >
-              <Radio value={GENDER_FEMALE_ENUM}>Female</Radio>
-              <Radio value={GENDER_MALE_ENUM}>Male</Radio>
+              <Radio value={GENDER_FEMALE_ENUM}> Female </Radio>
+              <Radio value={GENDER_MALE_ENUM}> Male </Radio>
             </ConfigProvider>
           </Radio.Group>
         </Form.Item>
-
         <Form.Item
           name="joinedDate"
           label="Joined Date"
@@ -195,7 +169,7 @@ export function CreateUserPage() {
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (
-                  getFieldValue("dateOfBirth") === undefined ||
+                  !value ||
                   getFieldValue("joinedDate") > getFieldValue("dateOfBirth")
                 ) {
                   return Promise.resolve();
@@ -218,55 +192,44 @@ export function CreateUserPage() {
           ]}
         >
           <DatePicker
-            disabledDate={disabledDate}
             style={{ width: "100%" }}
+            disabledDate={disabledDate}
             format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
-
         <Form.Item
-          name="role"
           label="Type"
+          name="role"
           rules={[{ required: true, message: ROLE_REQUIRED }]}
         >
-          <Select name="role">
-            <Option value={ROLE_ADMIN_ENUM}>Admin</Option>
-            <Option value={ROLE_STAFF_ENUM}>Staff</Option>
+          <Select>
+            <Select.Option value={ROLE_ADMIN_ENUM}>Admin</Select.Option>
+            <Select.Option value={ROLE_STAFF_ENUM}>Staff</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout} shouldUpdate>
-          {() => (
-            <div>
-              <Button
-                className="mx-2"
-                type="primary"
-                danger
-                onSubmit={onFinish}
-                htmlType="submit"
-                disabled={
-                  !form.isFieldsTouched(
-                    [
-                      "firstName",
-                      "lastName",
-                      "dateOfBirth",
-                      "joinedDate",
-                      "role"
-                    ],
-                    true
-                  ) ||
-                  form.getFieldsError().filter(({ errors }) => errors.length)
-                    .length > 0
-                }
-                onClick={() => enterLoading(1)}
-                loading={loadings[1]}
-              >
-                Save
-              </Button>
-              <Button className="mx-3" danger onClick={handleCancel}>
-                Cancel
-              </Button>
-            </div>
-          )}
+        {() => (
+          <div>
+            <Button
+            className="mx-2"
+            type="primary"
+            danger
+            onSubmit={onFinish}
+            htmlType="submit"
+            disabled={
+              form.getFieldsError().filter(({ errors }) => errors.length)
+                .length > 0
+            }
+            onClick={() => enterLoading(1)}
+            loading={loadings[1]}
+          >
+            Save
+          </Button>
+          <Button className="mx-5" onClick={handleCancel} danger>
+            Cancel
+          </Button>
+          </div>
+        )}
         </Form.Item>
       </Form>
 
@@ -278,9 +241,9 @@ export function CreateUserPage() {
         footer={[]}
       >
         <h1 className="mb-5 text-2xl font-bold text-red-600">
-          Create User Successfully
+          Edit User Successfully
         </h1>
-        <p className="mb-8">New user is created successfully!</p>
+        <p className="mb-8">User information is updated successfully</p>
         <Button
           className="content-end"
           danger

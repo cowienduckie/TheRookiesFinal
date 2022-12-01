@@ -8,11 +8,13 @@ using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Application.Queries;
+using Application.DTOs.Users.ChangePassword;
+using Application.DTOs.Users.DisableUser;
+using Application.DTOs.Users.EditUser;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(UserRole.Admin)]
 [ApiController]
 public class UsersController : BaseController
 {
@@ -23,6 +25,7 @@ public class UsersController : BaseController
         _userService = userService;
     }
 
+    [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetUserResponse>>> GetById(Guid id)
     {
@@ -54,6 +57,7 @@ public class UsersController : BaseController
         }
     }
 
+    [Authorize(UserRole.Admin)]
     [HttpGet]
     public async Task<ActionResult<Response<GetListUsersResponse>>> GetList(
         [FromQuery] PagingQuery pagingQuery,
@@ -94,8 +98,53 @@ public class UsersController : BaseController
         }
     }
 
-    [HttpPost("create")]
+    [Authorize(UserRole.Admin)]
+    [HttpPost]
     public async Task<ActionResult<Response<CreateUserResponse>>> CreateUser([FromBody] CreateUserRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response<CreateUserResponse>(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.Location = CurrentUser.Location;
+
+            var response = await _userService.CreateUserAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpGet("disable-availability/{id}")]
+    public async Task<ActionResult<Response>> CheckDisableAvailability(Guid id)
+    {
+        try
+        {
+            var response = await _userService.IsAbleToDisableUser(id);
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPut("disable")]
+    public async Task<ActionResult<Response>> DisableUser([FromBody] DisableUserRequest requestModel)
     {
         try
         {
@@ -106,7 +155,62 @@ public class UsersController : BaseController
 
             requestModel.Location = CurrentUser.Location;
 
-            var response = await _userService.CreateUserAsync(requestModel);
+            var response = await _userService.DisableUserAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPut("change-password")]
+    public async Task<ActionResult<Response>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.Id = CurrentUser?.Id;
+
+            var response = await _userService.ChangePasswordAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<Response>> Edit([FromBody] EditUserRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.AdminLocation = CurrentUser.Location;
+
+            var response = await _userService.EditUserAsync(requestModel);
 
             if (!response.IsSuccess)
             {

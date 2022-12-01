@@ -1,4 +1,5 @@
 ﻿using Domain.Base;
+using Domain.Entities.Assignments;
 using Domain.Shared.Enums;
 
 namespace Domain.Entities.Users;
@@ -26,4 +27,8 @@ public class User : AuditableEntity<Guid>
     public Location Location { get; set; }
 
     public bool IsFirstTimeLogIn { get; set; } = true;
+
+    public ICollection<Assignment> OwnedAssignments { get; set; } = null!;
+
+    public ICollection<Assignment> CreatedAssignments { get; set; } = null!;
 }

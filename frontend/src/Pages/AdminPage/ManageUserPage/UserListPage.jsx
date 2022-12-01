@@ -106,7 +106,7 @@ export function UserListPage() {
     const newQueries = {
       ...queries,
       filterField: ROLE_ENUM,
-      filterValue: value
+      filterValue: !!value ? value : ""
     };
 
     navigateByQueries(newQueries);
@@ -118,9 +118,11 @@ export function UserListPage() {
       dataIndex: "staffCode",
       key: STAFF_CODE_ENUM,
       sorter: true,
-      defaultSortOrder: "ascend",
       render: (text, record) => (
-        <Link to={`/admin/manage-user/${record.id}`} state={{ background: location }}>
+        <Link
+          to={`/admin/manage-user/${record.id}`}
+          state={{ background: location }}
+        >
           <p>{text}</p>
         </Link>
       )
@@ -136,38 +138,42 @@ export function UserListPage() {
       title: "Username",
       dataIndex: "username",
       key: USERNAME_ENUM,
-      sorter: true,
-      defaultSortOrder: "ascend"
+      sorter: true
     },
     {
       title: "Joined Date",
       dataIndex: "joinedDate",
       key: JOINED_DATE_ENUM,
-      sorter: true,
-      defaultSortOrder: "ascend"
+      sorter: true
     },
     {
       title: "Type",
       dataIndex: "role",
       key: ROLE_ENUM,
-      sorter: true,
-      defaultSortOrder: "ascend"
+      sorter: true
     },
     {
       title: "",
       dataIndex: "",
       key: "actions",
       render: (_, record) => (
-        <div className="max-w-fit">
-          <Button
-            className="mx-2"
-            icon={<EditOutlined className="align-middle" />}
-          />
-          <Button
-            className="mx-2"
-            danger
-            icon={<CloseOutlined className="align-middle" />}
-          />
+        <div className="max-w-fit p-0">
+          <Link to = {`/admin/manage-user/edit-user/${record.id}`} >
+            <Button
+              className="mr-2"
+              icon={<EditOutlined className="align-middle" />}
+            />
+          </Link>
+          <Link 
+            to={`/admin/manage-user/disable/${record.id}`}
+            state={{ background: location }}
+          >
+            <Button
+              className="ml-2"
+              danger
+              icon={<CloseOutlined className="align-middle" />}
+            />
+          </Link>
         </div>
       )
     }
@@ -175,19 +181,17 @@ export function UserListPage() {
 
   return (
     <>
-      <h1 className="font-bold text-red-600 text-2xl">USER LIST</h1>
+      <h1 className="font-bold text-red-600 text-2xl">User List</h1>
       <div className="flex flex-row py-5 w-full justify-between">
         <div className="w-1/2 p-0">
           <Select
-            className="w-1/6"
-            defaultValue=""
-            suffixIcon={<FilterFilled />}
+            className="w-3/12"
+            allowClear
+            placeholder="Type"
+            suffixIcon={<FilterFilled className="align-middle" />}
+            clearIcon={<CloseOutlined className="align-middle" />}
             onChange={onFilter}
             options={[
-              {
-                label: "Type",
-                value: ""
-              },
               {
                 label: "Admin",
                 value: "Admin"
@@ -199,10 +203,10 @@ export function UserListPage() {
             ]}
           />
         </div>
-        <div className="w-1/2 p-0 flex flex-row justify-end">
-          <Search className="w-1/3 mr-3" onSearch={onSearch} />
+        <div className="flex w-1/2 flex-row justify-end p-0">
+          <Search className="mr-3 w-1/3" onSearch={onSearch} />
           <Link to="/admin/manage-user/create-user">
-            <Button className="ml-3" danger>
+            <Button className="ml-3" type="primary" danger>
               Create New User
             </Button>
           </Link>
