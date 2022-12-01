@@ -11,6 +11,7 @@ public class GetUserResponse
         StaffCode = user.StaffCode;
         FirstName = user.FirstName;
         LastName = user.LastName;
+        FullName = user.FullName;
         DateOfBirth = user.DateOfBirth.ToString("dd/MM/yyyy");
         Gender = user.Gender.ToString();
         JoinedDate = user.JoinedDate.ToString("dd/MM/yyyy");
@@ -28,7 +29,7 @@ public class GetUserResponse
 
     public string LastName { get; set; }
 
-    public string FullName => $"{FirstName} {LastName}";
+    public string FullName { get; set; }
 
     public string DateOfBirth { get; set; }
 

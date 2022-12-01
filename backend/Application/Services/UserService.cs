@@ -209,10 +209,10 @@ public class UserService : BaseService, IUserService
                                     .SortByField(validSortFields,
                                                 request.SortQuery.SortField,
                                                 request.SortQuery.SortDirection)
-                                    .Select(u => new GetUserResponse(u))
-                                    .AsQueryable()
                                     .SearchByField(searchFields,
-                                                request.SearchQuery.SearchValue);
+                                                request.SearchQuery.SearchValue)
+                                    .Select(u => new GetUserResponse(u))
+                                    .AsQueryable();
 
         var paginatedList = new PagedList<GetUserResponse>(processedList,
                                                             request.PagingQuery.PageIndex,
