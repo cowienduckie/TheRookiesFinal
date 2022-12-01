@@ -205,16 +205,16 @@ public class UserService : BaseService, IUserService
             ModelField.StaffCode
         };
 
-        var processedList = users.FilterByField(validFilterFields,
-                                                request.FilterQuery.FilterField,
-                                                request.FilterQuery.FilterValue)
-                                    .SortByField(validSortFields,
+        var processedList = users.SortByField(validSortFields,
                                                 request.SortQuery.SortField,
                                                 request.SortQuery.SortDirection)
+                                    .SearchByField(searchFields,
+                                                request.SearchQuery.SearchValue)
                                     .Select(u => new GetUserResponse(u))
                                     .AsQueryable()
-                                    .SearchByField(searchFields,
-                                                request.SearchQuery.SearchValue);
+                                    .FilterByField(validFilterFields,
+                                                request.FilterQuery.FilterField,
+                                                request.FilterQuery.FilterValue);
 
         var paginatedList = new PagedList<GetUserResponse>(processedList,
                                                             request.PagingQuery.PageIndex,
