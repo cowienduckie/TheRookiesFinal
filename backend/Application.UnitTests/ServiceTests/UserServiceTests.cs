@@ -454,18 +454,17 @@ public class UserServiceTests
     {
         var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
 
-        _unitOfWork
-            .Setup(uow => uow.AsyncRepository<Assignment>())
-            .Returns(assignmentRepository.Object);
+        _unitOfWork.Setup(uow => uow.AsyncRepository<Assignment>())
+                    .Returns(assignmentRepository.Object);
 
         assignmentRepository
-            .Setup(ar => ar.ListAsync(
-                                    It.IsAny<Expression<Func<Assignment, bool>>>(),
-                                    It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<Assignment>
-            {
-                It.IsAny<Assignment>()
-            });
+                        .Setup(ar => ar.ListAsync(
+                                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                                It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<Assignment>
+                        {
+                            It.IsAny<Assignment>()
+                        });
 
         var result = await _userService.IsAbleToDisableUser(It.IsAny<Guid>());
 
@@ -514,10 +513,10 @@ public class UserServiceTests
     public async Task DisableUserAsync_NotFoundUser_ReturnsNotSuccessResponse()
     {
         _userRepository
-            .Setup(ur => ur.GetAsync(
-                                    It.IsAny<Expression<Func<User, bool>>>(),
-                                    It.IsAny<CancellationToken>()))
-            .ReturnsAsync(null as User);
+                    .Setup(ur => ur.GetAsync(
+                                            It.IsAny<Expression<Func<User, bool>>>(),
+                                            It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(null as User);
 
         var result = await _userService.DisableUserAsync(It.IsAny<DisableUserRequest>());
 
@@ -539,23 +538,23 @@ public class UserServiceTests
         var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
 
         _unitOfWork
-            .Setup(uow => uow.AsyncRepository<Assignment>())
-            .Returns(assignmentRepository.Object);
+                .Setup(uow => uow.AsyncRepository<Assignment>())
+                .Returns(assignmentRepository.Object);
 
         assignmentRepository
-            .Setup(ar => ar.ListAsync(
-                                    It.IsAny<Expression<Func<Assignment, bool>>>(),
-                                    It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<Assignment>
-            {
-                It.IsAny<Assignment>()
-            });
+                        .Setup(ar => ar.ListAsync(
+                                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                                It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<Assignment>
+                        {
+                            It.IsAny<Assignment>()
+                        });
 
         _userRepository
-            .Setup(ur => ur.GetAsync(
-                                    It.IsAny<Expression<Func<User, bool>>>(),
-                                    It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new User());
+                    .Setup(ur => ur.GetAsync(
+                                            It.IsAny<Expression<Func<User, bool>>>(),
+                                            It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(new User());
 
         var result = await _userService.DisableUserAsync(new DisableUserRequest());
 
@@ -577,20 +576,20 @@ public class UserServiceTests
         var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
 
         _unitOfWork
-            .Setup(uow => uow.AsyncRepository<Assignment>())
-            .Returns(assignmentRepository.Object);
+                .Setup(uow => uow.AsyncRepository<Assignment>())
+                .Returns(assignmentRepository.Object);
 
         assignmentRepository
-            .Setup(ar => ar.ListAsync(
-                                    It.IsAny<Expression<Func<Assignment, bool>>>(),
-                                    It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<Assignment>());
+                        .Setup(ar => ar.ListAsync(
+                                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                                It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<Assignment>());
 
         _userRepository
-            .Setup(ur => ur.GetAsync(
-                                    It.IsAny<Expression<Func<User, bool>>>(),
-                                    It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new User());
+                    .Setup(ur => ur.GetAsync(
+                                            It.IsAny<Expression<Func<User, bool>>>(),
+                                            It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(new User());
 
         var result = await _userService.DisableUserAsync(new DisableUserRequest());
 

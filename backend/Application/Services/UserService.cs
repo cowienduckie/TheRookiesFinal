@@ -226,9 +226,9 @@ public class UserService : BaseService, IUserService
 
     public async Task<Response> IsAbleToDisableUser(Guid id)
     {
-        var isAnyValidAssignment = await IsAnyValidAssignmentBelongsToUser(id);
+        var hasValidAssignment = await HasValidAssignment(id);
 
-        if (isAnyValidAssignment)
+        if (hasValidAssignment)
         {
             return new Response(false, ErrorMessages.CannotDisableUser);
         }
@@ -249,9 +249,9 @@ public class UserService : BaseService, IUserService
             return new Response(false, ErrorMessages.NotFound);
         }
 
-        var isAnyValidAssignment = await IsAnyValidAssignmentBelongsToUser(request.Id);
+        var hasValidAssignment = await HasValidAssignment(request.Id);
 
-        if (isAnyValidAssignment)
+        if (hasValidAssignment)
         {
             return new Response(false, ErrorMessages.CannotDisableUser);
         }
@@ -264,7 +264,7 @@ public class UserService : BaseService, IUserService
         return new Response(true, Messages.ActionSuccess);
     }
 
-    private async Task<bool> IsAnyValidAssignmentBelongsToUser(Guid userId)
+    private async Task<bool> HasValidAssignment(Guid userId)
     {
         var assignmentRepository = UnitOfWork.AsyncRepository<Assignment>();
 

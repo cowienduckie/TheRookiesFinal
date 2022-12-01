@@ -30,5 +30,5 @@ export async function checkCanDisableUser(id) {
 }
 
 export async function disableUser(data) {
-  return await callApiTakeSuccessWrapper("put", `${url}/disability`, data);
+  return await callApiTakeSuccessWrapper("put", `${url}/disable`, data);
 }

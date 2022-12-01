@@ -143,7 +143,7 @@ public class UsersController : BaseController
     }
 
     [Authorize(UserRole.Admin)]
-    [HttpPut("disability")]
+    [HttpPut("disable")]
     public async Task<ActionResult<Response>> DisableUser([FromBody] DisableUserRequest requestModel)
     {
         try
