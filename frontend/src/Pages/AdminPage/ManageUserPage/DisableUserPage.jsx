@@ -6,7 +6,7 @@ export function DisableUserPage() {
   let { id } = useParams();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const assigment = true;
+  const assigment = false;
 
   const handleOnclick=()=>{
     setIsModalOpen(false);
@@ -34,7 +34,7 @@ export function DisableUserPage() {
           <Divider />
           <div className="text-xl">
             <p>There are valid assignments belonging to this user.</p>
-            <p className="text-xl mt-2 mb-2">Please close all assignments before disabling user.</p>
+            <p className="mt-2 mb-2">Please close all assignments before disabling user.</p>
           </div>
         </Modal>
       ) : (

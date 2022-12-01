@@ -611,6 +611,14 @@ video {
   margin-left: 2.5rem !important;
 }
 
+.mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+.mr-5 {
+  margin-right: 1.25rem !important;
+}
+
 .mr-2 {
   margin-right: 0.5rem !important;
 }
@@ -710,6 +718,10 @@ video {
   flex-direction: row !important;
 }
 
+.content-center {
+  align-content: center !important;
+}
+
 .content-end {
   align-content: flex-end !important;
 }
@@ -773,6 +785,14 @@ video {
 
 .py-5 {
   padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+}
+
+.pl-5 {
+  padding-left: 1.25rem !important;
+}
+
+.pb-5 {
   padding-bottom: 1.25rem !important;
 }
 
