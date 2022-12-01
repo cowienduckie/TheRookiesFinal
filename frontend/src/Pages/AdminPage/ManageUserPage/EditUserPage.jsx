@@ -136,7 +136,7 @@ export function EditUserPage() {
           <DatePicker
             style={{ width: "100%" }}
             disabledDate={disabledDate}
-            format={dateFormat}
+            format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
 
@@ -194,7 +194,7 @@ export function EditUserPage() {
           <DatePicker
             style={{ width: "100%" }}
             disabledDate={disabledDate}
-            format={dateFormat}
+            format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
         <Form.Item
