@@ -7,7 +7,7 @@ export function DisableUserPage() {
   let { id } = useParams();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [isAbleToDisable, setIsAbleToDisable] = useState(false);
+  const [isAbleToDisable, setIsAbleToDisable] = useState();
 
   useEffect(() => {
     async function checkValid() {
@@ -27,7 +27,7 @@ export function DisableUserPage() {
     await disableUser({ id });
 
     setIsModalOpen(false);
-    navigate("/admin/manage-user");
+    navigate(-1);
   };
 
   const handleOnclick = () => {
@@ -41,7 +41,7 @@ export function DisableUserPage() {
 
   return (
     <>
-      {isAbleToDisable ? (
+      {isAbleToDisable !== undefined && isAbleToDisable !== null ? (
         <Modal open={isModalOpen} closable={false} footer={false} width={400}>
           <div className="flex content-center justify-between">
             <h1 className="pl-5 text-2xl font-bold text-red-600">
