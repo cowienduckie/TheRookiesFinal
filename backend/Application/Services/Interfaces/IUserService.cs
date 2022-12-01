@@ -19,5 +19,5 @@ public interface IUserService
     Task<Response<CreateUserResponse>> CreateUserAsync(CreateUserRequest requestModel);
     Task<Response> DisableUserAsync(DisableUserRequest request);
     Task<Response> IsAbleToDisableUser(Guid id);
-    Task<Response> EditUserAsync(EditUserRequest requestModel);
+    Task<Response<GetUserResponse>> EditUserAsync(EditUserRequest requestModel);
 }

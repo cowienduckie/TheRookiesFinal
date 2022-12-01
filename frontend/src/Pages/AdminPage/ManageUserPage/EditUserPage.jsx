@@ -43,7 +43,7 @@ export function EditUserPage() {
   const [form] = Form.useForm();
 
   const dateFormat = "YYYY/MM/DD";
-
+  const [updatedUser, setUpdatedUser] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -82,16 +82,19 @@ export function EditUserPage() {
     }, 2000);
   };
 
-  const handleCancel = () => {
-    navigate(-1);
+  const handleCancelModal = () => {
+    navigate("/admin/manage-user", { state: { newUser: updatedUser } });
   };
+
+  const handleCancelForm = () => {
+    navigate(-1);
+  }
 
   const disabledDate = (current) => {
     return current && current > dayjs().endOf("day");
   };
 
   const onFinish = async (values) => {
-    console.log(values);
     values = {
       ...values,
       role: parseInt(values.role),
@@ -100,6 +103,7 @@ export function EditUserPage() {
     };
 
     await editUser(values).then((data) => {
+      setUpdatedUser(data);
       setIsModalOpen(true);
     });
   };
@@ -225,7 +229,7 @@ export function EditUserPage() {
           >
             Save
           </Button>
-          <Button className="mx-5" onClick={handleCancel} danger>
+          <Button className="mx-5" onClick={handleCancelForm} danger>
             Cancel
           </Button>
           </div>
@@ -235,9 +239,9 @@ export function EditUserPage() {
 
       <Modal
         open={isModalOpen}
-        onOk={handleCancel}
-        onCancel={handleCancel}
-        closable={handleCancel}
+        onOk={handleCancelModal}
+        onCancel={handleCancelModal}
+        closable={handleCancelModal}
         footer={[]}
       >
         <h1 className="mb-5 text-2xl font-bold text-red-600">
@@ -248,7 +252,7 @@ export function EditUserPage() {
           className="content-end"
           danger
           key="back"
-          onClick={handleCancel}
+          onClick={handleCancelModal}
         >
           Close
         </Button>
