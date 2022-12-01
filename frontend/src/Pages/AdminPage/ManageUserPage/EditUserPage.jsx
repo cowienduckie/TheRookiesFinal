@@ -1,5 +1,5 @@
-import React, { useEffect , useState} from "react";
-import { useNavigate, useParams  } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   DatePicker,
   Form,
@@ -13,7 +13,15 @@ import {
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { editUser, getUserById } from "../../../Apis/UserApis";
-import { DOB_REQUIRED, DOB_UNDER_18, GENDER_REQUIRED, JOINED_DATE_NOT_LATER_DOB, JOINED_DATE_NOT_WEEKENDS, JOINED_DATE_REQUIRED, ROLE_REQUIRED } from "../../../Constants/ErrorMessages";
+import {
+  DOB_REQUIRED,
+  DOB_UNDER_18,
+  GENDER_REQUIRED,
+  JOINED_DATE_NOT_LATER_DOB,
+  JOINED_DATE_NOT_WEEKENDS,
+  JOINED_DATE_REQUIRED,
+  ROLE_REQUIRED
+} from "../../../Constants/ErrorMessages";
 import {
   GENDER_FEMALE_ENUM,
   GENDER_MALE_ENUM,
@@ -30,20 +38,20 @@ export function EditUserPage() {
 
   const [form] = Form.useForm();
 
-  const dateFormat = "YYYY/MM/DD"
+  const dateFormat = "YYYY/MM/DD";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() =>{
-    getUserById(userId).then(res => {
+  useEffect(() => {
+    getUserById(userId).then((res) => {
       form.setFieldValue("firstName", res.firstName);
       form.setFieldValue("lastName", res.lastName);
       form.setFieldValue("gender", res.gender === "Male" ? "0" : "1");
       form.setFieldValue("dateOfBirth", dayjs(res.dateOfBirth, "DD/MM/YYYY"));
       form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
       form.setFieldValue("joinedDate", dayjs(res.joinedDate, "DD/MM/YYYY"));
-    })
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
     labelCol: { span: 7 },
@@ -52,6 +60,22 @@ export function EditUserPage() {
 
   const tailLayout = {
     wrapperCol: { offset: 9 }
+  };
+
+  const [loadings, setLoadings] = useState([]);
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 2000);
   };
 
   const handleCancel = () => {
@@ -63,13 +87,13 @@ export function EditUserPage() {
   };
 
   const onFinish = async (values) => {
-    console.log(values)
-    values ={
+    console.log(values);
+    values = {
       ...values,
       role: parseInt(values.role),
       gender: parseInt(values.gender),
       id: userId
-    }
+    };
 
     await editUser(values).then((data) => {
       setIsModalOpen(true);
@@ -78,12 +102,12 @@ export function EditUserPage() {
 
   return (
     <>
-      <Form {...layout}  onFinish={onFinish} form={form}>
-        <h1 className="font-bold text-red-600 text-2xl">Edit User</h1>
+      <Form {...layout} onFinish={onFinish} form={form}>
+        <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
         <Form.Item label="First Name" name="firstName">
           <Input disabled />
         </Form.Item>
-        <Form.Item label="Last Name" name="lastName" >
+        <Form.Item label="Last Name" name="lastName">
           <Input disabled />
         </Form.Item>
         <Form.Item
@@ -100,21 +124,23 @@ export function EditUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject(
-                  new Error(DOB_UNDER_18)
-                );
+                return Promise.reject(new Error(DOB_UNDER_18));
               }
             })
           ]}
         >
-          <DatePicker style={{ width: "100%" }} disabledDate={disabledDate} format={dateFormat}/>
+          <DatePicker
+            style={{ width: "100%" }}
+            disabledDate={disabledDate}
+            format={dateFormat}
+          />
         </Form.Item>
 
         <Form.Item
           name="gender"
           label="Gender"
           className="text-red-600"
-          rules={[{ required: true, message: GENDER_REQUIRED}]}
+          rules={[{ required: true, message: GENDER_REQUIRED }]}
         >
           <Radio.Group>
             <ConfigProvider
@@ -126,8 +152,8 @@ export function EditUserPage() {
                 }
               }}
             >
-              <Radio value = {GENDER_FEMALE_ENUM}> Female </Radio>
-              <Radio value = {GENDER_MALE_ENUM}> Male </Radio>
+              <Radio value={GENDER_FEMALE_ENUM}> Female </Radio>
+              <Radio value={GENDER_MALE_ENUM}> Male </Radio>
             </ConfigProvider>
           </Radio.Group>
         </Form.Item>
@@ -144,7 +170,7 @@ export function EditUserPage() {
                 ) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error( JOINED_DATE_NOT_LATER_DOB));
+                return Promise.reject(new Error(JOINED_DATE_NOT_LATER_DOB));
               }
             }),
             ({ getFieldValue }) => ({
@@ -161,7 +187,11 @@ export function EditUserPage() {
             })
           ]}
         >
-          <DatePicker style={{ width: "100%" }} disabledDate={disabledDate} format={dateFormat}/>
+          <DatePicker
+            style={{ width: "100%" }}
+            disabledDate={disabledDate}
+            format={dateFormat}
+          />
         </Form.Item>
         <Form.Item
           label="Type"
@@ -173,13 +203,29 @@ export function EditUserPage() {
             <Select.Option value={ROLE_STAFF_ENUM}>Staff</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item {...tailLayout}>
-          <Button className="mx-2" type="primary" danger htmlType="submit">
+        <Form.Item {...tailLayout} shouldUpdate>
+        {() => (
+          <div>
+            <Button
+            className="mx-2"
+            type="primary"
+            danger
+            onSubmit={onFinish}
+            htmlType="submit"
+            disabled={
+              form.getFieldsError().filter(({ errors }) => errors.length)
+                .length > 0
+            }
+            onClick={() => enterLoading(1)}
+            loading={loadings[1]}
+          >
             Save
           </Button>
           <Button className="mx-5" onClick={handleCancel} danger>
             Cancel
           </Button>
+          </div>
+        )}
         </Form.Item>
       </Form>
 
@@ -190,7 +236,7 @@ export function EditUserPage() {
         closable={handleCancel}
         footer={[]}
       >
-        <h1 className="text-2xl text-red-600 font-bold mb-5">
+        <h1 className="mb-5 text-2xl font-bold text-red-600">
           Edit User Success
         </h1>
         <p className="mb-8">User has been edited successfully!</p>
