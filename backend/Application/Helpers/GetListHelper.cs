@@ -50,7 +50,7 @@ public static class GetListHelper
             if (prop != null && prop.PropertyType == typeof(string))
             {
                 predicates.Add(entity => (prop.GetValue(entity) as string)
-                                        !.Contains(searchText.Trim()));
+                                        !.Contains(searchText.Trim(), StringComparison.OrdinalIgnoreCase));
             }
         }
 
