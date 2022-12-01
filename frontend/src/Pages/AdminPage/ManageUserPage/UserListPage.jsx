@@ -61,10 +61,12 @@ function useLoader() {
       const data = await getUserList(queryString);
 
       setQueries(queriesFromUrl);
-      setPagedData(data.result);
+      setPagedData({
+        ...data.result,
+        items: [...data.result.items]
+      });
       setLoading(false);
     }
-
     getList();
   }, [search]);
 
@@ -72,7 +74,7 @@ function useLoader() {
       pagedData.items.length > 0 &&
       pagedData.items[0].id !== createdUser.id) {
     pagedData.items.unshift(createdUser);
-    window.history.replaceState(null, "");
+    window.history.replaceState({}, "");
   }
 
   return { pagedData, queries, loading };
