@@ -12,6 +12,7 @@ using Application.DTOs.Users.ChangePassword;
 using Application.UnitTests.Common;
 using System.Data;
 using Application.DTOs.Users.CreateUser;
+using Application.Helpers;
 
 namespace Application.UnitTests.ServiceTests;
 
@@ -20,6 +21,7 @@ public class UserServiceTests
     private static readonly Guid UserId = new();
     private Mock<IAsyncRepository<User>> _userRepository = null!;
     private Mock<IUnitOfWork> _unitOfWork = null!;
+    private Mock<UserNameHelper> _userNameHelper = null!;
     private UserService _userService = null!;
 
     [SetUp]
@@ -487,9 +489,9 @@ public class UserServiceTests
             LastName = Constants.LastName,
             Username = Constants.Username,
             HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2002,10,5),
+            DateOfBirth = new DateTime(2002, 10, 5),
             Gender = Constants.NewGender,
-            JoinedDate = new DateTime(2022,12,3),
+            JoinedDate = new DateTime(2022, 12, 3),
             Role = Constants.Role,
             Location = Constants.NewLocation,
             IsFirstTimeLogIn = true,
@@ -540,7 +542,7 @@ public class UserServiceTests
             LastName = Constants.LastName,
             Username = Constants.Username,
             HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2022,10,5),
+            DateOfBirth = new DateTime(2022, 10, 5),
             Gender = Constants.NewGender,
             JoinedDate = DateTime.Now,
             Role = Constants.Role,
@@ -593,23 +595,17 @@ public class UserServiceTests
             LastName = Constants.LastName,
             Username = Constants.NewUserName,
             HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2002,10,5),
+            DateOfBirth = new DateTime(2002, 10, 5),
             Gender = Constants.NewGender,
-            JoinedDate = DateTime.Now,
+            JoinedDate = new DateTime(2022, 12, 1),
             Role = Constants.Role,
             Location = Constants.NewLocation,
             IsFirstTimeLogIn = true,
         };
 
-        _userRepository
-            .Setup(ur => ur.GetAsync(
-                                It.IsAny<Expression<Func<User, bool>>>(),
-                                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
-
         var request = new CreateUserRequest
         {
-            FirstName = user.FirstName,
+            FirstName = Constants.FirstName,
             LastName = user.LastName,
             DateOfBirth = user.DateOfBirth,
             Gender = user.Gender,
@@ -617,6 +613,53 @@ public class UserServiceTests
             Role = user.Role,
             Location = user.Location
         };
+
+        var listUser = new List<User>();
+        listUser.Add(new User
+        {
+            Id = Guid.NewGuid(),
+            StaffCode = Constants.StaffCode,
+            FirstName = "John",
+            LastName = "Major",
+            Username = Constants.NewUserName,
+            HashedPassword = hashedPassword,
+            DateOfBirth = new DateTime(2002, 10, 5),
+            Gender = Constants.NewGender,
+            JoinedDate = new DateTime(2022, 12, 1),
+            Role = Constants.Role,
+            Location = Constants.NewLocation,
+            IsFirstTimeLogIn = true,
+        });
+        listUser.Add(new User
+        {
+            Id = Guid.NewGuid(),
+            StaffCode = Constants.StaffCode,
+            FirstName = "Theresa",
+            LastName = "May",
+            Username = Constants.NewUserName,
+            HashedPassword = hashedPassword,
+            DateOfBirth = new DateTime(2002, 10, 5),
+            Gender = Constants.NewGender,
+            JoinedDate = new DateTime(2022, 12, 1),
+            Role = Constants.Role,
+            Location = Constants.NewLocation,
+            IsFirstTimeLogIn = true,
+        });
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        _userRepository
+            .Setup(ur => ur.ListAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(listUser);
+
+        //_userNameHelper.Setup(u => UserNameHelper.GetNewUserNameWithoutNumber(Constants.FirstName, Constants.LastName))
+        //    .Returns("namefl");
 
         var result = await _userService.CreateUserAsync(request);
 
