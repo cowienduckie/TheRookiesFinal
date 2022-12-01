@@ -241,9 +241,9 @@ export function EditUserPage() {
         footer={[]}
       >
         <h1 className="mb-5 text-2xl font-bold text-red-600">
-          Edit User Success
+          Edit User Successfully
         </h1>
-        <p className="mb-8">User has been edited successfully!</p>
+        <p className="mb-8">User information is updated successfully</p>
         <Button
           className="content-end"
           danger
