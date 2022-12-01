@@ -181,8 +181,7 @@ public class UserService : BaseService, IUserService
 
         var users = (await userRepository.ListAsync(u => !u.IsDeleted &&
                                                             u.Location == request.Location))
-                                .Select(u => new GetUserResponse(u))
-                                .AsQueryable();
+                                            .AsQueryable();
 
         var validSortFields = new[]
         {
@@ -207,11 +206,13 @@ public class UserService : BaseService, IUserService
         var processedList = users.FilterByField(validFilterFields,
                                                 request.FilterQuery.FilterField,
                                                 request.FilterQuery.FilterValue)
-                                    .SearchByField(searchFields,
-                                                request.SearchQuery.SearchValue)
                                     .SortByField(validSortFields,
                                                 request.SortQuery.SortField,
-                                                request.SortQuery.SortDirection);
+                                                request.SortQuery.SortDirection)
+                                    .Select(u => new GetUserResponse(u))
+                                    .AsQueryable()
+                                    .SearchByField(searchFields,
+                                                request.SearchQuery.SearchValue);
 
         var paginatedList = new PagedList<GetUserResponse>(processedList,
                                                             request.PagingQuery.PageIndex,
