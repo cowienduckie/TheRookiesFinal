@@ -55,7 +55,7 @@ export function EditUserPage() {
       form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
       form.setFieldValue("joinedDate", dayjs().utc(res.dateOfBirth, "DD/MM/YYYY"));
     });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
     labelCol: { span: 7 },
@@ -64,6 +64,22 @@ export function EditUserPage() {
 
   const tailLayout = {
     wrapperCol: { offset: 9 }
+  };
+
+  const [loadings, setLoadings] = useState([]);
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 2000);
   };
 
   const handleCancel = () => {
@@ -191,13 +207,29 @@ export function EditUserPage() {
             <Select.Option value={ROLE_STAFF_ENUM}>Staff</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item {...tailLayout}>
-          <Button className="mx-2" type="primary" danger htmlType="submit">
+        <Form.Item {...tailLayout} shouldUpdate>
+        {() => (
+          <div>
+            <Button
+            className="mx-2"
+            type="primary"
+            danger
+            onSubmit={onFinish}
+            htmlType="submit"
+            disabled={
+              form.getFieldsError().filter(({ errors }) => errors.length)
+                .length > 0
+            }
+            onClick={() => enterLoading(1)}
+            loading={loadings[1]}
+          >
             Save
           </Button>
           <Button className="mx-5" onClick={handleCancel} danger>
             Cancel
           </Button>
+          </div>
+        )}
         </Form.Item>
       </Form>
 
@@ -209,9 +241,9 @@ export function EditUserPage() {
         footer={[]}
       >
         <h1 className="mb-5 text-2xl font-bold text-red-600">
-          Edit User Success
+          Edit User Successfully
         </h1>
-        <p className="mb-8">User has been edited successfully!</p>
+        <p className="mb-8">User information is updated successfully</p>
         <Button
           className="content-end"
           danger

@@ -280,7 +280,12 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
-        var user = await userRepository.GetAsync(u => u.Id == requestModel.Id);
+        var user = await userRepository.GetAsync(u => !u.IsDeleted && u.Id == requestModel.Id);
+
+        if (user == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
 
         var userAge = UserNameHelper.GetAge(requestModel.DateOfBirth);
 
