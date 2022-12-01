@@ -10,8 +10,10 @@ public static class Constants
     public const string NewPassword = "Password";
     public const UserRole Role = UserRole.Admin;
     public const string StaffCode = "SD0001";
-    public const string FirstName = "Le";
-    public const string LastName = "Thanh Dat";
+    public const string FirstName = "Firstname";
+    public const string LastName = "Last Name";
+    public const string NewUserName = "namefl";
+    public const string NewCreatePassword = "namefl@05102002";
     public const Gender NewGender = Gender.Male;
     public const Location NewLocation = Location.HaNoi;
     public const bool IsFirstTimeLogIn = true;

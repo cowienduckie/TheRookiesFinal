@@ -87,6 +87,11 @@ public class UserService : BaseService, IUserService
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
+        if (requestModel == null)
+        {
+            return new Response<CreateUserResponse>(false, ErrorMessages.BadRequest);
+        }
+
         var userAge = UserNameHelper.GetAge(requestModel.DateOfBirth);
 
         if (userAge < Settings.MinimumStaffAge)
