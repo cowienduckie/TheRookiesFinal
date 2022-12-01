@@ -16,7 +16,7 @@ import {
 function useLoader() {
   const { search, state } = useLocation();
   const navigate  = useNavigate();
-  const createdUser = state && state.createdUser;
+  const newUser = state && state.newUser;
   const isReload = state && state.isReload;
 
   const [queries, setQueries] = useState({
@@ -72,16 +72,16 @@ function useLoader() {
     getList();
   }, [search]);
 
-  if (!!createdUser &&
+  if (!!newUser &&
       pagedData.items.length > 0 &&
-      pagedData.items[0].id !== createdUser.id) {
-    const duplicateId =  pagedData.items.findIndex((value) => value.id === createdUser.id)
+      pagedData.items[0].id !== newUser.id) {
+    const duplicateId =  pagedData.items.findIndex((value) => value.id === newUser.id)
 
     if (duplicateId >= 0) {
       pagedData.items.splice(duplicateId, 1);
     }
 
-    pagedData.items.unshift(createdUser);
+    pagedData.items.unshift(newUser);
     window.history.replaceState({}, "");
   }
 
