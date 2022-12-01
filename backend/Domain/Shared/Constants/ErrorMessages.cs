@@ -11,5 +11,7 @@ public static class ErrorMessages
     public const string WrongOldPassword = "Old password is wrong!";
     public const string InvalidAge = "User's age is invalid!";
     public const string InvalidJoinedDate = "Joined date is invalid!";
-    public const string InvalidLocation = "Loaction is invalid!";
+    public const string CannotDisableUser =
+        "There are valid assignments belongings to this user. Please close all assignments before disabling user.";
+    public const string InvalidLocation = "Location is invalid!";
 }

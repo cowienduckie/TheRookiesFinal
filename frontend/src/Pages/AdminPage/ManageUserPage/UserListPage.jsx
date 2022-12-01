@@ -164,11 +164,16 @@ export function UserListPage() {
               icon={<EditOutlined className="align-middle" />}
             />
           </Link>
-          <Button
-            className="ml-2"
-            danger
-            icon={<CloseOutlined className="align-middle" />}
-          />
+          <Link 
+            to={`/admin/manage-user/disable/${record.id}`}
+            state={{ background: location }}
+          >
+            <Button
+              className="ml-2"
+              danger
+              icon={<CloseOutlined className="align-middle" />}
+            />
+          </Link>
         </div>
       )
     }

@@ -2,6 +2,7 @@ import { Divider, Modal } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserById } from "../../../Apis/UserApis";
+import { CITY_ONE, CITY_TWO, LOCATION } from "../../../Constants/DetailUserInfoConstants";
 
 export function DetailedInfoUserPage() {
   const [data, setData] = useState({});
@@ -18,23 +19,28 @@ export function DetailedInfoUserPage() {
     };
 
     loadData();
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onCancel = () => {
     navigate(-1);
-  }
+  };
 
   return (
     <>
-      <Modal open={isModalOpen} closable={true} footer={false} onCancel={onCancel} >
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl text-red-600 font-bold">
+      <Modal
+        open={isModalOpen}
+        closable={true}
+        footer={false}
+        onCancel={onCancel}
+      >
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-red-600">
             Detail User Information
           </h1>
         </div>
         <Divider />
         <div>
-          <table className="border-separate border-spacing-5 ml-10">
+          <table className="ml-10 border-separate border-spacing-5">
             <tbody>
               <tr>
                 <td className="font-bold">Staff Code:</td>
@@ -62,7 +68,9 @@ export function DetailedInfoUserPage() {
               </tr>
               <tr>
                 <td className="font-bold">Location:</td>
-                <td>{data.location === "HaNoi" ? "Ha Noi" : "Ho Chi Minh City"}</td>
+                <td>
+                  {data.location === LOCATION ? CITY_ONE : CITY_TWO}
+                </td>
               </tr>
             </tbody>
           </table>
