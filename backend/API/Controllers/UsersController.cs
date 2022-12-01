@@ -170,7 +170,7 @@ public class UsersController : BaseController
         }
     }
 
-    [Authorize(UserRole.Admin)]
+    [Authorize]
     [HttpPut("change-password")]
     public async Task<ActionResult<Response>> ChangePassword([FromBody] ChangePasswordRequest requestModel)
     {
@@ -198,6 +198,7 @@ public class UsersController : BaseController
         }
     }
 
+    [Authorize(UserRole.Admin)]
     [HttpPut]
     public async Task<ActionResult<Response>> Edit([FromBody] EditUserRequest requestModel)
     {
