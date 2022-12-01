@@ -8,34 +8,37 @@ public class CreateUserResponse
     public CreateUserResponse(User user)
     {
         Id = user.Id;
+        Username = user.Username;
         StaffCode = user.StaffCode;
         FirstName = user.FirstName;
         LastName = user.LastName;
-        DateOfBirth = user.DateOfBirth.ToLocalTime();
-        Gender = user.Gender;
-        JoinedDate = user.JoinedDate.ToLocalTime();
-        Role = user.Role;
-        Location = user.Location;
-        IsFirstTimeLogIn = user.IsFirstTimeLogIn;
+        FullName = user.FullName;
+        DateOfBirth = user.DateOfBirth.ToString("dd/MM/yyyy");
+        Gender = user.Gender.ToString();
+        JoinedDate = user.JoinedDate.ToString("dd/MM/yyyy");
+        Role = user.Role.ToString();
+        Location = user.Location.ToString();
     }
 
-    public Guid Id { get; }
+    public Guid Id { get; set; }
 
-    public string StaffCode { get; }
+    public string Username { get; set; }
 
-    public string FirstName { get; }
+    public string StaffCode { get; set; }
 
-    public string LastName { get; }
+    public string FirstName { get; set; }
 
-    public DateTime DateOfBirth { get; }
+    public string LastName { get; set; }
 
-    public Gender Gender { get; }
+    public string FullName { get; set; }
 
-    public DateTime JoinedDate { get; }
+    public string DateOfBirth { get; set; }
 
-    public UserRole Role { get; }
+    public string Gender { get; set; }
 
-    public Location Location { get; }
+    public string JoinedDate { get; set; }
 
-    public bool IsFirstTimeLogIn { get; }
+    public string Role { get; set; }
+
+    public string Location { get; set; }
 }

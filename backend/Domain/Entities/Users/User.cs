@@ -12,6 +12,8 @@ public class User : AuditableEntity<Guid>
 
     public string LastName { get; set; } = null!;
 
+    public string FullName => $"{FirstName} {LastName}";
+
     public string Username { get; set; } = null!;
 
     public string HashedPassword { get; set; } = null!;
