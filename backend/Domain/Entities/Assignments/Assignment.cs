@@ -1,4 +1,5 @@
 using Domain.Base;
+using Domain.Entities.Assets;
 using Domain.Entities.Users;
 using Domain.Shared.Enums;
 
@@ -7,6 +8,8 @@ namespace Domain.Entities.Assignments;
 public class Assignment : AuditableEntity<Guid>
 {
     public Guid AssetId { get; set; }
+
+    public Asset Asset { get; set;} = null!;
 
     public Guid AssignedBy { get; set; }
 
