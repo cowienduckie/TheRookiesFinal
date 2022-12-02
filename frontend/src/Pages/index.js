@@ -15,12 +15,15 @@ export {
   EditUserPage,
   UserListPage,
   DetailedInfoUserPage,
-  DisableUserPage
+  DisableUserPage,
+  CreateAssetPage,
+  CreateCategoryPage,
+  EditAssetPage
 } from "./AdminPage";
 
 export {
   LoginPage,
   ChangePasswordPage,
   LogoutPage,
-  ChangePasswordFirstTimePage,
+  ChangePasswordFirstTimePage
 } from "./AuthenticationPage";

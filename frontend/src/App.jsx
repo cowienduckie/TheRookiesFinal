@@ -17,7 +17,10 @@ import {
   ReportPage,
   UserListPage,
   DetailedInfoUserPage,
-  DisableUserPage
+  DisableUserPage,
+  CreateAssetPage,
+  CreateCategoryPage,
+  EditAssetPage
 } from "./Pages";
 
 function App() {
@@ -30,7 +33,16 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
-          <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
+          <Route path="/admin/manage-asset" element={<ManageAssetPage />}>
+            <Route
+              path="/admin/manage-asset/create-asset"
+              element={<CreateAssetPage />}
+            />
+            <Route
+              path="/admin/manage-asset/edit-asset"
+              element={<EditAssetPage />}
+            />
+          </Route>
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
             <Route index={true} element={<UserListPage />} />
             <Route
@@ -78,14 +90,15 @@ function App() {
         element={<ChangePasswordFirstTimePage />}
       />
       <Route path="/logout" element={<LogoutPage />} />
+      <Route path="/admin/manage-user/:id" element={<DetailedInfoUserPage />} />
       <Route
-        path="/admin/manage-user/:id"
-        element={<DetailedInfoUserPage />}
+        path="/admin/manage-user/disable/:id"
+        element={<DisableUserPage />}
       />
       <Route
-              path="/admin/manage-user/disable/:id"
-              element={<DisableUserPage />}
-            />
+        path="/admin/manage-asset/create-asset/create-category"
+        element={<CreateCategoryPage />}
+      />
     </Routes>
   );
 

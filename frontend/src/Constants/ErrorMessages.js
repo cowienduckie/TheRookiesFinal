@@ -17,7 +17,7 @@ export const PASSWORD_COMPARED =
   "The new password cannot match the old password!";
 export const PASSWORD_ONLY_ALLOW = "Please enter a valid value!";
 export const NAME_ONLY_ALLOW =
-  "Name should only contain alphabetic: A to Z or a to z and one space between words";
+  "Name should only contain alphabetic: A to Z or a to z and one space between words!";
 export const FIRST_NAME_REQUIRED = "Please enter your first name!";
 export const LAST_NAME_REQUIRED = "Please enter your last name!";
 export const DOB_UNDER_18 = "User is under 18. Please select a different date!";
@@ -31,3 +31,18 @@ export const JOINED_DATE_NOT_WEEKENDS =
 export const ROLE_REQUIRED = "Please select user type!";
 export const NAME_MAX_LENGTH =
   "Input value for name must be below 255 characters!";
+export const ASSET_NAME_REQUIRED = "Please enter asset name!";
+export const ASSET_NAME_ONLY =
+  "Name should only contain alphabetic: A to Z, a to z, 0 to 9 and one space between words!";
+export const ASSET_MAX_LENGTH =
+  "Input value for specification must be below 255 characters!";
+export const SPECIFICATION_REQUIRED = "Please enter Specification box!";
+export const SPECIFICATION_NAME_ONLY =
+  "Name should only contain alphabetic: A to Z, a to z, 0 to 9 and one space between words!";
+export const SPECIFICATION_MAX_LENGTH =
+  "Input value for specification must be below 255 characters!";
+export const INSTALLED_DATE_REQUIRED = "Please enter your installed date!";
+export const STATE_REQUIRED = "Please select asset state!";
+export const CATEGORY_REQUIRED = "Please select a category!";
+export const CATEGORY_NAME_REQUIRED = "Please input your Category name!";
+export const CATEGORY_PREFIX_REQUIRED = "Please input your Category prefix!";
