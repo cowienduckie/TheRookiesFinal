@@ -41,6 +41,7 @@ dayjs.extend(customParseFormat);
 
 export function CreateUserPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [createdUser, setCreatedUser] = useState({});
   const [form] = Form.useForm();
   const { Option } = Select;
   const dateFormat = "YYYY/MM/DD";
@@ -59,13 +60,18 @@ export function CreateUserPage() {
       role: parseInt(values.role)
     };
     await createUser(values).then((data) => {
+      setCreatedUser(data);
       setIsModalOpen(true);
     });
   };
 
-  const handleCancel = () => {
-    navigate("/admin/manage-user");
+  const handleCancelModal = () => {
+    navigate("/admin/manage-user", { state: { createdUser } });
   };
+
+  const handleCancelForm = () => {
+    navigate(-1);
+  }
 
   const layout = {
     labelCol: { span: 7 },
@@ -262,7 +268,7 @@ export function CreateUserPage() {
               >
                 Save
               </Button>
-              <Button className="mx-3" danger onClick={handleCancel}>
+              <Button className="mx-3" danger onClick={handleCancelForm}>
                 Cancel
               </Button>
             </div>
@@ -272,9 +278,9 @@ export function CreateUserPage() {
 
       <Modal
         open={isModalOpen}
-        onOk={handleCancel}
-        onCancel={handleCancel}
-        closable={handleCancel}
+        onOk={handleCancelModal}
+        onCancel={handleCancelModal}
+        closable={handleCancelModal}
         footer={[]}
       >
         <h1 className="mb-5 text-2xl font-bold text-red-600">
@@ -285,7 +291,7 @@ export function CreateUserPage() {
           className="content-end"
           danger
           key="back"
-          onClick={handleCancel}
+          onClick={handleCancelModal}
         >
           Close
         </Button>

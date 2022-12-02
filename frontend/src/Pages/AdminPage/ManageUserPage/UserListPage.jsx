@@ -14,7 +14,8 @@ import {
 } from "../../../Constants/ModelFieldConstants";
 
 function useLoader() {
-  const { search } = useLocation();
+  const { search, state } = useLocation();
+  const createdUser = state && state.createdUser;
 
   const [queries, setQueries] = useState({
     pageIndex: "",
@@ -66,6 +67,13 @@ function useLoader() {
 
     getList();
   }, [search]);
+
+  if (!!createdUser &&
+      pagedData.items.length > 0 &&
+      pagedData.items[0].id !== createdUser.id) {
+    pagedData.items.unshift(createdUser);
+    window.history.replaceState(null, "");
+  }
 
   return { pagedData, queries, loading };
 }
@@ -158,13 +166,13 @@ export function UserListPage() {
       key: "actions",
       render: (_, record) => (
         <div className="max-w-fit p-0">
-          <Link to = {`/admin/manage-user/edit-user/${record.id}`} >
+          <Link to={`/admin/manage-user/edit-user/${record.id}`}>
             <Button
               className="mr-2"
               icon={<EditOutlined className="align-middle" />}
             />
           </Link>
-          <Link 
+          <Link
             to={`/admin/manage-user/disable/${record.id}`}
             state={{ background: location }}
           >
@@ -181,8 +189,8 @@ export function UserListPage() {
 
   return (
     <>
-      <h1 className="font-bold text-red-600 text-2xl">User List</h1>
-      <div className="flex flex-row py-5 w-full justify-between">
+      <h1 className="text-2xl font-bold text-red-600">User List</h1>
+      <div className="flex w-full flex-row justify-between py-5">
         <div className="w-1/2 p-0">
           <Select
             className="w-3/12"
