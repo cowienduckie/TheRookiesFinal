@@ -16,7 +16,6 @@ using Application.DTOs.Users.CreateUser;
 using Application.Helpers;
 using Application.DTOs.Users.EditUser;
 using Domain.Shared.Enums;
-using Microsoft.IdentityModel.Tokens;
 using Application.DTOs.Users.GetUser;
 
 namespace Application.UnitTests.ServiceTests;
