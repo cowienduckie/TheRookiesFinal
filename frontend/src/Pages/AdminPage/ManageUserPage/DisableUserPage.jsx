@@ -8,6 +8,21 @@ export function DisableUserPage() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isAbleToDisable, setIsAbleToDisable] = useState();
+  const [loadings, setLoadings] = useState([]);
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 6000);
+  };
 
   useEffect(() => {
     async function checkValid() {
@@ -24,11 +39,11 @@ export function DisableUserPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDisable = async () => {
-    await disableUser({ id })
-      .finally(() => {
-        setIsModalOpen(false);
-        navigate("/admin/manage-user", { state: { isReload: true } });
-      })
+    enterLoading(0);
+    await disableUser({ id }).finally(() => {
+      setIsModalOpen(false);
+      navigate("/admin/manage-user", { state: { isReload: true } });
+    });
   };
 
   const handleOnclick = () => {
@@ -60,8 +75,9 @@ export function DisableUserPage() {
                 <Button
                   type="primary"
                   danger
-                  onClick={handleDisable}
                   className="mr-2"
+                  loading={loadings[0]}
+                  onClick={handleDisable}
                 >
                   Disable
                 </Button>
