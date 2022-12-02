@@ -620,7 +620,7 @@ public class UserServiceTests
                                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as User);
 
-        var result = await _userService.CreateUserAsync(null);
+        var result = await _userService.CreateUserAsync(It.IsAny<CreateUserRequest>());
 
         Assert.Multiple(() =>
         {
