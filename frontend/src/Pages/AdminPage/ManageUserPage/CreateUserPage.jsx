@@ -57,7 +57,9 @@ export function CreateUserPage() {
       ...values,
       firstName: values.firstName.trim(),
       gender: parseInt(values.gender),
-      role: parseInt(values.role)
+      role: parseInt(values.role),
+      dateOfBirth: dayjs(values.dateOfBirth).add(7, 'h'),
+      joinedDate: dayjs(values.joinedDate).add(7, 'h'),
     };
     await createUser(values).then((data) => {
       setCreatedUser(data);
