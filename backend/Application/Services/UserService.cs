@@ -12,7 +12,6 @@ using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Domain.Shared.Helpers;
 using Infrastructure.Persistence.Interfaces;
-using System.Text.RegularExpressions;
 using Application.DTOs.Users.DisableUser;
 using Domain.Entities.Assignments;
 
@@ -108,7 +107,7 @@ public class UserService : BaseService, IUserService
             return new Response<CreateUserResponse>(false, ErrorMessages.InvalidJoinedDate);
         }
 
-        var validUserList = await userRepository.ListAsync(u => !u.IsDeleted);
+        var validUserList = await userRepository.ListAsync();
 
         var latestStaffCode = validUserList.OrderByDescending(u => u.StaffCode).First().StaffCode;
 
