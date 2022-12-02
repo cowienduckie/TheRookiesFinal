@@ -5,12 +5,12 @@ namespace Application.DTOs.Assets.GetAsset;
 
 public class GetAssetResponse
 {
-    public GetAssetResponse(Asset asset, string category)
+    public GetAssetResponse(Asset asset)
     {    
         Id = asset.Id;
         AssetCode = asset.AssetCode;
         Name = asset.Name;
-        Category = category;
+        Category = asset.Category.Name;
         Specification = asset.Specification;
         InstalledDate = asset.InstalledDate.ToString("dd/MM/yyyy");
         State = asset.State.GetDescription() ?? asset.State.ToString();

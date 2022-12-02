@@ -5,5 +5,5 @@ namespace Application.Services.Interfaces;
 
 public interface IAssetService
 {
-    Task<Response<GetAssetResponse>> GetByIdAsync(GetAssetRequest request);
+    Task<Response<GetAssetResponse>> GetAsync(GetAssetRequest request);
 }

@@ -6,12 +6,12 @@ public enum AssetState
 {
     [Description("Available")]
     Available,
-    [Description("Not Available")]
+    [Description("Not available")]
     NotAvailable,
     [Description("Assigned")]
     Assigned,
-    [Description("Waiting")]
-    Waiting,
+    [Description("Waiting for recycling")]
+    WaitingForRecycling,
     [Description("Recycled")]
     Recycled
 }

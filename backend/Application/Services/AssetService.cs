@@ -1,18 +1,37 @@
 using Application.Common.Models;
 using Application.DTOs.Assets.GetAsset;
 using Application.Services.Interfaces;
+using Domain.Entities.Assets;
+using Domain.Shared.Constants;
 using Infrastructure.Persistence.Interfaces;
 
 namespace Application.Services;
 
 public class AssetService : BaseService, IAssetService
 {
-    public AssetService(IUnitOfWork unitOfWork) : base(unitOfWork)
+    private readonly IAssetRepository _assetRepository;
+
+    public AssetService(
+        IUnitOfWork unitOfWork,
+        IAssetRepository assetRepository) : base(unitOfWork)
     {
+        _assetRepository = assetRepository;
     }
 
-    public Task<Response<GetAssetResponse>> GetByIdAsync(GetAssetRequest request)
+    public async Task<Response<GetAssetResponse>> GetAsync(GetAssetRequest request)
     {
-        throw new NotImplementedException();
+        var asset = await _assetRepository
+            .GetAsync(a => !a.IsDeleted &&
+                            a.Id == request.Id &&
+                            a.Location == request.Location);
+        
+        if (asset == null)
+        {
+            return new Response<GetAssetResponse>(false, ErrorMessages.NotFound);
+        }
+
+        var responseModel = new GetAssetResponse(asset);
+
+        return new Response<GetAssetResponse>(true, Messages.ActionSuccess, responseModel);
     }
 }

@@ -36,7 +36,7 @@ public class AssetsController : BaseController
 
         try
         {
-            var response = await _assetService.GetByIdAsync(request);
+            var response = await _assetService.GetAsync(request);
 
             if (!response.IsSuccess)
             {
