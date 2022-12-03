@@ -1,4 +1,7 @@
-﻿using Domain.Entities.Users;
+﻿using Domain.Entities.Assets;
+using Domain.Entities.Assignments;
+using Domain.Entities.Categories;
+using Domain.Entities.Users;
 using Domain.Interfaces;
 using Domain.Shared.Constants;
 using Infrastructure.Common.Interfaces;
@@ -27,7 +30,10 @@ public static class ConfigureServices
         services.AddScoped<IEfContext>(provider => provider.GetRequiredService<EfContext>());
 
         services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>))
-            .AddScoped<IUserRepository, UserRepository>();
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IAssetRepository, AssetRepository>()
+            .AddScoped<IAssignmentRepository, AssignmentRepository>()
+            .AddScoped<ICategoryRepository, CategoryRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

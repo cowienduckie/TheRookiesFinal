@@ -19,7 +19,6 @@ namespace Application.Services;
 
 public class UserService : BaseService, IUserService
 {
-
     public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
     {
     }

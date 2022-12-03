@@ -17,5 +17,9 @@ public class AssignmentConfiguration : IEntityTypeConfiguration<Assignment>
                 .WithMany(u => u.CreatedAssignments)
                 .HasForeignKey(a => a.AssignedBy)
                 .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasOne(a => a.Asset)
+            .WithMany(a => a.Assignments)
+            .HasForeignKey(a => a.AssetId);
     }
 }

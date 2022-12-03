@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
+using Domain.Entities.Categories;
 using Domain.Entities.Users;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Interfaces;
@@ -21,6 +23,8 @@ public class EfContext : DbContext, IEfContext
 
     public virtual DbSet<User> Users => Set<User>();
     public virtual DbSet<Assignment> Assignments => Set<Assignment>();
+    public virtual DbSet <Asset> Assets => Set<Asset>();
+    public virtual DbSet <Category> Categories => Set<Category>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
