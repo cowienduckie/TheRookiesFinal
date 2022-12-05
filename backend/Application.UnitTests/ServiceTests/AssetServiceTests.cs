@@ -13,8 +13,8 @@ namespace Application.UnitTests.ServiceTests;
 public class AssetServiceTests
 {
     private Mock<IAssetRepository> _assetRepository = null!;
-    private Mock<IUnitOfWork> _unitOfWork = null!;
     private AssetService _assetService = null!;
+    private Mock<IUnitOfWork> _unitOfWork = null!;
 
     [SetUp]
     public void SetUp()
@@ -33,10 +33,10 @@ public class AssetServiceTests
                 It.IsAny<Expression<Func<Asset, bool>>>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as Asset);
-        
+
         var result = await _assetService.GetAsync(It.IsAny<GetAssetRequest>());
 
-        Assert.Multiple(() => 
+        Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
 
@@ -54,17 +54,16 @@ public class AssetServiceTests
     public async Task GetAsync_ValidInput_ReturnsTrueResultWithData()
     {
         var entity = AssetConstants.SampleAsset;
-        var expected = AssetConstants.ExpectedGetResponse;
 
         _assetRepository
             .Setup(ar => ar.GetAsync(
                 It.IsAny<Expression<Func<Asset, bool>>>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(entity);
-        
+
         var result = await _assetService.GetAsync(It.IsAny<GetAssetRequest>());
 
-        Assert.Multiple(() => 
+        Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
 
@@ -78,7 +77,23 @@ public class AssetServiceTests
 
             Assert.That(result.Data, Is.InstanceOf<GetAssetResponse>());
 
-            Assert.That(result.Data, Is.EqualTo(expected));
+            Assert.That(result.Data!.Id, Is.EqualTo(AssetConstants.Id));
+
+            Assert.That(result.Data!.AssetCode, Is.EqualTo(AssetConstants.AssetCode));
+
+            Assert.That(result.Data!.Name, Is.EqualTo(AssetConstants.Name));
+
+            Assert.That(result.Data!.Category, Is.EqualTo(AssetConstants.CategoryName));
+
+            Assert.That(result.Data!.Specification, Is.EqualTo(AssetConstants.Specification));
+
+            Assert.That(result.Data!.InstalledDate, Is.EqualTo(AssetConstants.InstalledDateString));
+
+            Assert.That(result.Data!.State, Is.EqualTo(AssetConstants.StateString));
+
+            Assert.That(result.Data!.Location, Is.EqualTo(AssetConstants.LocationString));
+
+            Assert.That(result.Data!.HasHistoricalAssignment, Is.EqualTo(AssetConstants.HasHistoricalAssignment));
         });
     }
 }

@@ -6,7 +6,7 @@ namespace Application.DTOs.Assets.GetAsset;
 public class GetAssetResponse
 {
     public GetAssetResponse(Asset asset)
-    {    
+    {
         Id = asset.Id;
         AssetCode = asset.AssetCode;
         Name = asset.Name;

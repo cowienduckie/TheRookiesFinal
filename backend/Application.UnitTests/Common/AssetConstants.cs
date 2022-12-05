@@ -7,21 +7,33 @@ namespace Application.UnitTests.Common;
 
 public static class AssetConstants
 {
-    public static readonly Guid Id = new Guid();
+    public static readonly Guid Id = new();
+    public static readonly Guid CategoryId = new();
     public const string AssetCode = "LA0000001";
     public const string Name = "Sample Asset";
-    public static readonly Guid CategoryId = new Guid();
     public const string Specification = "A detailed description";
+
     public static readonly DateTime InstalledDate = DateTime.Now;
-    public static readonly AssetState State = AssetState.Available;
-    public static readonly Location Location = Location.HaNoi;
+    public static string InstalledDateString => InstalledDate.ToString("dd/MM/yyyy");
+
+    public const AssetState State = AssetState.Available;
+    public const string StateString = "Available";
+
+    public const Location AssetLocation = Location.HaNoi;
+    public const string LocationString = "Ha Noi";
+
     public const bool HasHistoricalAssignment = true;
+
+    public const string CategoryName = "Sample Category";
+    public const string CategoryPrefix = "SC";
+
     public static readonly Category SampleCategory = new()
     {
         Id = CategoryId,
-        Prefix = "LA",
-        Name = "Sample Category"
+        Prefix = CategoryPrefix,
+        Name = CategoryName
     };
+
     public static readonly Asset SampleAsset = new()
     {
         Id = Id,
@@ -32,8 +44,7 @@ public static class AssetConstants
         Specification = Specification,
         InstalledDate = InstalledDate,
         State = State,
-        Location = Location,
+        Location = AssetLocation,
         HasHistoricalAssignment = HasHistoricalAssignment
     };
-    public static GetAssetResponse ExpectedGetResponse => new(SampleAsset);
 }
