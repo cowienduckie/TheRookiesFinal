@@ -12,6 +12,16 @@ export function DeleteAssetPage() {
     navigate(-1);
   };
 
+  const handleDelete = ()=>{
+    setIsModalOpen(false);
+    navigate(-1)
+  }
+
+  const handleCancel = ()=>{
+    setIsModalOpen(false);
+    navigate(-1)
+  }
+
   return (
     <>
       {isHistoricalAssignment !== undefined &&
@@ -33,16 +43,12 @@ export function DeleteAssetPage() {
                   type="primary"
                   danger
                   className="mr-2"
-                  onClick={() => {
-                    navigate(-1);
-                  }}
+                  onClick={handleDelete}
                 >
                   Delete
                 </Button>
                 <Button
-                  onClick={() => {
-                    navigate(-1);
-                  }}
+                  onClick={handleCancel}
                 >
                   Cancel
                 </Button>
@@ -57,7 +63,7 @@ export function DeleteAssetPage() {
               </h1>
             </div>
             <Divider />
-            <div className="pl-5 pr-5 text-base">
+            <div className="pl-5 pr-5 pb-2 text-lg">
               <p className=" leading-relaxed">
                 Cannot delete the asset because it belongs to one or more
                 historical assigments.
