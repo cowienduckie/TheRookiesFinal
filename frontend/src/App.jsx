@@ -31,12 +31,11 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
-          <Route path="/admin/manage-asset" element={<ManageAssetPage />}>
-            <Route
-              path="/admin/manage-asset/delete-asset/:id"
-              element={<DeleteAssetPage />}
-            />
-          </Route>
+          <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
+          <Route
+            path="/admin/manage-asset/delete-asset/:id"
+            element={<DeleteAssetPage />}
+          />
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
             <Route index={true} element={<UserListPage />} />
             <Route
@@ -66,6 +65,7 @@ function App() {
           />
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
+
         <Route path="/change-password" element={<ChangePasswordPage />} />
         <Route
           path="/change-password-first-time"
