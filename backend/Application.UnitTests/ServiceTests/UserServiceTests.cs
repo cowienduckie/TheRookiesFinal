@@ -10,11 +10,14 @@ using Domain.Shared.Constants;
 using Domain.Shared.Helpers;
 using Application.DTOs.Users.ChangePassword;
 using Application.UnitTests.Common;
-using System.Data;
 using Application.DTOs.Users.DisableUser;
 using Domain.Entities.Assignments;
 using Application.DTOs.Users.CreateUser;
 using Application.Helpers;
+using Application.DTOs.Users.EditUser;
+using Domain.Shared.Enums;
+using Microsoft.IdentityModel.Tokens;
+using Application.DTOs.Users.GetUser;
 
 namespace Application.UnitTests.ServiceTests;
 
@@ -631,282 +634,10 @@ public class UserServiceTests
 
             Assert.That(result.Message, Is.EqualTo(ErrorMessages.BadRequest));
         });
-    }
-
+    } 
+    
     [Test]
-    public async Task CreateUserAsync_InvalidJoinedDateWeekend_ReturnsInvalidJoinedDate()
-    {
-        var hashedPassword = HashStringHelper.HashString(Constants.Password);
-        var user = new User
-        {
-            Id = UserId,
-            StaffCode = Constants.StaffCode,
-            FirstName = Constants.FirstName,
-            LastName = Constants.LastName,
-            Username = Constants.Username,
-            HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2002, 10, 5),
-            Gender = Constants.NewGender,
-            JoinedDate = new DateTime(2022, 12, 3),
-            Role = Constants.Role,
-            Location = Constants.NewLocation,
-            IsFirstTimeLogIn = true,
-        };
-
-        _userRepository
-            .Setup(ur => ur.GetAsync(
-                                It.IsAny<Expression<Func<User, bool>>>(),
-                                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
-
-        var request = new CreateUserRequest
-        {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            DateOfBirth = user.DateOfBirth,
-            Gender = user.Gender,
-            JoinedDate = user.JoinedDate,
-            Role = user.Role,
-            Location = user.Location
-        };
-
-        var result = await _userService.CreateUserAsync(request);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-
-            Assert.That(result, Is.InstanceOf<Response<CreateUserResponse>>());
-
-            Assert.That(result.IsSuccess, Is.False);
-
-            Assert.That(result.Message, Is.Not.Null);
-
-            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidJoinedDate));
-        });
-    }
-
-    [Test]
-    public async Task CreateUserAsync_InvalidJoinedDateNotWeekend_ReturnsInvalidJoinedDate()
-    {
-        var hashedPassword = HashStringHelper.HashString(Constants.Password);
-        var user = new User
-        {
-            Id = UserId,
-            StaffCode = Constants.StaffCode,
-            FirstName = Constants.FirstName,
-            LastName = Constants.LastName,
-            Username = Constants.Username,
-            HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2002, 10, 5),
-            Gender = Constants.NewGender,
-            JoinedDate = new DateTime(2000, 12, 3),
-            Role = Constants.Role,
-            Location = Constants.NewLocation,
-            IsFirstTimeLogIn = true,
-        };
-
-        _userRepository
-            .Setup(ur => ur.GetAsync(
-                                It.IsAny<Expression<Func<User, bool>>>(),
-                                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
-
-        var request = new CreateUserRequest
-        {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            DateOfBirth = user.DateOfBirth,
-            Gender = user.Gender,
-            JoinedDate = user.JoinedDate,
-            Role = user.Role,
-            Location = user.Location
-        };
-
-        var result = await _userService.CreateUserAsync(request);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-
-            Assert.That(result, Is.InstanceOf<Response<CreateUserResponse>>());
-
-            Assert.That(result.IsSuccess, Is.False);
-
-            Assert.That(result.Message, Is.Not.Null);
-
-            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidJoinedDate));
-        });
-    }
-
-    [Test]
-    public async Task CreateUserAsync_InvalidDateOfBirth_ReturnsInvalidAge()
-    {
-        var hashedPassword = HashStringHelper.HashString(Constants.Password);
-        var user = new User
-        {
-            Id = UserId,
-            StaffCode = Constants.StaffCode,
-            FirstName = Constants.FirstName,
-            LastName = Constants.LastName,
-            Username = Constants.Username,
-            HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2022, 10, 5),
-            Gender = Constants.NewGender,
-            JoinedDate = DateTime.Now,
-            Role = Constants.Role,
-            Location = Constants.NewLocation,
-            IsFirstTimeLogIn = true,
-        };
-
-        _userRepository
-            .Setup(ur => ur.GetAsync(
-                                It.IsAny<Expression<Func<User, bool>>>(),
-                                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
-
-        var request = new CreateUserRequest
-        {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            DateOfBirth = user.DateOfBirth,
-            Gender = user.Gender,
-            JoinedDate = user.JoinedDate,
-            Role = user.Role,
-            Location = user.Location
-        };
-
-        var result = await _userService.CreateUserAsync(request);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-
-            Assert.That(result, Is.InstanceOf<Response<CreateUserResponse>>());
-
-            Assert.That(result.IsSuccess, Is.False);
-
-            Assert.That(result.Message, Is.Not.Null);
-
-            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidAge));
-        });
-    }
-
-    [Test]
-    public async Task CreateUserAsync_ValidInputs_ReturnsSuccessResponse()
-    {
-        var hashedPassword = HashStringHelper.HashString(Constants.NewCreatePassword);
-        var user = new User
-        {
-            Id = UserId,
-            StaffCode = Constants.StaffCode,
-            FirstName = Constants.FirstName,
-            LastName = Constants.LastName,
-            Username = Constants.NewUserName,
-            HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2002, 10, 5),
-            Gender = Constants.NewGender,
-            JoinedDate = new DateTime(2022, 12, 1),
-            Role = Constants.Role,
-            Location = Constants.NewLocation,
-            IsFirstTimeLogIn = true,
-        };
-
-        var request = new CreateUserRequest
-        {
-            FirstName = Constants.FirstName,
-            LastName = Constants.LastName,
-            DateOfBirth = new DateTime(2002, 10, 5),
-            Gender = Constants.NewGender,
-            JoinedDate = new DateTime(2022, 12, 1),
-            Role = Constants.Role,
-            Location = Constants.NewLocation
-        };
-
-        var listUser = new List<User>();
-        listUser.Add(new User
-        {
-            Id = Guid.NewGuid(),
-            StaffCode = "SD0001",
-            FirstName = "John",
-            LastName = "Major",
-            Username = "majorj",
-            HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2002, 10, 5),
-            Gender = Constants.NewGender,
-            JoinedDate = new DateTime(2022, 12, 1),
-            Role = Constants.Role,
-            Location = Constants.NewLocation,
-            IsFirstTimeLogIn = true,
-        });
-        listUser.Add(new User
-        {
-            Id = Guid.NewGuid(),
-            StaffCode = "SD0002",
-            FirstName = "Theresa",
-            LastName = "May",
-            Username = "mayt",
-            HashedPassword = hashedPassword,
-            DateOfBirth = new DateTime(2002, 10, 5),
-            Gender = Constants.NewGender,
-            JoinedDate = new DateTime(2022, 12, 1),
-            Role = Constants.Role,
-            Location = Constants.NewLocation,
-            IsFirstTimeLogIn = true,
-        });
-
-        _userRepository
-            .Setup(ur => ur.GetAsync(
-                                It.IsAny<Expression<Func<User, bool>>>(),
-                                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(user);
-
-        _userRepository
-            .Setup(ur => ur.ListAsync(
-                                It.IsAny<Expression<Func<User, bool>>>(),
-                                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(listUser);
-
-        var result = await _userService.CreateUserAsync(request);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-
-            Assert.That(result, Is.InstanceOf<Response<CreateUserResponse>>());
-
-            Assert.That(result.IsSuccess, Is.True);
-
-            Assert.That(result.Message, Is.Not.Null);
-
-            Assert.That(result.Message, Is.EqualTo("Success"));
-
-            Assert.That(result.Data, Is.Not.Null);
-
-            Assert.That(result.Data, Is.InstanceOf<CreateUserResponse>());
-
-            Assert.That(result.Data?.FirstName, Is.EqualTo(Constants.FirstName));
-
-            Assert.That(result.Data?.LastName, Is.EqualTo(Constants.LastName));
-
-            Assert.That(result.Data?.StaffCode, Is.EqualTo("SD0003"));
-
-            Assert.That(result.Data?.DateOfBirth, Is.EqualTo(new DateTime(2002, 10, 5)));
-
-            Assert.That(result.Data?.Gender, Is.EqualTo(Constants.NewGender));
-
-            Assert.That(result.Data?.JoinedDate, Is.EqualTo(new DateTime(2022, 12, 1)));
-
-            Assert.That(result.Data?.Role, Is.EqualTo(Constants.Role));
-
-            Assert.That(result.Data?.Location, Is.EqualTo(Constants.NewLocation));
-
-            Assert.That(result.Data?.IsFirstTimeLogIn, Is.EqualTo(true));
-        });
-    }
-
-    [Test]
-    public async Task CreateUserAsync_NullUser_ReturnsBadRequest()
+    public async Task EditUserAsync_NullUser_ReturnsNotFound()
     {
         _userRepository
             .Setup(ur => ur.GetAsync(
@@ -914,19 +645,252 @@ public class UserServiceTests
                                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as User);
 
-        var result = await _userService.CreateUserAsync(null);
+        var request = new EditUserRequest
+        {
+            Id = UserId,
+            DateOfBirth = new DateTime(2002,5,19),
+            Gender = Gender.Female,
+            JoinedDate = new DateTime(2022, 12, 2),
+            Role = UserRole.Admin,
+        };
+
+        var result = await _userService.EditUserAsync(request);
 
         Assert.Multiple(() =>
         {
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result, Is.InstanceOf<Response<CreateUserResponse>>());
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
 
             Assert.That(result.IsSuccess, Is.False);
 
             Assert.That(result.Message, Is.Not.Null);
 
-            Assert.That(result.Message, Is.EqualTo(ErrorMessages.BadRequest));
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.NotFound));
+        });
+    }
+
+    [Test]
+    public async Task EditUserAsync_UserAgeLessThan18_ReturnsInvalidAge()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = true,
+            Role = Constants.Role
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new EditUserRequest
+        {
+            Id = UserId,
+            DateOfBirth = new DateTime(2022, 5, 19),
+            Gender = Gender.Female,
+            JoinedDate = DateTime.Now,
+            Role = UserRole.Admin,
+        };
+
+        var result = await _userService.EditUserAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidAge));
+        });
+    }
+
+    [Test]
+    public async Task EditUserAsync_InvalidJoinDate_ReturnsInvalidJoinedDate()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = true,
+            Role = Constants.Role
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new EditUserRequest
+        {
+            Id = UserId,
+            DateOfBirth = new DateTime(2002, 5, 19),
+            Gender = Gender.Female,
+            JoinedDate = new DateTime(2001, 5, 18),
+            Role = UserRole.Admin,
+        };
+
+        var result = await _userService.EditUserAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidJoinedDate));
+        });
+    }
+
+    [Test]
+    public async Task EditUserAsync_InvalidJoinDateNotWeekend_ReturnsInvalidJoinedDate()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = true,
+            Role = Constants.Role
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new EditUserRequest
+        {
+            Id = UserId,
+            DateOfBirth = new DateTime(2002, 5, 19),
+            Gender = Gender.Female,
+            JoinedDate = new DateTime(2022, 12, 3),
+            Role = UserRole.Admin,
+        };
+
+        var result = await _userService.EditUserAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidJoinedDate));
+        });
+    }
+
+    [Test]
+    public async Task EditUserAsync_InvalidLocation_ReturnsInvalidLocation()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = true,
+            Role = Constants.Role,
+            Location = Location.HaNoi
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new EditUserRequest
+        {
+            Id = UserId,
+            DateOfBirth = new DateTime(2002, 5, 19),
+            Gender = Gender.Female,
+            JoinedDate = new DateTime(2022, 12, 1),
+            Role = UserRole.Admin,
+            AdminLocation = Location.HCMCity
+        };
+
+        var result = await _userService.EditUserAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidLocation));
+        });
+    }
+
+    [Test]
+    public async Task EditUserAsync_ValidInput_ReturnsSuccessResponse()
+    {
+        var hashedPassword = HashStringHelper.HashString(Constants.Password);
+        var user = new User
+        {
+            Id = UserId,
+            Username = Constants.Username,
+            HashedPassword = hashedPassword,
+            IsFirstTimeLogIn = true,
+            Role = Constants.Role,
+            Location = Location.HaNoi
+        };
+
+        _userRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<User, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(user);
+
+        var request = new EditUserRequest
+        {
+            Id = UserId,
+            DateOfBirth = new DateTime(2002, 5, 19),
+            Gender = Gender.Female,
+            JoinedDate = new DateTime(2022, 12, 1),
+            Role = UserRole.Admin,
+            AdminLocation = Location.HaNoi
+        };
+
+        var result = await _userService.EditUserAsync(request);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response<GetUserResponse>>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo("Success"));
         });
     }
 
@@ -1187,18 +1151,6 @@ public class UserServiceTests
             Assert.That(result.Data?.LastName, Is.EqualTo(Constants.LastName));
 
             Assert.That(result.Data?.StaffCode, Is.EqualTo("SD0003"));
-
-            Assert.That(result.Data?.DateOfBirth, Is.EqualTo(new DateTime(2002, 10, 5)));
-
-            Assert.That(result.Data?.Gender, Is.EqualTo(Constants.NewGender));
-
-            Assert.That(result.Data?.JoinedDate, Is.EqualTo(new DateTime(2022, 12, 1)));
-
-            Assert.That(result.Data?.Role, Is.EqualTo(Constants.Role));
-
-            Assert.That(result.Data?.Location, Is.EqualTo(Constants.NewLocation));
-
-            Assert.That(result.Data?.IsFirstTimeLogIn, Is.EqualTo(true));
         });
     }
 }

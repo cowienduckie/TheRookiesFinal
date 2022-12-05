@@ -15,7 +15,9 @@ import {
 
 function useLoader() {
   const { search, state } = useLocation();
-  const createdUser = state && state.createdUser;
+  const navigate  = useNavigate();
+  const newUser = state && state.newUser;
+  const isReload = state && state.isReload;
 
   const [queries, setQueries] = useState({
     pageIndex: "",
@@ -61,18 +63,34 @@ function useLoader() {
       const data = await getUserList(queryString);
 
       setQueries(queriesFromUrl);
-      setPagedData(data.result);
+      setPagedData({
+        ...data.result,
+        items: [...data.result.items]
+      });
       setLoading(false);
     }
-
     getList();
   }, [search]);
 
-  if (!!createdUser &&
+  if (!!newUser &&
       pagedData.items.length > 0 &&
-      pagedData.items[0].id !== createdUser.id) {
-    pagedData.items.unshift(createdUser);
-    window.history.replaceState(null, "");
+      pagedData.items[0].id !== newUser.id) {
+    const duplicateId =  pagedData.items.findIndex((value) => value.id === newUser.id)
+
+    if (duplicateId >= 0) {
+      pagedData.items.splice(duplicateId, 1);
+    }
+
+    pagedData.items.unshift(newUser);
+    window.history.replaceState({}, "");
+  }
+
+  if (!!isReload) {
+    if (isReload) {
+      navigate(0);
+    }
+
+    window.history.replaceState({}, "");
   }
 
   return { pagedData, queries, loading };
