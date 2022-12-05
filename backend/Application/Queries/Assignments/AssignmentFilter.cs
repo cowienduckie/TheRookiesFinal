@@ -2,7 +2,7 @@
 
 public class AssignmentFilter
 {
-    public string? State { get; set; }
+    public string? AssignmentState { get; set; }
 
     public string? AssignedDate { get; set; }
 }

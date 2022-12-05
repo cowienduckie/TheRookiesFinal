@@ -22,7 +22,7 @@ public class AssetsController : BaseController
         _assetService = assetService;
     }
 
-    [Authorize(UserRole.Admin, UserRole.Staff)]
+    [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetAssetResponse>>> GetById(Guid id)
     {

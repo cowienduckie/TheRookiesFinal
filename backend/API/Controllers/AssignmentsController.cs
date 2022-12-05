@@ -23,11 +23,14 @@ public class AssignmentsController : BaseController
         _assignmentService = assignmentService;
     }
 
-    [Authorize(UserRole.Admin, UserRole.Staff)]
+    [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetAssignmentResponse>>> GetById(Guid id)
     {
-        if (CurrentUser == null) return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
 
         var request = new GetAssignmentRequest
         {
@@ -60,7 +63,10 @@ public class AssignmentsController : BaseController
         [FromQuery] AssignmentFilter assignmentFilter,
         [FromQuery] SearchQuery searchQuery)
     {
-        if (CurrentUser == null) return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
 
         if (sortQuery.SortField == ModelField.None)
         {
