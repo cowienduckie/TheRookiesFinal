@@ -2,10 +2,8 @@ using Application.Common.Models;
 using Application.DTOs.Categories;
 using Application.Services.Interfaces;
 using Domain.Entities.Categories;
-using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Infrastructure.Persistence.Interfaces;
-using Infrastructure.Persistence.Repositories;
 using System.Text.RegularExpressions;
 
 namespace Application.Services;
