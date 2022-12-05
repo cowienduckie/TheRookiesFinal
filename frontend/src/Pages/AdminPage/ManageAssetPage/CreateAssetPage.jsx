@@ -96,12 +96,12 @@ export function CreateAssetPage() {
           rules={[
             { required: true, message: ASSET_NAME_REQUIRED },
             {
-              pattern: /^([a-zA-Z]+\s)*[a-zA-Z]+$/,
+              pattern: /^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/,
               message: ASSET_NAME_ONLY
             },
             {
-              min: 1,
-              max: 255,
+              min: 6,
+              max: 50,
               message: ASSET_MAX_LENGTH
             }
           ]}
@@ -150,11 +150,12 @@ export function CreateAssetPage() {
           rules={[
             { required: true, message: SPECIFICATION_REQUIRED },
             {
-              pattern: /^([a-zA-Z]+\s)*[a-zA-Z]+$/,
+              pattern:
+                /^([a-zA-Z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]+\s)*[a-zA-Z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]+$/,
               message: SPECIFICATION_NAME_ONLY
             },
             {
-              min: 1,
+              min: 6,
               max: 255,
               message: SPECIFICATION_MAX_LENGTH
             }
@@ -239,7 +240,7 @@ export function CreateAssetPage() {
         <h1 className="mb-5 text-2xl font-bold text-red-600">
           Create Asset Successfully
         </h1>
-        <p className="mb-8">New Asset is created successfully!</p>
+        <p className="mb-8">New asset is created successfully!</p>
         <Button
           className="content-end"
           danger

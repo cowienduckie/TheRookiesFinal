@@ -101,8 +101,8 @@ export function EditAssetPage() {
               message: ASSET_NAME_ONLY
             },
             {
-              min: 1,
-              max: 255,
+              min: 6,
+              max: 50,
               message: ASSET_MAX_LENGTH
             }
           ]}
@@ -151,11 +151,12 @@ export function EditAssetPage() {
           rules={[
             { required: true, message: SPECIFICATION_REQUIRED },
             {
-              pattern: /^([a-zA-Z]+\s)*[a-zA-Z]+$/,
+              pattern:
+                /^([a-zA-Z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]+\s)*[a-zA-Z0-9!*_@#$%^&+=<>|.,:;"'{})(-/`~]+$/,
               message: SPECIFICATION_NAME_ONLY
             },
             {
-              min: 1,
+              min: 6,
               max: 255,
               message: SPECIFICATION_MAX_LENGTH
             }

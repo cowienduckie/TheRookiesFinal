@@ -2,7 +2,11 @@ import { Form, Input, Button, Modal } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  CATEGORY_NAME_MAX_LENGTH,
+  CATEGORY_NAME_ONLY,
   CATEGORY_NAME_REQUIRED,
+  CATEGORY_PREFIX_MAX_LENGTH,
+  CATEGORY_PREFIX_ONLY,
   CATEGORY_PREFIX_REQUIRED
 } from "../../../Constants/ErrorMessages";
 import { CheckNullValidation } from "../../../Helpers";
@@ -64,7 +68,16 @@ export function CreateCategoryPage() {
           label="Category Name"
           name="categoryName"
           rules={[
-            CheckNullValidation(CATEGORY_NAME_REQUIRED, "categoryName")
+            CheckNullValidation(CATEGORY_NAME_REQUIRED, "categoryName"),
+            {
+              pattern: /^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/,
+              message: CATEGORY_NAME_ONLY
+            },
+            {
+              min: 6,
+              max: 50,
+              message: CATEGORY_NAME_MAX_LENGTH
+            }
           ]}
         >
           <Input style={{ width: "80%" }} />
@@ -73,7 +86,16 @@ export function CreateCategoryPage() {
           label="Category Prefix"
           name="categoryPrefix"
           rules={[
-            CheckNullValidation(CATEGORY_PREFIX_REQUIRED, "categoryPrefix")
+            CheckNullValidation(CATEGORY_PREFIX_REQUIRED, "categoryPrefix"),
+            {
+              pattern: /^[A-Z]+$/,
+              message: CATEGORY_PREFIX_ONLY
+            },
+            {
+              min: 2,
+              max: 8,
+              message: CATEGORY_PREFIX_MAX_LENGTH
+            }
           ]}
         >
           <Input style={{ width: "80%" }} />

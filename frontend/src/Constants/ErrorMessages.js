@@ -33,16 +33,21 @@ export const NAME_MAX_LENGTH =
   "Input value for name must be below 255 characters!";
 export const ASSET_NAME_REQUIRED = "Please enter asset name!";
 export const ASSET_NAME_ONLY =
-  "Name should only contain alphabetic: A to Z, a to z, 0 to 9 and one space between words!";
-export const ASSET_MAX_LENGTH =
-  "Input value for specification must be below 255 characters!";
-export const SPECIFICATION_REQUIRED = "Please enter Specification box!";
+  "Asset Name should contain alphanumeric characters and only one space in between characters!";
+export const ASSET_MAX_LENGTH = "Asset name length should be 6 - 50 characters";
+export const SPECIFICATION_REQUIRED = "Please enter specification!";
 export const SPECIFICATION_NAME_ONLY =
-  "Name should only contain alphabetic: A to Z, a to z, 0 to 9 and one space between words!";
+  "Specification should contain alphanumeric, special characters and only one space in between characters!";
 export const SPECIFICATION_MAX_LENGTH =
-  "Input value for specification must be below 255 characters!";
-export const INSTALLED_DATE_REQUIRED = "Please enter your installed date!";
+  "Specification length should be 6 - 255 characters!";
+export const INSTALLED_DATE_REQUIRED = "Please enter installed date!";
 export const STATE_REQUIRED = "Please select asset state!";
-export const CATEGORY_REQUIRED = "Please select a category!";
-export const CATEGORY_NAME_REQUIRED = "Please input your Category name!";
-export const CATEGORY_PREFIX_REQUIRED = "Please input your Category prefix!";
+export const CATEGORY_REQUIRED = "Please enter category!";
+export const CATEGORY_NAME_REQUIRED = "Please enter category name!";
+export const CATEGORY_NAME_MAX_LENGTH =
+  "Category name length should be 6 - 50 characters!";
+export const CATEGORY_NAME_ONLY =
+  "Category name should contain alphabetic characters and only one space in between characters!";
+export const CATEGORY_PREFIX_REQUIRED = "Please enter prefix!";
+export const CATEGORY_PREFIX_MAX_LENGTH = "Prefix length should be 2 - 8 characters!";
+export const CATEGORY_PREFIX_ONLY = "Prefix should contain only uppercase alphabetic characters!";
