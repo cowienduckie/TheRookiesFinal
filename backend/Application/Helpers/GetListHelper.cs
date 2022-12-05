@@ -81,4 +81,28 @@ public static class GetListHelper
 
         return source.Where(entity => (prop.GetValue(entity) as string) == filterValue);
     }
+
+    public static IQueryable<T> FilterByFieldWithRawValue<T, TValueType>(
+        this IQueryable<T> source,
+        IEnumerable<ModelField> validFilterFields,
+        ModelField filterField,
+        TValueType filterValue,
+        Func<TValueType, TValueType, bool> isEqual) where T : class
+    {
+        if (!validFilterFields.Contains(filterField))
+        {
+            return source;
+        }
+
+        var prop = typeof(T).GetProperty(filterField.ToString());
+
+        if (prop == null ||
+            prop.PropertyType != typeof(TValueType))
+        {
+            return source;
+        }
+
+        return source.Where(entity => prop.GetValue(entity) != null &&
+                                      isEqual((TValueType)prop.GetValue(entity)!, filterValue));
+    }
 }
