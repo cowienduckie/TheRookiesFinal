@@ -3,3 +3,7 @@ export const FULL_NAME_ENUM = "2";
 export const ROLE_ENUM = "3";
 export const USERNAME_ENUM = "4";
 export const JOINED_DATE_ENUM = "5";
+export const NAME_ENUM = "6";
+export const ASSET_CODE_ENUM = "7";
+export const CATEGORY_ENUM = "8";
+export const STATE_ENUM = "9";

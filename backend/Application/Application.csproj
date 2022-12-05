@@ -19,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\Assets\GetListAssets\" />
     <Folder Include="DTOs\Users\DisableUser\" />
+    <Folder Include="Queries\Assets\" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class RepositoryBase<T> : IAsyncRepository<T> where T :class
 {
-    private readonly DbSet<T> _dbSet;
+    protected readonly DbSet<T> _dbSet;
 
     public RepositoryBase(EfContext dbContext)
     {
