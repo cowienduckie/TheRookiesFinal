@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Application.Queries;
 using Domain.Shared.Enums;
 
 namespace Application.Helpers;
@@ -82,27 +83,33 @@ public static class GetListHelper
         return source.Where(entity => (prop.GetValue(entity) as string) == filterValue);
     }
 
-    public static IQueryable<T> FilterByFieldWithRawValue<T, TValueType>(
+    public static IQueryable<T> MultipleFiltersByField<T>(
         this IQueryable<T> source,
         IEnumerable<ModelField> validFilterFields,
-        ModelField filterField,
-        TValueType filterValue,
-        Func<TValueType, TValueType, bool> isEqual) where T : class
+        IEnumerable<FilterQuery> filterQueries)
     {
-        if (!validFilterFields.Contains(filterField))
+        foreach (var query in filterQueries)
         {
-            return source;
+            var filterField = query.FilterField;
+            var filterValue = query.FilterValue;
+
+            if (string.IsNullOrEmpty(filterValue) ||
+            !validFilterFields.Contains(filterField))
+            {
+                continue;
+            }
+
+            var prop = typeof(T).GetProperty(filterField.ToString());
+
+            if (prop == null ||
+                prop.PropertyType != typeof(string))
+            {
+                continue;
+            }
+
+            source = source.Where(entity => (prop.GetValue(entity) as string) == filterValue);
         }
 
-        var prop = typeof(T).GetProperty(filterField.ToString());
-
-        if (prop == null ||
-            prop.PropertyType != typeof(TValueType))
-        {
-            return source;
-        }
-
-        return source.Where(entity => prop.GetValue(entity) != null &&
-                                      isEqual((TValueType)prop.GetValue(entity)!, filterValue));
+        return source;
     }
 }

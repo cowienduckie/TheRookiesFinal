@@ -16,6 +16,15 @@ public class AssetRepository : RepositoryBase<Asset>, IAssetRepository
     {
         var dbSet = predicate == null ? _dbSet : _dbSet.Where(predicate);
 
-        return await dbSet.Include(a => a.Category).FirstOrDefaultAsync();
+        return await dbSet.Include(a => a.Category).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public new async Task<List<Asset>> ListAsync(
+        Expression<Func<Asset, bool>>? predicate = null,
+        CancellationToken cancellationToken = default)
+    {
+        var dbSet = predicate == null ? _dbSet : _dbSet.Where(predicate);
+
+        return await dbSet.Include(a => a.Category).ToListAsync(cancellationToken);
     }
 }

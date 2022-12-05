@@ -4,6 +4,6 @@ namespace Application.Queries.Assets;
 
 public class AssetFilter
 {
-    public AssetState? AssetState { get; set; }
-    public DateTime? AssignedDate { get; set; }
+    public string? AssetState { get; set; }
+    public string? Category { get; set; }
 }
