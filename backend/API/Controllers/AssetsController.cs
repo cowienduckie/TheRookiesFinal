@@ -63,6 +63,7 @@ public class AssetsController : BaseController
 
         if (sortQuery.SortField == ModelField.None)
         {
+            sortQuery.SortField = ModelField.Name;
         }
 
         var request = new GetListAssetsRequest(pagingQuery, sortQuery, searchQuery, assetFilter, CurrentUser.Location);
