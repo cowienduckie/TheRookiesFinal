@@ -21,6 +21,7 @@ import {
   AssetListPage,
   AssetDetailPage
 } from "./Pages";
+import { AssignmentDeletePage } from "./Pages/AdminPage/ManageAssignmentPage";
 
 function App() {
   const location = useLocation();
@@ -61,6 +62,10 @@ function App() {
           <Route
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
+          />
+          <Route
+            path="/admin/manage-assignment/delete-assigment/:id"
+            element={<AssignmentDeletePage />}
           />
           <Route
             path="/admin/manage-returning"
