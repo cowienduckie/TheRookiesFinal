@@ -1,9 +1,13 @@
 using API.Attributes;
 using Application.Common.Models;
+using Application.DTOs.Categories.GetCategories;
+using API.Attributes;
+using Application.Common.Models;
 using Application.DTOs.Categories;
 using Application.DTOs.Users.CreateUser;
 using Application.Services;
 using Application.Services.Interfaces;
+using Domain.Shared.Enums;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +23,27 @@ public class CategoriesController : BaseController
     public CategoriesController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpGet("all")]
+    public async Task<ActionResult<Response<List<GetCategoryResponse>>>> GetAll()
+    {
+        try
+        {
+            var response = await _categoryService.GetAllAsync();
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
     }
 
     [Authorize(UserRole.Admin)]

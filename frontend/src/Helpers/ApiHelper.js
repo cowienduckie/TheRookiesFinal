@@ -57,3 +57,17 @@ export function queriesToString(queries) {
     `searchValue=${queries.searchValue}&`
   );
 }
+
+export function queryObjectToString(query) {
+  var queryString = "?";
+
+  for (let prop in query) {
+    queryString += `${prop}=${query[prop]}&`;
+  }
+
+  return queryString
+}
+
+export function addQueryToString(queryString, queryName, queryValue) {
+  return queryString + `${queryName}=${queryValue}&`;
+}
