@@ -11,6 +11,7 @@ import {
   NAME_ENUM,
   STATE_ENUM
 } from "../../../Constants/ModelFieldConstants";
+import { getAllCategories } from "../../../Apis/CategoryApis";
 
 function useLoader() {
   const { search, state } = useLocation();
@@ -103,6 +104,17 @@ export function AssetListPage() {
   const { pagedData, queries, loading } = useLoader();
   const navigate = useNavigate();
   const location = useLocation();
+  const [categoryList, setCategoryList] = useState([]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      const res = await getAllCategories();
+
+      setCategoryList(res);
+    };
+
+    loadCategories();
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigateByQueries = (queries) => {
     const queryString = queryObjectToString(queries);
@@ -248,12 +260,12 @@ export function AssetListPage() {
             suffixIcon={<FilterFilled className="align-middle" />}
             clearIcon={<CloseOutlined className="align-middle" />}
             onChange={onCategoryFilter}
-            options={[
-              {
-                label: "Laptop",
-                value: "Laptop"
-              }
-            ]}
+            options={
+              categoryList.map(value => ({
+                label: value.name,
+                value: value.name
+              }))
+            }
           />
         </div>
         <div className="flex w-1/2 flex-row justify-end p-0">

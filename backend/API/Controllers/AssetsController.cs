@@ -38,7 +38,10 @@ public class AssetsController : BaseController
         {
             var response = await _assetService.GetAsync(request);
 
-            if (!response.IsSuccess) return NotFound(response);
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
 
             return Ok(response);
         }
@@ -49,6 +52,7 @@ public class AssetsController : BaseController
     }
 
     [Authorize(UserRole.Admin)]
+    [HttpGet]
     public async Task<ActionResult<Response>> GetList(
         [FromQuery] PagingQuery pagingQuery,
         [FromQuery] SortQuery sortQuery,
