@@ -93,6 +93,12 @@ public class EfContextInitializer
                 Name = "Laptop"
             }).Entity;
 
+            var pcCategory = _context.Categories.Add(new Category
+            {
+                Prefix = "PC",
+                Name = "Personal Computer"
+            }).Entity;
+
             _context.Assets.Add(new Asset
             {
                 AssetCode = "LA0000001",
@@ -101,6 +107,30 @@ public class EfContextInitializer
                 Specification = "15-inch, Core i7, 16GB RAM, 256GB SSD, MacOs",
                 InstalledDate = DateTime.Now,
                 State = AssetState.Available,
+                Location = Location.HaNoi,
+                HasHistoricalAssignment = false
+            });
+
+            _context.Assets.Add(new Asset
+            {
+                AssetCode = "LA0000003",
+                Name = "ThinkPad X1 Nano",
+                Category = laptopCategory,
+                Specification = "13-inch, Core i7, 32GB RAM, 512GB SSD, Windows 10",
+                InstalledDate = DateTime.Now,
+                State = AssetState.NotAvailable,
+                Location = Location.HaNoi,
+                HasHistoricalAssignment = true
+            });
+
+            _context.Assets.Add(new Asset
+            {
+                AssetCode = "PC0000001",
+                Name = "Mid-tier Personal Computer",
+                Category = pcCategory,
+                Specification = "Core i5, 16GB RAM, 256GB SSD, 512GB HDD, Windows 10",
+                InstalledDate = DateTime.Now,
+                State = AssetState.WaitingForRecycling,
                 Location = Location.HaNoi,
                 HasHistoricalAssignment = false
             });

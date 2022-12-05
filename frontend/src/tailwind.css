@@ -612,10 +612,6 @@ video {
   margin-bottom: 2rem !important;
 }
 
-.ml-10 {
-  margin-left: 2.5rem !important;
-}
-
 .mr-2 {
   margin-right: 0.5rem !important;
 }
@@ -630,6 +626,10 @@ video {
 
 .ml-3 {
   margin-left: 0.75rem !important;
+}
+
+.ml-10 {
+  margin-left: 2.5rem !important;
 }
 
 .flex {
