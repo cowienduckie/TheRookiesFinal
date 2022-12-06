@@ -158,13 +158,6 @@ export function AssignmentListPage() {
       }
     },
     {
-      title: "Asset Name",
-      dataIndex: "assetName",
-      key: ASSET_NAME_ENUM,
-      sorter: true,
-      defaultSortOrder: "ascend"
-    },
-    {
       title: "Asset Code",
       dataIndex: "assetCode",
       key: ASSET_CODE_ENUM,
@@ -177,6 +170,13 @@ export function AssignmentListPage() {
           <p>{text}</p>
         </Link>
       )
+    },
+    {
+      title: "Asset Name",
+      dataIndex: "assetName",
+      key: ASSET_NAME_ENUM,
+      sorter: true,
+      defaultSortOrder: "ascend"
     },
     {
       title: "Assigned To",
