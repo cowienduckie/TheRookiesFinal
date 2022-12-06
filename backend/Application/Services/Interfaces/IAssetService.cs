@@ -8,7 +8,7 @@ namespace Application.Services.Interfaces;
 
 public interface IAssetService
 {
-    Task<Response<CreateAssetResponse>> CreateAssetAsync(CreateAssetRequest requestModel);
+    Task<Response<GetAssetResponse>> CreateAssetAsync(CreateAssetRequest requestModel);
     Task<Response<GetAssetResponse>> GetAsync(GetAssetRequest request);
     Task<Response<GetListAssetsResponse>> GetListAsync(GetListAssetsRequest request);
 }

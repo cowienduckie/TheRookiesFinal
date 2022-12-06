@@ -4,14 +4,12 @@ using Application.DTOs.Assets.GetAsset;
 using Application.DTOs.Assets.GetListAssets;
 using Application.Queries;
 using Application.Queries.Assets;
-using API.Attributes;
-using Application.Common.Models;
 using Application.DTOs.Assets.CreateAsset;
-using Application.DTOs.Categories;
 using Application.DTOs.Users.CreateUser;
-using Application.Services;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Shared.Enums;
+using Domain.Shared.Constants;
 
 namespace API.Controllers;
 
@@ -90,7 +88,7 @@ public class AssetsController : BaseController
 
     [Authorize(UserRole.Admin)]
     [HttpPost]
-    public async Task<ActionResult<Response<CreateAssetResponse>>> CreateAsset([FromBody] CreateAssetRequest requestModel)
+    public async Task<ActionResult<Response<GetAssetResponse>>> CreateAsset([FromBody] CreateAssetRequest requestModel)
     {
         try
         {
@@ -100,7 +98,6 @@ public class AssetsController : BaseController
             }
 
             requestModel.Location = CurrentUser.Location;
-            requestModel.CreatedBy = CurrentUser.Id;
 
             var response = await _assetService.CreateAssetAsync(requestModel);
 
