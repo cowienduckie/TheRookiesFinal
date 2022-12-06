@@ -19,7 +19,9 @@ import {
   DetailedInfoUserPage,
   DisableUserPage,
   AssetListPage,
-  AssetDetailPage
+  AssetDetailPage,
+  AssignmentDetailPage,
+  AssignmentListPage
 } from "./Pages";
 
 function App() {
@@ -61,7 +63,13 @@ function App() {
           <Route
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
-          />
+          >
+            <Route index={true} element={<AssignmentListPage />} />
+            <Route
+              path="/admin/manage-assignment/:assignmentId"
+              element={<AssignmentDetailPage />}
+            />
+          </Route>
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
@@ -94,6 +102,10 @@ function App() {
       <Route
         path="/admin/manage-asset/:assetId"
         element={<AssetDetailPage />}
+      />
+      <Route
+        path="/admin/manage-assignment/:assignmentId"
+        element={<AssignmentDetailPage />}
       />
     </Routes>
   );
