@@ -1,9 +1,5 @@
 import { Button, Table } from "antd";
-import {
-  CheckOutlined,
-  CloseOutlined,
-  UndoOutlined
-} from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, UndoOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getOwnedAssignmentList } from "../../Apis/AssignmentApis";
@@ -14,6 +10,10 @@ import {
   ASSIGNED_DATE_ENUM,
   STATE_ENUM
 } from "../../Constants/ModelFieldConstants";
+import {
+  WAITING_FOR_ACCEPTANCE,
+  ACCEPTED
+} from "../../Constants/AssignmentState";
 
 function useLoader() {
   const { search } = useLocation();
@@ -135,7 +135,12 @@ export function HomePage() {
             <Button
               className="mr-1"
               danger
-              icon={<CheckOutlined className="align-middle" />}
+              disabled={record.state === WAITING_FOR_ACCEPTANCE}
+              icon={<CheckOutlined className={
+                record.state === WAITING_FOR_ACCEPTANCE
+                  ? "align-middle text-gray-300"
+                  : "align-middle"
+              } />}
             />
           </Link>
           <Link
@@ -143,13 +148,31 @@ export function HomePage() {
             state={{ background: location }}
           >
             <Button
-              className="mx-1 border-gray-700"
-              icon={<CloseOutlined className="align-middle text-gray-700" />}
+              className="mx-1 border-gray-700 disabled:border-gray-200"
+              disabled={record.state === WAITING_FOR_ACCEPTANCE}
+              icon={
+                <CloseOutlined
+                  className={
+                    record.state === WAITING_FOR_ACCEPTANCE
+                      ? "align-middle text-gray-300"
+                      : "align-middle text-gray-700"
+                  }
+                />
+              }
             />
           </Link>
           <Button
-            className="ml-1 border-blue-500"
-            icon={<UndoOutlined className="align-middle text-blue-500" />}
+            className="ml-1 border-blue-500 disabled:border-gray-200"
+            disabled={record.state === ACCEPTED}
+            icon={
+              <UndoOutlined
+                className={
+                  record.state === ACCEPTED
+                    ? "align-middle text-gray-300"
+                    : "align-middle text-blue-500"
+                }
+              />
+            }
           />
         </div>
       )
@@ -158,7 +181,7 @@ export function HomePage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-red-600 mb-5">My Assignment</h1>
+      <h1 className="mb-5 text-2xl font-bold text-red-600">My Assignment</h1>
       <Table
         columns={columns}
         dataSource={pagedData.items}

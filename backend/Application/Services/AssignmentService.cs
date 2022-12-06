@@ -106,7 +106,12 @@ public class AssignmentService : BaseService, IAssignmentService
 
     public async Task<Response<GetListAssignmentsResponse>> GetOwnedListAsync(GetListOwnedAssignmentsRequest request)
     {
-        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted && a.AssignedTo == request.CurrentUser.Id))
+        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted && 
+                                                                      a.AssignedTo == request.CurrentUser.Id &&
+                                                                      a.State != AssignmentState.Declined &&
+                                                                      DateTime.Compare(DateTime.Today, a.AssignedDate.Date) >= 0))
+            .AsQueryable()
+            .SortByField(new [] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(a => new GetAssignmentResponse(a))
             .AsQueryable();
 
@@ -114,9 +119,6 @@ public class AssignmentService : BaseService, IAssignmentService
         {
             ModelField.AssetCode,
             ModelField.AssetName,
-            ModelField.AssignedTo,
-            ModelField.AssignedBy,
-            ModelField.AssignedDate,
             ModelField.State
         };
 
