@@ -1,13 +1,17 @@
 using Application.Common.Models;
+using Application.DTOs.Assets.CreateAsset;
 using Application.DTOs.Assets.GetAsset;
 using Application.DTOs.Assets.GetListAssets;
 using Application.Helpers;
 using Application.Queries;
 using Application.Services.Interfaces;
 using Domain.Entities.Assets;
+using Domain.Entities.Categories;
+using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
+using Infrastructure.Persistence.Repositories;
 
 namespace Application.Services;
 
@@ -100,4 +104,42 @@ public class AssetService : BaseService, IAssetService
 
         return new Response<GetListAssetsResponse>(true, responseData);
     }
+
+    public async Task<Response<GetAssetResponse>> CreateAssetAsync(CreateAssetRequest requestModel)
+    {
+        var categoryRepository = UnitOfWork.AsyncRepository<Category>();
+
+        var existCategory = await categoryRepository.GetAsync(cat => cat.Id == requestModel.CategoryId);
+
+        if (existCategory == null)
+        {
+            return new Response<GetAssetResponse>(false, ErrorMessages.UnexistedCategory);
+        }
+
+        var assetList = await _assetRepository.ListAsync();
+
+        var existCategoryCount = assetList.Count(asset => asset.CategoryId == requestModel.CategoryId);
+
+        var newAssetCode = AssetCodeHelper.GetNewAssetCode(existCategory.Prefix, existCategoryCount);
+        
+        var asset = new Asset
+        {
+            AssetCode = newAssetCode,
+            Name = requestModel.Name,
+            Category = existCategory,
+            Specification = requestModel.Specification,
+            InstalledDate = requestModel.InstalledDate,
+            State = requestModel.State,
+            Location = requestModel.Location,
+            HasHistoricalAssignment = false
+        };
+        var responseModel = new GetAssetResponse(asset);
+
+        await _assetRepository.AddAsync(asset);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response<GetAssetResponse>(true, Messages.ActionSuccess, responseModel);
+    }
+
+
 }
