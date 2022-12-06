@@ -15,8 +15,8 @@ namespace Application.DTOs.Categories
             Prefix = category.Prefix;
             Name = category.Name;
         }
-        public string Prefix { get; set; } = null!;
+        public string Prefix { get;}
 
-        public string Name { get; set; } = null!;
+        public string Name { get;}
     }
 }

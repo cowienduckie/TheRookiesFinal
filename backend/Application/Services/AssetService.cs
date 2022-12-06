@@ -6,6 +6,7 @@ using Application.Helpers;
 using Application.Queries;
 using Application.Services.Interfaces;
 using Domain.Entities.Assets;
+using Domain.Entities.Categories;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
@@ -106,11 +107,18 @@ public class AssetService : BaseService, IAssetService
 
     public async Task<Response<GetAssetResponse>> CreateAssetAsync(CreateAssetRequest requestModel)
     {
+        var categoryRepository = UnitOfWork.AsyncRepository<Category>();
+
+        var existCategory = await categoryRepository.GetAsync(cat => cat.Id == requestModel.CategoryId);
+
+        if (existCategory == null)
+        {
+            return new Response<GetAssetResponse>(false, ErrorMessages.UnexistedCategory);
+        }
+
         var assetList = await _assetRepository.ListAsync();
 
         var existCategoryCount = assetList.Count(asset => asset.CategoryId == requestModel.CategoryId);
-
-        var existCategory = assetList.First(asset => asset.CategoryId == requestModel.CategoryId).Category;
 
         var newAssetCode = AssetCodeHelper.GetNewAssetCode(existCategory.Prefix, existCategoryCount);
         

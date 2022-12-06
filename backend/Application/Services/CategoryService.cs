@@ -35,7 +35,14 @@ public class CategoryService : BaseService, ICategoryService
 
         if (existPrefix != null)
         {
-            return new Response<CreateCategoryResponse>(false, ErrorMessages.BadRequest);
+            return new Response<CreateCategoryResponse>(false, ErrorMessages.DuplicateCategoryPrefix);
+        }
+
+        var existCategoryName = await categoryRepository.GetAsync(cat => cat.Name == requestModel.Name);
+
+        if (existCategoryName != null)
+        {
+            return new Response<CreateCategoryResponse>(false, ErrorMessages.DuplicateCategoryName);
         }
 
         if (!Regex.IsMatch(requestModel.Prefix, @"[A-Z]{2,8}"))
