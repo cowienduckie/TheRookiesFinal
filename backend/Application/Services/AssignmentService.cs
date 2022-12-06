@@ -42,6 +42,8 @@ public class AssignmentService : BaseService, IAssignmentService
     {
         var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted))
             .Where(a => a.Asset.Location == request.Location)
+            .AsQueryable()
+            .SortByField(new [] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(a => new GetAssignmentResponse(a))
             .AsQueryable();
 
@@ -51,7 +53,6 @@ public class AssignmentService : BaseService, IAssignmentService
             ModelField.AssetName,
             ModelField.AssignedTo,
             ModelField.AssignedBy,
-            ModelField.AssignedDate,
             ModelField.State
         };
 
