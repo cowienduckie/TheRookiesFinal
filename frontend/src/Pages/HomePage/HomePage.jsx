@@ -1,7 +1,6 @@
 import React from "react";
 import { Table, Button } from "antd";
-import { useNavigate, Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   CheckOutlined,
   ReloadOutlined,
@@ -11,21 +10,13 @@ import {
 export function HomePage() {
   const location = useLocation();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const navigate = useNavigate();
-
-  const onCancel = () => {
-    navigate(-1);
-  };
-
   const columns = [
     {
       title: "Asset Code",
       dataIndex: "assetCode",
       sorter: true,
       render: (text, record) => (
-        <Link to={`/home-detail`} state={{ background: location }}>
+        <Link to={`/${record.id}`} state={{ background: location }}>
           <p>{text}</p>
         </Link>
       )
@@ -51,13 +42,13 @@ export function HomePage() {
       key: "actions",
       render: (_, record) => (
         <div className="max-w-fit p-0">
-          <Link to={`/accept-assigment`} state={{ background: location }}>
+          <Link to={`/accept-assigment/${record.id}`} state={{ background: location }}>
             <Button
               className="ml-2"
               icon={<CheckOutlined className="align-left" />}
             />
           </Link>
-          <Link to={`/decline-assigment`} state={{ background: location }}>
+          <Link to={`/decline-assigment/${record.id}`} state={{ background: location }}>
             <Button
               className="ml-2"
               danger

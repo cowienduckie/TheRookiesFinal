@@ -5,11 +5,7 @@ import { useState } from "react";
 export function DetailedInfoHomePage() {
   const navigate = useNavigate();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const onCancel = () => {
     navigate(-1);
@@ -18,7 +14,7 @@ export function DetailedInfoHomePage() {
   return (
     <>
       <Modal
-        open={showModal}
+        open={isModalOpen}
         closable={true}
         footer={false}
         onCancel={onCancel}
@@ -30,7 +26,7 @@ export function DetailedInfoHomePage() {
         </div>
         <Divider />
         <div>
-          <table className="ml-10 border-separate border-spacing-5">
+          <table className="ml-5 border-separate border-spacing-3">
             <tbody>
               <tr>
                 <td className="font-bold">Asset Code:</td>

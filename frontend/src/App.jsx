@@ -90,14 +90,17 @@ function App() {
       />
       <Route path="/logout" element={<LogoutPage />} />
       <Route path="/admin/manage-user/:id" element={<DetailedInfoUserPage />} />
-      <Route path="/admin/manage-user/disable/:id" element={<DisableUserPage />} />
       <Route
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
       />
-      <Route path="/home-detail" element={<DetailedInfoHomePage />} />
-      <Route path="/accept-assigment" element={<AcceptAssignmentPage />} />
-      <Route path="/decline-assigment" element={<DeclineAssignmentPage />} />
+      <Route
+        path="/admin/manage-user/disable/:id"
+        element={<DisableUserPage />}
+      />
+      <Route path="/:assignmentId" element={<DetailedInfoHomePage />} />
+      <Route path="/accept-assigment/:assignmentId" element={<AcceptAssignmentPage />} />
+      <Route path="/decline-assigment/:assignmentId" element={<DeclineAssignmentPage />} />
       <Route
         path="/admin/manage-asset/:assetId"
         element={<AssetDetailPage />}
