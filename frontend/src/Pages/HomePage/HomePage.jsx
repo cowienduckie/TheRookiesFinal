@@ -131,7 +131,7 @@ export function HomePage() {
           <Button
             className="mr-1"
             danger
-            disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            disabled={record.state === ACCEPTED}
             onClick={() =>
               navigate(`/assignments/accept/${record.id}`, {
                 state: { background: location }
@@ -140,7 +140,7 @@ export function HomePage() {
             icon={
               <CheckOutlined
                 className={
-                  record.state === WAITING_FOR_ACCEPTANCE
+                  record.state === ACCEPTED
                     ? "align-middle text-gray-300"
                     : "align-middle"
                 }
@@ -149,7 +149,7 @@ export function HomePage() {
           />
           <Button
             className="mx-1 border-gray-700 disabled:border-gray-200"
-            disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            disabled={record.state === ACCEPTED}
             onClick={() =>
               navigate(`/assignments/decline/${record.id}`, {
                 state: { background: location }
@@ -158,7 +158,7 @@ export function HomePage() {
             icon={
               <CloseOutlined
                 className={
-                  record.state === WAITING_FOR_ACCEPTANCE
+                  record.state === ACCEPTED
                     ? "align-middle text-gray-300"
                     : "align-middle text-gray-700"
                 }
@@ -167,11 +167,11 @@ export function HomePage() {
           />
           <Button
             className="ml-1 border-blue-500 disabled:border-gray-200"
-            disabled={record.state === ACCEPTED}
+            disabled={record.state === WAITING_FOR_ACCEPTANCE}
             icon={
               <UndoOutlined
                 className={
-                  record.state === ACCEPTED
+                  record.state === WAITING_FOR_ACCEPTANCE
                     ? "align-middle text-gray-300"
                     : "align-middle text-blue-500"
                 }
