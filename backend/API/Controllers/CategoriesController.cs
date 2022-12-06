@@ -1,15 +1,11 @@
 using API.Attributes;
 using Application.Common.Models;
 using Application.DTOs.Categories.GetCategories;
-using API.Attributes;
-using Application.Common.Models;
 using Application.DTOs.Categories;
 using Application.DTOs.Users.CreateUser;
-using Application.Services;
 using Application.Services.Interfaces;
 using Domain.Shared.Enums;
 using Domain.Shared.Constants;
-using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
