@@ -17,7 +17,10 @@ import {
   ReportPage,
   UserListPage,
   DetailedInfoUserPage,
-  DisableUserPage
+  DisableUserPage,
+  DetailedInfoHomePage,
+  AcceptAssignmentPage,
+  DeclineAssignmentPage
 } from "./Pages";
 
 function App() {
@@ -78,14 +81,14 @@ function App() {
         element={<ChangePasswordFirstTimePage />}
       />
       <Route path="/logout" element={<LogoutPage />} />
+      <Route path="/admin/manage-user/:id" element={<DetailedInfoUserPage />} />
       <Route
-        path="/admin/manage-user/:id"
-        element={<DetailedInfoUserPage />}
+        path="/admin/manage-user/disable/:id"
+        element={<DisableUserPage />}
       />
-      <Route
-              path="/admin/manage-user/disable/:id"
-              element={<DisableUserPage />}
-            />
+      <Route path="/home-detail" element={<DetailedInfoHomePage />} />
+      <Route path="/accept-assigment" element={<AcceptAssignmentPage />} />
+      <Route path="/decline-assigment" element={<DeclineAssignmentPage />} />
     </Routes>
   );
 
