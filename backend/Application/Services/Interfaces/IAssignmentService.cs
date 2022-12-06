@@ -8,4 +8,5 @@ public interface IAssignmentService
 {
     Task<Response<GetAssignmentResponse>> GetAsync(GetAssignmentRequest request);
     Task<Response<GetListAssignmentsResponse>> GetListAsync(GetListAssignmentsRequest request);
+    Task<Response<GetListAssignmentsResponse>> GetOwnedListAsync(GetListOwnedAssignmentsRequest request);
 }
