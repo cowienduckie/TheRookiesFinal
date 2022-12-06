@@ -128,39 +128,43 @@ export function HomePage() {
       key: "actions",
       render: (_, record) => (
         <div className="flex min-w-fit flex-nowrap p-0">
-          <Link
-            to={`/assignments/accept/${record.id}`}
-            state={{ background: location }}
-          >
-            <Button
-              className="mr-1"
-              danger
-              disabled={record.state === WAITING_FOR_ACCEPTANCE}
-              icon={<CheckOutlined className={
-                record.state === WAITING_FOR_ACCEPTANCE
-                  ? "align-middle text-gray-300"
-                  : "align-middle"
-              } />}
-            />
-          </Link>
-          <Link
-            to={`/assignments/decline/${record.id}`}
-            state={{ background: location }}
-          >
-            <Button
-              className="mx-1 border-gray-700 disabled:border-gray-200"
-              disabled={record.state === WAITING_FOR_ACCEPTANCE}
-              icon={
-                <CloseOutlined
-                  className={
-                    record.state === WAITING_FOR_ACCEPTANCE
-                      ? "align-middle text-gray-300"
-                      : "align-middle text-gray-700"
-                  }
-                />
-              }
-            />
-          </Link>
+          <Button
+            className="mr-1"
+            danger
+            disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            onClick={() =>
+              navigate(`/assignments/accept/${record.id}`, {
+                state: { background: location }
+              })
+            }
+            icon={
+              <CheckOutlined
+                className={
+                  record.state === WAITING_FOR_ACCEPTANCE
+                    ? "align-middle text-gray-300"
+                    : "align-middle"
+                }
+              />
+            }
+          />
+          <Button
+            className="mx-1 border-gray-700 disabled:border-gray-200"
+            disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            onClick={() =>
+              navigate(`/assignments/decline/${record.id}`, {
+                state: { background: location }
+              })
+            }
+            icon={
+              <CloseOutlined
+                className={
+                  record.state === WAITING_FOR_ACCEPTANCE
+                    ? "align-middle text-gray-300"
+                    : "align-middle text-gray-700"
+                }
+              />
+            }
+          />
           <Button
             className="ml-1 border-blue-500 disabled:border-gray-200"
             disabled={record.state === ACCEPTED}
