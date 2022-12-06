@@ -273,8 +273,7 @@ public class UserService : BaseService, IUserService
         var assignmentRepository = UnitOfWork.AsyncRepository<Assignment>();
 
         var assignments = await assignmentRepository.ListAsync(a => !a.IsDeleted &&
-                                                                    a.AssignedTo == userId &&
-                                                                    a.State != AssignmentState.Declined);
+                                                                    a.AssignedTo == userId);
 
         return assignments.Any();
     }

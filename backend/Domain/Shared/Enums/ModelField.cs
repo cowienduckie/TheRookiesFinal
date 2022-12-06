@@ -11,5 +11,9 @@ public enum ModelField
     Name,
     AssetCode,
     Category,
-    State
+    State,
+    AssetName,
+    AssignedTo,
+    AssignedBy,
+    AssignedDate
 }
