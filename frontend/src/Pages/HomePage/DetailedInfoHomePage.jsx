@@ -1,11 +1,8 @@
 import { Divider, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 export function DetailedInfoHomePage() {
   const navigate = useNavigate();
-
-  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const onCancel = () => {
     navigate(-1);
@@ -14,14 +11,14 @@ export function DetailedInfoHomePage() {
   return (
     <>
       <Modal
-        open={isModalOpen}
+        open={true}
         closable={true}
         footer={false}
         onCancel={onCancel}
       >
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-red-600">
-            Detailed Assigment Information
+            Detailed Assignment Information
           </h1>
         </div>
         <Divider />
@@ -30,7 +27,7 @@ export function DetailedInfoHomePage() {
             <tbody>
               <tr>
                 <td className="font-bold">Asset Code:</td>
-                <td>03</td>
+                <td>00</td>
               </tr>
               <tr>
                 <td className="font-bold">Asset Name:</td>

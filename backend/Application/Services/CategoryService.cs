@@ -1,9 +1,7 @@
 using Application.Common.Models;
 using Application.DTOs.Categories.GetCategories;
-using Application.Common.Models;
 using Application.DTOs.Categories;
 using Application.Services.Interfaces;
-using Domain.Entities.Categories;
 using Domain.Entities.Categories;
 using Domain.Shared.Constants;
 using Infrastructure.Persistence.Interfaces;
