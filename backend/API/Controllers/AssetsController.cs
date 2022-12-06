@@ -4,10 +4,12 @@ using Application.DTOs.Assets.GetAsset;
 using Application.DTOs.Assets.GetListAssets;
 using Application.Queries;
 using Application.Queries.Assets;
+using Application.DTOs.Assets.CreateAsset;
+using Application.DTOs.Users.CreateUser;
 using Application.Services.Interfaces;
-using Domain.Shared.Constants;
-using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Shared.Enums;
+using Domain.Shared.Constants;
 
 namespace API.Controllers;
 
@@ -75,6 +77,34 @@ public class AssetsController : BaseController
             if (!response.IsSuccess)
             {
                 return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPost]
+    public async Task<ActionResult<Response<GetAssetResponse>>> CreateAsset([FromBody] CreateAssetRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response<CreateUserResponse>(false, ErrorMessages.BadRequest));
+            }
+
+            requestModel.Location = CurrentUser.Location;
+
+            var response = await _assetService.CreateAssetAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
             }
 
             return Ok(response);
