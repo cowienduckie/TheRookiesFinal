@@ -62,7 +62,7 @@ public class AssignmentService : BaseService, IAssignmentService
             ModelField.AssignedTo
         };
 
-        var validFilterFields = new []
+        var validFilterFields = new[]
         {
             ModelField.AssignedDate,
             ModelField.State
@@ -92,6 +92,34 @@ public class AssignmentService : BaseService, IAssignmentService
             .MultipleFiltersByField(validFilterFields, filterQueries)
             .SearchByField(validSearchFields, request.SearchQuery.SearchValue)
             .SortByField(validSortFields, request.SortQuery.SortField, request.SortQuery.SortDirection);
+
+        var pagedList = new PagedList<GetAssignmentResponse>(
+            processedList,
+            request.PagingQuery.PageIndex,
+            request.PagingQuery.PageSize);
+
+        var responseData = new GetListAssignmentsResponse(pagedList);
+
+        return new Response<GetListAssignmentsResponse>(true, responseData);
+    }
+
+    public async Task<Response<GetListAssignmentsResponse>> GetOwnedListAsync(GetListOwnedAssignmentsRequest request)
+    {
+        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted && a.AssignedTo == request.CurrentUser.Id))
+            .Select(a => new GetAssignmentResponse(a))
+            .AsQueryable();
+
+        var validSortFields = new[]
+        {
+            ModelField.AssetCode,
+            ModelField.AssetName,
+            ModelField.AssignedTo,
+            ModelField.AssignedBy,
+            ModelField.AssignedDate,
+            ModelField.State
+        };
+
+        var processedList = assignments.SortByField(validSortFields, request.SortQuery.SortField, request.SortQuery.SortDirection);
 
         var pagedList = new PagedList<GetAssignmentResponse>(
             processedList,
