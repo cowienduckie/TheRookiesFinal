@@ -18,9 +18,14 @@ import {
   UserListPage,
   DetailedInfoUserPage,
   DisableUserPage,
+<<<<<<< HEAD
   DetailedInfoHomePage,
   AcceptAssignmentPage,
   DeclineAssignmentPage
+=======
+  AssetListPage,
+  AssetDetailPage
+>>>>>>> dev
 } from "./Pages";
 
 function App() {
@@ -33,7 +38,13 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
-          <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
+          <Route path="/admin/manage-asset" element={<ManageAssetPage />}>
+            <Route index={true} element={<AssetListPage />} />
+            <Route
+              path="/admin/manage-asset/:assetId"
+              element={<AssetDetailPage />}
+            />
+          </Route>
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
             <Route index={true} element={<UserListPage />} />
             <Route
@@ -86,9 +97,16 @@ function App() {
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
       />
+<<<<<<< HEAD
       <Route path="/home-detail" element={<DetailedInfoHomePage />} />
       <Route path="/accept-assigment" element={<AcceptAssignmentPage />} />
       <Route path="/decline-assigment" element={<DeclineAssignmentPage />} />
+=======
+      <Route
+        path="/admin/manage-asset/:assetId"
+        element={<AssetDetailPage />}
+      />
+>>>>>>> dev
     </Routes>
   );
 

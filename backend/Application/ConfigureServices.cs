@@ -9,6 +9,9 @@ public static class ConfigureServices
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
+        services.AddTransient<IAssetService, AssetService>();
+        services.AddTransient<IAssignmentService, AssignmentService>();
+        services.AddTransient<ICategoryService, CategoryService>();
 
         return services;
     }

@@ -15,7 +15,9 @@ export {
   EditUserPage,
   UserListPage,
   DetailedInfoUserPage,
-  DisableUserPage
+  DisableUserPage,
+  AssetListPage,
+  AssetDetailPage
 } from "./AdminPage";
 
 export {
