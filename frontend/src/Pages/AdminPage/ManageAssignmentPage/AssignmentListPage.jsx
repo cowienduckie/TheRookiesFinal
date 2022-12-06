@@ -1,6 +1,7 @@
-import { Button, Select, Table } from "antd";
+import { Button, DatePicker, Select, Table } from "antd";
 import { FilterFilled, EditOutlined, CloseOutlined, UndoOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
+import dayjs from 'dayjs';
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getAssignmentList } from "../../../Apis/AssignmentApis";
@@ -127,14 +128,14 @@ export function AssignmentListPage() {
     navigateByQueries(newQueries);
   };
 
-  // const onCategoryFilter = (value) => {
-  //   const newQueries = {
-  //     ...queries,
-  //     assignedDate: !!value ? value : ""
-  //   };
+  const onAssignedDateFilter = (value) => {
+    const newQueries = {
+      ...queries,
+      assignedDate: !!value ? dayjs(value).format("DD/MM/YYYY").toString() : ""
+    };
 
-  //   navigateByQueries(newQueries);
-  // };
+    navigateByQueries(newQueries);
+  };
 
   const onStateFilter = (value) => {
     const newQueries = {
@@ -161,6 +162,13 @@ export function AssignmentListPage() {
       dataIndex: "assetName",
       key: ASSET_NAME_ENUM,
       sorter: true,
+      defaultSortOrder: "ascend"
+    },
+    {
+      title: "Asset Code",
+      dataIndex: "assetCode",
+      key: ASSET_CODE_ENUM,
+      sorter: true,
       render: (text, record) => (
         <Link
           to={`/admin/manage-assignment/${record.id}`}
@@ -169,13 +177,6 @@ export function AssignmentListPage() {
           <p>{text}</p>
         </Link>
       )
-    },
-    {
-      title: "Asset Code",
-      dataIndex: "assetCode",
-      key: ASSET_CODE_ENUM,
-      sorter: true,
-      defaultSortOrder: "ascend"
     },
     {
       title: "Assigned To",
@@ -206,18 +207,18 @@ export function AssignmentListPage() {
       dataIndex: "",
       key: "actions",
       render: (_, record) => (
-        <div className="max-w-fit p-0">
+        <div className="min-w-fit p-0 flex flex-nowrap">
           <Button
-            className="mr-2"
+            className="mr-1"
             icon={<EditOutlined className="align-middle" />}
           />
           <Button
-            className="ml-2"
+            className="mx-1"
             danger
             icon={<CloseOutlined className="align-middle" />}
           />
           <Button
-            className="ml-2 border-blue-500"
+            className="ml-1 border-blue-500"
             icon={<UndoOutlined className="align-middle text-blue-500" />}
           />
         </div>
@@ -252,6 +253,13 @@ export function AssignmentListPage() {
                 value: DECLINED
               }
             ]}
+          />
+          <DatePicker
+            className="w-4/12 min-w-fit ml-3"
+            allowClear
+            placeholder="Assigned Date"
+            format={"DD/MM/YYYY"}
+            onChange={onAssignedDateFilter}
           />
         </div>
         <div className="flex w-1/2 flex-row justify-end p-0">
