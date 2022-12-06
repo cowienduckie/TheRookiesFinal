@@ -16,7 +16,7 @@ export function HomePage() {
       dataIndex: "assetCode",
       sorter: true,
       render: (text, record) => (
-        <Link to={`/${record.id}`} state={{ background: location }}>
+        <Link to={`/assignments/${record.id}`} state={{ background: location }}>
           <p>{text}</p>
         </Link>
       )
@@ -42,13 +42,13 @@ export function HomePage() {
       key: "actions",
       render: (_, record) => (
         <div className="max-w-fit p-0">
-          <Link to={`/accept-assigment/${record.id}`} state={{ background: location }}>
+          <Link to={`/assignments/accept/${record.id}`} state={{ background: location }}>
             <Button
               className="ml-2"
               icon={<CheckOutlined className="align-left" />}
             />
           </Link>
-          <Link to={`/decline-assigment/${record.id}`} state={{ background: location }}>
+          <Link to={`/assignments/decline/${record.id}`} state={{ background: location }}>
             <Button
               className="ml-2"
               danger

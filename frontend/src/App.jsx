@@ -102,13 +102,15 @@ function App() {
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
       />
+      <Route path="/assignments/:assignmentId" element={<DetailedInfoHomePage />} />
       <Route
-        path="/admin/manage-user/disable/:id"
-        element={<DisableUserPage />}
+        path="/assignments/accept/:assignmentId"
+        element={<AcceptAssignmentPage />}
       />
-      <Route path="/:assignmentId" element={<DetailedInfoHomePage />} />
-      <Route path="/accept-assigment/:assignmentId" element={<AcceptAssignmentPage />} />
-      <Route path="/decline-assigment/:assignmentId" element={<DeclineAssignmentPage />} />
+      <Route
+        path="/assignments/decline/:assignmentId"
+        element={<DeclineAssignmentPage />}
+      />
       <Route
         path="/admin/manage-asset/:assetId"
         element={<AssetDetailPage />}

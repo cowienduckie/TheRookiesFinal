@@ -30,27 +30,35 @@ export function DetailedInfoHomePage() {
             <tbody>
               <tr>
                 <td className="font-bold">Asset Code:</td>
+                <td>03</td>
               </tr>
               <tr>
                 <td className="font-bold">Asset Name:</td>
+                <td>...</td>
               </tr>
               <tr>
                 <td className="font-bold">Specification:</td> 
+                <td>...</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned to:</td>
+                <td>...</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned by:</td>
+                <td>00/00/0000</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned date:</td>
+                <td>00/00/0000</td>
               </tr>
               <tr>
                 <td className="font-bold">State:</td>
+                <td>None</td>
               </tr>
               <tr>
                 <td className="font-bold">Note:</td>
+                <td>...</td>
               </tr>
             </tbody>
           </table>

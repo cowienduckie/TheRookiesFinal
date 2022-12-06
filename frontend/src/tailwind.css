@@ -617,24 +617,16 @@ video {
   margin-bottom: 2rem !important;
 }
 
-.ml-5 {
-  margin-left: 1.25rem !important;
-}
-
 .mr-2 {
   margin-right: 0.5rem !important;
 }
 
-.ml-10 {
-  margin-left: 2.5rem !important;
+.ml-5 {
+  margin-left: 1.25rem !important;
 }
 
 .ml-2 {
   margin-left: 0.5rem !important;
-}
-
-.ml-5 {
-  margin-left: 1.25rem !important;
 }
 
 .mr-3 {
@@ -745,12 +737,6 @@ video {
 .border-spacing-5 {
   --tw-border-spacing-x: 1.25rem !important;
   --tw-border-spacing-y: 1.25rem !important;
-  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y) !important;
-}
-
-.border-spacing-3 {
-  --tw-border-spacing-x: 0.75rem !important;
-  --tw-border-spacing-y: 0.75rem !important;
   border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y) !important;
 }
 

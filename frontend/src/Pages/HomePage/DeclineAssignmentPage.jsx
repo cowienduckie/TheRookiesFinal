@@ -30,10 +30,6 @@ export function DeclineAssignmentPage() {
 
   const handleDecline = async () => {
     enterLoading(0);
-    // await disableUser({ id }).finally(() => {
-    //   setIsModalOpen(false);
-    //   navigate("/", { state: { isReload: true } });
-    // });
   };
 
   return (
