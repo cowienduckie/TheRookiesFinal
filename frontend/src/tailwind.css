@@ -617,12 +617,12 @@ video {
   margin-bottom: 2rem !important;
 }
 
-.ml-5 {
-  margin-left: 1.25rem !important;
-}
-
 .mr-2 {
   margin-right: 0.5rem !important;
+}
+
+.ml-5 {
+  margin-left: 1.25rem !important;
 }
 
 .ml-2 {
@@ -804,12 +804,12 @@ video {
   padding: 2.5rem !important;
 }
 
-.p-5 {
-  padding: 1.25rem !important;
-}
-
 .p-0 {
   padding: 0px !important;
+}
+
+.p-5 {
+  padding: 1.25rem !important;
 }
 
 .py-0 {
@@ -848,14 +848,14 @@ video {
   line-height: 2rem !important;
 }
 
-.text-xl {
-  font-size: 1.25rem !important;
-  line-height: 1.75rem !important;
-}
-
 .text-base {
   font-size: 1rem !important;
   line-height: 1.5rem !important;
+}
+
+.text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
 }
 
 .font-bold {
