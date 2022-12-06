@@ -16,7 +16,6 @@ using Application.DTOs.Users.CreateUser;
 using Application.Helpers;
 using Application.DTOs.Users.EditUser;
 using Domain.Shared.Enums;
-using Microsoft.IdentityModel.Tokens;
 using Application.DTOs.Users.GetUser;
 
 namespace Application.UnitTests.ServiceTests;
@@ -620,7 +619,7 @@ public class UserServiceTests
                                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as User);
 
-        var result = await _userService.CreateUserAsync(null);
+        var result = await _userService.CreateUserAsync(It.IsAny<CreateUserRequest>());
 
         Assert.Multiple(() =>
         {

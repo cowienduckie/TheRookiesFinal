@@ -18,6 +18,8 @@ import {
   UserListPage,
   DetailedInfoUserPage,
   DisableUserPage,
+  AssetListPage,
+  AssetDetailPage,
   CreateAssetPage,
   CreateCategoryPage,
   EditAssetPage
@@ -41,6 +43,11 @@ function App() {
             <Route
               path="/admin/manage-asset/edit-asset"
               element={<EditAssetPage />}
+            />
+            <Route index={true} element={<AssetListPage />} />
+            <Route
+              path="/admin/manage-asset/:assetId"
+              element={<AssetDetailPage />}
             />
           </Route>
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
@@ -91,6 +98,10 @@ function App() {
       />
       <Route path="/logout" element={<LogoutPage />} />
       <Route path="/admin/manage-user/:id" element={<DetailedInfoUserPage />} />
+      <Route
+        path="/admin/manage-user/disable/:id"
+        element={<DisableUserPage />}
+      />
       <Route
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}

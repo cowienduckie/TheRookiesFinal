@@ -13,7 +13,9 @@ export {
   ManageAssetPage,
   CreateAssetPage,
   CreateCategoryPage,
-  EditAssetPage
+  EditAssetPage,
+  AssetListPage,
+  AssetDetailPage
 } from "./ManageAssetPage";
 
 export { ManageAssignmentPage } from "./ManageAssignmentPage";
