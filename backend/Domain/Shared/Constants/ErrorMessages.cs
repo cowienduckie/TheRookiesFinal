@@ -14,4 +14,8 @@ public static class ErrorMessages
     public const string CannotDisableUser =
         "There are valid assignments belongings to this user. Please close all assignments before disabling user.";
     public const string InvalidLocation = "Location is invalid!";
+    public const string InvalidCategoryPrefix = "Category prefix is invalid!";
+    public const string DuplicateCategoryPrefix = "Category prefix is duplicated!";
+    public const string DuplicateCategoryName = "Category name is duplicated!";
+    public const string UnexistedCategory = "Category is not existed!";
 }
