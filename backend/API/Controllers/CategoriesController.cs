@@ -1,7 +1,14 @@
 using API.Attributes;
 using Application.Common.Models;
 using Application.DTOs.Categories.GetCategories;
+using API.Attributes;
+using Application.Common.Models;
+using Application.DTOs.Categories;
+using Application.DTOs.Users.CreateUser;
+using Application.Services;
 using Application.Services.Interfaces;
+using Domain.Shared.Enums;
+using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +36,32 @@ public class CategoriesController : BaseController
             if (!response.IsSuccess)
             {
                 return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPost]
+    public async Task<ActionResult<Response<CreateCategoryResponse>>> CreateUser([FromBody] CreateCategoryRequest requestModel)
+    {
+        try
+        {
+            if (CurrentUser == null)
+            {
+                return BadRequest(new Response<CreateUserResponse>(false, ErrorMessages.BadRequest));
+            }
+
+            var response = await _categoryService.CreateCategoryAsync(requestModel);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
             }
 
             return Ok(response);
