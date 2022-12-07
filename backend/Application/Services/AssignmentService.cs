@@ -106,7 +106,7 @@ public class AssignmentService : BaseService, IAssignmentService
 
     public async Task<Response<GetListAssignmentsResponse>> GetOwnedListAsync(GetListOwnedAssignmentsRequest request)
     {
-        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted && 
+        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted &&
                                                                       a.AssignedTo == request.CurrentUser.Id &&
                                                                       a.State != AssignmentState.Declined &&
                                                                       DateTime.Compare(DateTime.Today, a.AssignedDate.Date) >= 0))
