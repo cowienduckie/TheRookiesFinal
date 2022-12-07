@@ -2,6 +2,7 @@
 using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
 using Domain.Entities.Categories;
+using Domain.Entities.RequestsForReturning;
 using Domain.Entities.Users;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Interfaces;
@@ -15,7 +16,7 @@ public class EfContext : DbContext, IEfContext
 
     public EfContext(
         DbContextOptions<EfContext> options,
-        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor) 
+        AuditableEntitySaveChangesInterceptor auditableEntitySaveChangesInterceptor)
         : base(options)
     {
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
@@ -23,8 +24,9 @@ public class EfContext : DbContext, IEfContext
 
     public virtual DbSet<User> Users => Set<User>();
     public virtual DbSet<Assignment> Assignments => Set<Assignment>();
-    public virtual DbSet <Asset> Assets => Set<Asset>();
-    public virtual DbSet <Category> Categories => Set<Category>();
+    public virtual DbSet<Asset> Assets => Set<Asset>();
+    public virtual DbSet<Category> Categories => Set<Category>();
+    public virtual DbSet<RequestForReturning> RequestsForReturning => Set<RequestForReturning>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

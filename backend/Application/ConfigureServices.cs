@@ -12,6 +12,7 @@ public static class ConfigureServices
         services.AddTransient<IAssetService, AssetService>();
         services.AddTransient<IAssignmentService, AssignmentService>();
         services.AddTransient<ICategoryService, CategoryService>();
+        services.AddTransient<IRequestForReturningService, RequestForReturningService>();
 
         return services;
     }

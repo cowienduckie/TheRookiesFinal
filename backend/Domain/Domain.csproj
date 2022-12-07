@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Entities\RequestsForReturning\" />
     <Folder Include="Entities\Users\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Base\" />
