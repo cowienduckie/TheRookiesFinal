@@ -2,6 +2,8 @@ using API.Attributes;
 using Application.Common.Models;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.GetListAssignments;
+using Application.DTOs.Assignments.RespondAssignment;
+using Application.DTOs.Users.ChangePassword;
 using Application.Queries;
 using Application.Queries.Assignments;
 using Application.Services;
@@ -78,6 +80,32 @@ public class AssignmentsController : BaseController
         try
         {
             var response = await _assignmentService.GetListAsync(request);
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin, UserRole.Staff)]
+    [HttpPut("respond")]
+    public async Task<ActionResult<Response>> RespondAssignmentAsync([FromBody] RespondAssignmentRequest request)
+    {
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
+
+        try
+        {
+            var response = await _assignmentService.RespondAssignmentAsync(request);
 
             if (!response.IsSuccess)
             {

@@ -1,6 +1,7 @@
 using Application.Common.Models;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.GetListAssignments;
+using Application.DTOs.Assignments.RespondAssignment;
 using Application.Helpers;
 using Application.Queries;
 using Application.Services.Interfaces;
@@ -43,7 +44,7 @@ public class AssignmentService : BaseService, IAssignmentService
         var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted))
             .Where(a => a.Asset.Location == request.Location)
             .AsQueryable()
-            .SortByField(new [] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
+            .SortByField(new[] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(a => new GetAssignmentResponse(a))
             .AsQueryable();
 
@@ -63,7 +64,7 @@ public class AssignmentService : BaseService, IAssignmentService
             ModelField.AssignedTo
         };
 
-        var validFilterFields = new []
+        var validFilterFields = new[]
         {
             ModelField.AssignedDate,
             ModelField.State
@@ -102,5 +103,29 @@ public class AssignmentService : BaseService, IAssignmentService
         var responseData = new GetListAssignmentsResponse(pagedList);
 
         return new Response<GetListAssignmentsResponse>(true, responseData);
+    }
+
+    public async Task<Response> RespondAssignmentAsync(RespondAssignmentRequest request)
+    {
+        var assignment = await _assignmentRepository.GetAsync(a => !a.IsDeleted && a.Id == request.Id);
+
+        if (assignment == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
+
+        if (request.State < 0 || Convert.ToInt16(request.State) > 2)
+        {
+            return new Response(false, ErrorMessages.BadRequest);
+        }
+
+        assignment.Id = request.Id;
+        assignment.State = request.State;
+
+        await _assignmentRepository.UpdateAsync(assignment);
+
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response(true, "Success");
     }
 }
