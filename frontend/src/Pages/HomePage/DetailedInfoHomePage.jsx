@@ -1,8 +1,24 @@
 import { Divider, Modal } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getOwnedAssignmentById } from "../../Apis/AssignmentApis";
 
 export function DetailedInfoHomePage() {
+  const [data, setData] = useState({});
+  const { assignmentId } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await getOwnedAssignmentById(assignmentId);
+
+      setData(res);
+      setIsModalOpen(true);
+    };
+
+    loadData();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onCancel = () => {
     navigate(-1);
@@ -11,7 +27,7 @@ export function DetailedInfoHomePage() {
   return (
     <>
       <Modal
-        open={true}
+        open={isModalOpen}
         closable={true}
         footer={false}
         onCancel={onCancel}
@@ -27,35 +43,35 @@ export function DetailedInfoHomePage() {
             <tbody>
               <tr>
                 <td className="font-bold">Asset Code:</td>
-                <td>00</td>
+                <td>{data.assetCode}</td>
               </tr>
               <tr>
                 <td className="font-bold">Asset Name:</td>
-                <td>...</td>
+                <td>{data.assetName}</td>
               </tr>
               <tr>
-                <td className="font-bold">Specification:</td> 
-                <td>...</td>
+                <td className="font-bold">Specification:</td>
+                <td>{data.specification}</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned to:</td>
-                <td>...</td>
+                <td>{data.assignedTo}</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned by:</td>
-                <td>00/00/0000</td>
+                <td>{data.assignedBy}</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned date:</td>
-                <td>00/00/0000</td>
+                <td>{data.assignedDate}</td>
               </tr>
               <tr>
                 <td className="font-bold">State:</td>
-                <td>None</td>
+                <td>{data.state}</td>
               </tr>
               <tr>
                 <td className="font-bold">Note:</td>
-                <td>...</td>
+                <td>{data.note}</td>
               </tr>
             </tbody>
           </table>

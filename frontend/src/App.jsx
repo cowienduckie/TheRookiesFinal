@@ -24,7 +24,9 @@ import {
   AcceptAssignmentPage,
   DeclineAssignmentPage,
   AssignmentDetailPage,
-  AssignmentListPage
+  AssignmentListPage,
+  CreateAssetPage,
+  CreateCategoryPage
 } from "./Pages";
 
 function App() {
@@ -38,6 +40,14 @@ function App() {
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/manage-asset" element={<ManageAssetPage />}>
+            <Route
+              path="/admin/manage-asset/create-asset"
+              element={<CreateAssetPage />}
+            />
+            <Route
+              path="/admin/manage-asset/create-category"
+              element={<CreateCategoryPage />}
+            />
             <Route index={true} element={<AssetListPage />} />
             <Route
               path="/admin/manage-asset/:assetId"
@@ -76,7 +86,8 @@ function App() {
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
-          />
+          >
+          </Route>
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
         <Route path="/change-password" element={<ChangePasswordPage />} />
@@ -102,7 +113,14 @@ function App() {
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
       />
-      <Route path="/assignments/:assignmentId" element={<DetailedInfoHomePage />} />
+      <Route
+        path="/admin/manage-asset/:assetId"
+        element={<AssetDetailPage />}
+      />
+      <Route
+        path="/assignments/:assignmentId"
+        element={<DetailedInfoHomePage />}
+      />
       <Route
         path="/assignments/accept/:assignmentId"
         element={<AcceptAssignmentPage />}
@@ -112,8 +130,8 @@ function App() {
         element={<DeclineAssignmentPage />}
       />
       <Route
-        path="/admin/manage-asset/:assetId"
-        element={<AssetDetailPage />}
+        path="/admin/manage-asset/create-category"
+        element={<CreateCategoryPage />}
       />
       <Route
         path="/admin/manage-assignment/:assignmentId"

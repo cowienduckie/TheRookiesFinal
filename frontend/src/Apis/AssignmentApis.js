@@ -10,3 +10,11 @@ export async function getAssignmentList(queries = "") {
 export async function getAssignmentById(id) {
   return await callApi("get", url + "/" + id);
 }
+
+export async function getOwnedAssignmentList(queries = "") {
+  return await callApi("get", url + "/owned-assignments" + queries);
+}
+
+export async function getOwnedAssignmentById(id) {
+  return await callApi("get", url + "/owned-assignments/" + id);
+}

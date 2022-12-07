@@ -105,6 +105,36 @@ public class AssignmentService : BaseService, IAssignmentService
         return new Response<GetListAssignmentsResponse>(true, responseData);
     }
 
+    public async Task<Response<GetListAssignmentsResponse>> GetOwnedListAsync(GetListOwnedAssignmentsRequest request)
+    {
+        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted && 
+                                                                      a.AssignedTo == request.CurrentUser.Id &&
+                                                                      a.State != AssignmentState.Declined &&
+                                                                      DateTime.Compare(DateTime.Today, a.AssignedDate.Date) >= 0))
+            .AsQueryable()
+            .SortByField(new [] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
+            .Select(a => new GetAssignmentResponse(a))
+            .AsQueryable();
+
+        var validSortFields = new[]
+        {
+            ModelField.AssetCode,
+            ModelField.AssetName,
+            ModelField.State
+        };
+
+        var processedList = assignments.SortByField(validSortFields, request.SortQuery.SortField, request.SortQuery.SortDirection);
+
+        var pagedList = new PagedList<GetAssignmentResponse>(
+            processedList,
+            request.PagingQuery.PageIndex,
+            request.PagingQuery.PageSize);
+
+        var responseData = new GetListAssignmentsResponse(pagedList);
+
+        return new Response<GetListAssignmentsResponse>(true, responseData);
+    }
+
     public async Task<Response> RespondAssignmentAsync(RespondAssignmentRequest request)
     {
         var assignment = await _assignmentRepository.GetAsync(a => !a.IsDeleted && a.Id == request.Id);
