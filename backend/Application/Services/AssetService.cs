@@ -131,8 +131,7 @@ public class AssetService : BaseService, IAssetService
             Specification = requestModel.Specification,
             InstalledDate = requestModel.InstalledDate,
             State = requestModel.State,
-            Location = requestModel.Location,
-            HasHistoricalAssignment = false
+            Location = requestModel.Location
         };
         var responseModel = new GetAssetResponse(asset);
 

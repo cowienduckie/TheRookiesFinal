@@ -107,8 +107,7 @@ public class EfContextInitializer
                 Specification = "15-inch, Core i7, 16GB RAM, 256GB SSD, MacOs",
                 InstalledDate = DateTime.Now,
                 State = AssetState.Available,
-                Location = Location.HaNoi,
-                HasHistoricalAssignment = false
+                Location = Location.HaNoi
             });
 
             _context.Assets.Add(new Asset
@@ -119,8 +118,7 @@ public class EfContextInitializer
                 Specification = "13-inch, Core i7, 32GB RAM, 512GB SSD, Windows 10",
                 InstalledDate = DateTime.Now,
                 State = AssetState.NotAvailable,
-                Location = Location.HaNoi,
-                HasHistoricalAssignment = true
+                Location = Location.HaNoi
             });
 
             _context.Assets.Add(new Asset
@@ -131,8 +129,7 @@ public class EfContextInitializer
                 Specification = "Core i5, 16GB RAM, 256GB SSD, 512GB HDD, Windows 10",
                 InstalledDate = DateTime.Now,
                 State = AssetState.WaitingForRecycling,
-                Location = Location.HaNoi,
-                HasHistoricalAssignment = false
+                Location = Location.HaNoi
             });
 
             _context.Assets.Add(new Asset
@@ -143,8 +140,7 @@ public class EfContextInitializer
                 Specification = "13-inch, Core i5, 16GB RAM, 512GB SSD, Windows 11",
                 InstalledDate = DateTime.Now,
                 State = AssetState.Available,
-                Location = Location.HCMCity,
-                HasHistoricalAssignment = false
+                Location = Location.HCMCity
             });
 
             await _context.SaveChangesAsync();
