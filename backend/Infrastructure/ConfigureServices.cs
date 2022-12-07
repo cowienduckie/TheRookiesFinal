@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
 using Domain.Entities.Categories;
+using Domain.Entities.RequestsForReturning;
 using Domain.Entities.Users;
 using Domain.Interfaces;
 using Domain.Shared.Constants;
@@ -24,7 +25,7 @@ public static class ConfigureServices
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
         services.AddDbContext<EfContext>(
-            options => options.UseSqlServer(configuration.GetConnectionString(Settings.DbConnectionStringName), 
+            options => options.UseSqlServer(configuration.GetConnectionString(Settings.DbConnectionStringName),
             builder => builder.MigrationsAssembly(typeof(EfContext).Assembly.FullName)));
 
         services.AddScoped<IEfContext>(provider => provider.GetRequiredService<EfContext>());
@@ -33,7 +34,8 @@ public static class ConfigureServices
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IAssetRepository, AssetRepository>()
             .AddScoped<IAssignmentRepository, AssignmentRepository>()
-            .AddScoped<ICategoryRepository, CategoryRepository>();
+            .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<IRequestForReturningRepository, RequestForReturningRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

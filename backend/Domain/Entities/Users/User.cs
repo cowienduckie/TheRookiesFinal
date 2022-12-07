@@ -1,5 +1,6 @@
 ﻿using Domain.Base;
 using Domain.Entities.Assignments;
+using Domain.Entities.RequestsForReturning;
 using Domain.Shared.Enums;
 
 namespace Domain.Entities.Users;
@@ -33,4 +34,8 @@ public class User : AuditableEntity<Guid>
     public ICollection<Assignment> OwnedAssignments { get; set; } = null!;
 
     public ICollection<Assignment> CreatedAssignments { get; set; } = null!;
+
+    public ICollection<RequestForReturning> OwnedRequestsForReturning { get; set; } = null!;
+
+    public ICollection<RequestForReturning> AcceptedRequestsForReturning { get; set; } = null!;
 }
