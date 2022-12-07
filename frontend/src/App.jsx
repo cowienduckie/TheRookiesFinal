@@ -26,7 +26,7 @@ import {
   AssignmentDetailPage,
   AssignmentListPage,
   CreateAssetPage,
-  CreateCategoryPage,
+  CreateCategoryPage
 } from "./Pages";
 
 function App() {
@@ -112,7 +112,14 @@ function App() {
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
       />
-      <Route path="/assignments/:assignmentId" element={<DetailedInfoHomePage />} />
+      <Route
+        path="/admin/manage-asset/:assetId"
+        element={<AssetDetailPage />}
+      />
+      <Route
+        path="/assignments/:assignmentId"
+        element={<DetailedInfoHomePage />}
+      />
       <Route
         path="/assignments/accept/:assignmentId"
         element={<AcceptAssignmentPage />}
