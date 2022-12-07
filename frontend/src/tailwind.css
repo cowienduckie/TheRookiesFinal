@@ -621,9 +621,6 @@ video {
   margin-right: 0.5rem !important;
 }
 
-.ml-10 {
-  margin-left: 2.5rem !important;
-}
 .ml-5 {
   margin-left: 1.25rem !important;
 }
@@ -869,11 +866,13 @@ video {
   line-height: 1.5rem !important;
 }
 
-.text-lg {
-  font-size: 1.125rem !important;
-}
 .text-xl {
   font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
   line-height: 1.75rem !important;
 }
 

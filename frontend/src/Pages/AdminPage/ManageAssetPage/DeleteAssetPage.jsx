@@ -7,12 +7,28 @@ export function DeleteAssetPage() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isHistoricalAssignment, setIsHistoricalAssignment] = useState(true);
+  const [loadings, setLoadings] = useState([]);
+  const enterLoading = (index) => {
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[index] = true;
+      return newLoadings;
+    });
+    setTimeout(() => {
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[index] = false;
+        return newLoadings;
+      });
+    }, 6000);
+  };
 
   const onCancel = () => {
     navigate(-1);
   };
 
   const handleDelete = ()=>{
+    enterLoading();
     setIsModalOpen(false);
     navigate(-1)
   }
@@ -43,6 +59,7 @@ export function DeleteAssetPage() {
                   type="primary"
                   danger
                   className="mr-2"
+                  loading={loadings[0]}
                   onClick={handleDelete}
                 >
                   Delete
