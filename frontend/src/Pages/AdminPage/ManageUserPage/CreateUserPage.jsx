@@ -60,9 +60,11 @@ export function CreateUserPage() {
       gender: parseInt(values.gender),
       role: parseInt(values.role),
       dateOfBirth: dayjs(values.dateOfBirth)
+        .add(7, "h")
         .utcOffset(0)
         .startOf("date"),
       joinedDate: dayjs(values.joinedDate)
+        .add(7, "h")
         .utcOffset(0)
         .startOf("date")
     };
