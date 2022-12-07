@@ -78,7 +78,6 @@ export function CreateAssetPage() {
       state: parseInt(values.state)
     };
     await createAsset(values).then((data) => {
-      console.log(data);
       setCreatedAsset(data);
       setIsModalOpen(true);
     });
