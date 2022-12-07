@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createCategory } from "../../../Apis/CategoryApis";
 import {
+  CATEGORY_NAME_EXISTED,
   CATEGORY_NAME_MAX_LENGTH,
   CATEGORY_NAME_ONLY,
   CATEGORY_NAME_REQUIRED,
+  CATEGORY_PREFIX_EXISTED,
   CATEGORY_PREFIX_MAX_LENGTH,
   CATEGORY_PREFIX_ONLY,
   CATEGORY_PREFIX_REQUIRED
@@ -101,6 +103,18 @@ export function CreateCategoryPage() {
                 min: 6,
                 max: 50,
                 message: CATEGORY_NAME_MAX_LENGTH
+              },
+              {
+                validator() {
+                  if (
+                    backendError.isError &&
+                    backendError.message === CATEGORY_NAME_EXISTED
+                  ) {
+                    return Promise.reject(new Error(backendError.message));
+                  } else {
+                    return Promise.resolve();
+                  }
+                }
               }
             ]}
           >
@@ -128,7 +142,10 @@ export function CreateCategoryPage() {
               },
               {
                 validator() {
-                  if (backendError.isError) {
+                  if (
+                    backendError.isError &&
+                    backendError.message === CATEGORY_PREFIX_EXISTED
+                  ) {
                     return Promise.reject(new Error(backendError.message));
                   } else {
                     return Promise.resolve();
