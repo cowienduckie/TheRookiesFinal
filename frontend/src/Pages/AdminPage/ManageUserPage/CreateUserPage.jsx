@@ -56,10 +56,15 @@ export function CreateUserPage() {
     values = {
       ...values,
       firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
       gender: parseInt(values.gender),
       role: parseInt(values.role),
-      dateOfBirth: dayjs(values.dateOfBirth).add(7, 'h'),
-      joinedDate: dayjs(values.joinedDate).add(7, 'h'),
+      dateOfBirth: dayjs(values.dateOfBirth)
+        .utcOffset(0)
+        .startOf("date"),
+      joinedDate: dayjs(values.joinedDate)
+        .utcOffset(0)
+        .startOf("date")
     };
     await createUser(values).then((data) => {
       setCreatedUser(data);
@@ -73,7 +78,7 @@ export function CreateUserPage() {
 
   const handleCancelForm = () => {
     navigate(-1);
-  }
+  };
 
   const layout = {
     labelCol: { span: 7 },
@@ -169,7 +174,7 @@ export function CreateUserPage() {
           <DatePicker
             disabledDate={disabledDate}
             style={{ width: "100%" }}
-            format={(date) => date.utc().format(dateFormat)}
+            format={dateFormat}
           />
         </Form.Item>
 
@@ -228,7 +233,7 @@ export function CreateUserPage() {
           <DatePicker
             disabledDate={disabledDate}
             style={{ width: "100%" }}
-            format={(date) => date.utc().format(dateFormat)}
+            format={dateFormat}
           />
         </Form.Item>
 
