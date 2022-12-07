@@ -144,18 +144,17 @@ public class AssignmentService : BaseService, IAssignmentService
             return new Response(false, ErrorMessages.NotFound);
         }
 
-        if (request.State < 0 || Convert.ToInt16(request.State) > 2)
+        if (assignment.State != AssignmentState.WaitingForAcceptance)
         {
-            return new Response(false, ErrorMessages.BadRequest);
+            return new Response(false, ErrorMessages.InvalidState);
         }
 
-        assignment.Id = request.Id;
         assignment.State = request.State;
 
         await _assignmentRepository.UpdateAsync(assignment);
 
         await UnitOfWork.SaveChangesAsync();
 
-        return new Response(true, "Success");
+        return new Response(true, Messages.ActionSuccess);
     }
 }

@@ -167,7 +167,7 @@ public class AssignmentsController : BaseController
     }
 
     [Authorize(UserRole.Admin, UserRole.Staff)]
-    [HttpPut("respond")]
+    [HttpPut("response")]
     public async Task<ActionResult<Response>> RespondAssignmentAsync([FromBody] RespondAssignmentRequest request)
     {
         if (CurrentUser == null)
