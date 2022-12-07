@@ -86,7 +86,8 @@ function App() {
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
-          />
+          >
+          </Route>
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
         <Route path="/change-password" element={<ChangePasswordPage />} />
