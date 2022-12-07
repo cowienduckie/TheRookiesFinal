@@ -121,9 +121,10 @@ public class AssetService : BaseService, IAssetService
         var existCategoryCount = assetList.Count(asset => asset.CategoryId == requestModel.CategoryId);
 
         var newAssetCode = AssetCodeHelper.GetNewAssetCode(existCategory.Prefix, existCategoryCount);
-        
+
         var asset = new Asset
         {
+            Id = Guid.NewGuid(),
             AssetCode = newAssetCode,
             Name = requestModel.Name,
             Category = existCategory,
