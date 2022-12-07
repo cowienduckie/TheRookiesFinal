@@ -62,11 +62,13 @@ function App() {
           <Route
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
-          />
-          <Route
+          >
+            <Route
             path="/admin/manage-assignment/delete-assigment/:id"
             element={<AssignmentDeletePage />}
           />
+          </Route>
+          
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
@@ -100,6 +102,10 @@ function App() {
         path="/admin/manage-asset/:assetId"
         element={<AssetDetailPage />}
       />
+      <Route
+            path="/admin/manage-assignment/delete-assigment/:id"
+            element={<AssignmentDeletePage />}
+          />
     </Routes>
   );
 

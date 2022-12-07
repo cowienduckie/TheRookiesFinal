@@ -24,6 +24,7 @@ export function AssignmentDeletePage() {
   };
 
   const handleDelete = async () => {
+    enterLoading();
     setIsModalOpen(false);
     navigate(-1);
   };
@@ -35,7 +36,7 @@ export function AssignmentDeletePage() {
 
   return (
     <>
-      <Modal open={isModalOpen} closable={false} footer={false} width={400}>
+      <Modal open={isModalOpen} closable={false} footer={false} className="w-fit">
         <div className="flex content-center justify-between">
           <h1 className="pl-5 text-2xl font-bold text-red-600">
             Are you sure?
