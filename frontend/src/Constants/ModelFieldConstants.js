@@ -7,3 +7,7 @@ export const NAME_ENUM = "6";
 export const ASSET_CODE_ENUM = "7";
 export const CATEGORY_ENUM = "8";
 export const STATE_ENUM = "9";
+export const ASSET_NAME_ENUM = "10";
+export const ASSIGNED_TO_ENUM = "11";
+export const ASSIGNED_BY_ENUM = "12";
+export const ASSIGNED_DATE_ENUM = "13";

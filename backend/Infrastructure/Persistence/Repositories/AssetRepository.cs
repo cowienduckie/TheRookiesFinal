@@ -11,7 +11,7 @@ public class AssetRepository : RepositoryBase<Asset>, IAssetRepository
     }
 
     public new async Task<Asset?> GetAsync(
-        Expression<Func<Asset, bool>>? predicate = null, 
+        Expression<Func<Asset, bool>>? predicate = null,
         CancellationToken cancellationToken = default)
     {
         var dbSet = predicate == null ? _dbSet : _dbSet.Where(predicate);
