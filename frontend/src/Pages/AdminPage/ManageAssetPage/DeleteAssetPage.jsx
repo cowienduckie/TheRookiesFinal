@@ -6,7 +6,7 @@ export function DeleteAssetPage() {
   let { id } = useParams();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [isHistoricalAssignment, setIsHistoricalAssignment] = useState(true);
+  const [hasHistoricalAssignment, sethasHistoricalAssignment] = useState(false);
   const [loadings, setLoadings] = useState([]);
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
@@ -40,10 +40,10 @@ export function DeleteAssetPage() {
 
   return (
     <>
-      {isHistoricalAssignment !== undefined &&
-        isHistoricalAssignment !== null &&
-        (!isHistoricalAssignment ? (
-          <Modal open={isModalOpen} closable={false} footer={false} width={400}>
+      {
+        !!hasHistoricalAssignment &&
+        (!hasHistoricalAssignment ? (
+          <Modal open={isModalOpen} closable={false} footer={false} className="w-fit">
             <div className="flex content-center justify-between">
               <h1 className="pl-5 text-2xl font-bold text-red-600">
                 Are you sure?
