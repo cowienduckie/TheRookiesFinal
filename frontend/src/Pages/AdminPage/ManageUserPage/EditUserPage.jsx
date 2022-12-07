@@ -104,9 +104,11 @@ export function EditUserPage() {
       gender: parseInt(values.gender),
       id: userId,
       dateOfBirth: dayjs(values.dateOfBirth)
+        .add(7, "h")
         .utcOffset(0)
         .startOf("date"),
       joinedDate: dayjs(values.joinedDate)
+        .add(7, "h")
         .utcOffset(0)
         .startOf("date")
     };
