@@ -112,6 +112,10 @@ function App() {
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
       />
+      <Route
+              path="/admin/manage-asset/:assetId"
+              element={<AssetDetailPage />}
+            />
       <Route path="/assignments/:assignmentId" element={<DetailedInfoHomePage />} />
       <Route
         path="/assignments/accept/:assignmentId"
