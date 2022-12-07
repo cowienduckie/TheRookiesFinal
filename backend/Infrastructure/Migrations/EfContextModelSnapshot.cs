@@ -161,6 +161,53 @@ namespace Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RequestsForReturning.RequestForReturning", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AcceptedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RequestedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AcceptedBy");
+
+                    b.HasIndex("AssignmentId");
+
+                    b.HasIndex("RequestedBy");
+
+                    b.ToTable("RequestsForReturning");
+                });
+
             modelBuilder.Entity("Domain.Entities.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -263,9 +310,39 @@ namespace Infrastructure.Migrations
                     b.Navigation("Assigner");
                 });
 
+            modelBuilder.Entity("Domain.Entities.RequestsForReturning.RequestForReturning", b =>
+                {
+                    b.HasOne("Domain.Entities.Users.User", "Approver")
+                        .WithMany("AcceptedRequestsForReturning")
+                        .HasForeignKey("AcceptedBy");
+
+                    b.HasOne("Domain.Entities.Assignments.Assignment", "Assignment")
+                        .WithMany("RequestsForReturning")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Users.User", "Requester")
+                        .WithMany("OwnedRequestsForReturning")
+                        .HasForeignKey("RequestedBy")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Approver");
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Requester");
+                });
+
             modelBuilder.Entity("Domain.Entities.Assets.Asset", b =>
                 {
                     b.Navigation("Assignments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Assignments.Assignment", b =>
+                {
+                    b.Navigation("RequestsForReturning");
                 });
 
             modelBuilder.Entity("Domain.Entities.Categories.Category", b =>
@@ -275,9 +352,13 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Users.User", b =>
                 {
+                    b.Navigation("AcceptedRequestsForReturning");
+
                     b.Navigation("CreatedAssignments");
 
                     b.Navigation("OwnedAssignments");
+
+                    b.Navigation("OwnedRequestsForReturning");
                 });
 #pragma warning restore 612, 618
         }

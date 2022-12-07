@@ -24,7 +24,7 @@ public class AssetsController : BaseController
         _assetService = assetService;
     }
 
-    [Authorize(UserRole.Admin, UserRole.Staff)]
+    [Authorize(UserRole.Admin)]
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<GetAssetResponse>>> GetById(Guid id)
     {
@@ -65,6 +65,7 @@ public class AssetsController : BaseController
 
         if (sortQuery.SortField == ModelField.None)
         {
+            sortQuery.SortField = ModelField.Name;
         }
 
         var request = new GetListAssetsRequest(pagingQuery, sortQuery, searchQuery, assetFilter, CurrentUser.Location);

@@ -45,7 +45,7 @@ public class AssetService : BaseService, IAssetService
 
     public async Task<Response<GetListAssetsResponse>> GetListAsync(GetListAssetsRequest request)
     {
-        var assets = (await _assetRepository.ListAsync(a => !a.IsDeleted && 
+        var assets = (await _assetRepository.ListAsync(a => !a.IsDeleted &&
                                                             a.Location == request.Location))
                     .Select(a => new GetAssetResponse(a))
                     .AsQueryable();
@@ -96,11 +96,11 @@ public class AssetService : BaseService, IAssetService
             .SortByField(validSortFields, request.SortQuery.SortField, request.SortQuery.SortDirection);
 
         var pagedList = new PagedList<GetAssetResponse>(
-                                processedList, 
-                                request.PagingQuery.PageIndex, 
+                                processedList,
+                                request.PagingQuery.PageIndex,
                                 request.PagingQuery.PageSize);
-        
-        var responseData = new GetListAssetsResponse(pagedList); 
+
+        var responseData = new GetListAssetsResponse(pagedList);
 
         return new Response<GetListAssetsResponse>(true, responseData);
     }
@@ -121,9 +121,10 @@ public class AssetService : BaseService, IAssetService
         var existCategoryCount = assetList.Count(asset => asset.CategoryId == requestModel.CategoryId);
 
         var newAssetCode = AssetCodeHelper.GetNewAssetCode(existCategory.Prefix, existCategoryCount);
-        
+
         var asset = new Asset
         {
+            Id = Guid.NewGuid(),
             AssetCode = newAssetCode,
             Name = requestModel.Name,
             Category = existCategory,

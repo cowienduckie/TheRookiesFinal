@@ -7,7 +7,7 @@ public class SortQuery
     public SortQuery()
     {
         SortField = ModelField.None;
-        SortDirection = Domain.Shared.Enums.SortDirection.Ascending;
+        SortDirection = SortDirection.Ascending;
     }
 
     public ModelField SortField { get; set; }

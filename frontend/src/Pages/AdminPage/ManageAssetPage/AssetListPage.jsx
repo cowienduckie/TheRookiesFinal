@@ -114,7 +114,7 @@ export function AssetListPage() {
     };
 
     loadCategories();
-  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigateByQueries = (queries) => {
     const queryString = queryObjectToString(queries);
@@ -222,7 +222,7 @@ export function AssetListPage() {
       <div className="flex w-full flex-row justify-between py-5">
         <div className="w-1/2 p-0">
           <Select
-            className="w-3/12 min-w-fit mr-3"
+            className="mr-3 w-3/12 min-w-fit"
             popupClassName="min-w-fit"
             allowClear
             placeholder="State"
@@ -253,26 +253,26 @@ export function AssetListPage() {
             ]}
           />
           <Select
-            className="w-3/12 min-w-fit ml-3"
+            className="ml-3 w-3/12 min-w-fit"
             popupClassName="min-w-fit"
             allowClear
             placeholder="Category"
             suffixIcon={<FilterFilled className="align-middle" />}
             clearIcon={<CloseOutlined className="align-middle" />}
             onChange={onCategoryFilter}
-            options={
-              categoryList.map(value => ({
-                label: value.name,
-                value: value.name
-              }))
-            }
+            options={categoryList.map((value) => ({
+              label: value.name,
+              value: value.name
+            }))}
           />
         </div>
         <div className="flex w-1/2 flex-row justify-end p-0">
           <Search className="mr-3 w-1/3" onSearch={onSearch} />
-          <Button className="ml-3" type="primary" danger>
-            Create New Asset
-          </Button>
+          <Link to="/admin/manage-asset/create-asset">
+            <Button className="ml-3" type="primary" danger>
+              Create New Asset
+            </Button>
+          </Link>
         </div>
       </div>
       <Table

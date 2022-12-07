@@ -1,4 +1,9 @@
-export { HomePage } from "./HomePage";
+export {
+  HomePage,
+  DetailedInfoHomePage,
+  AcceptAssignmentPage,
+  DeclineAssignmentPage
+} from "./HomePage";
 
 export { ErrorPage } from "./ErrorPage";
 
@@ -17,12 +22,16 @@ export {
   DetailedInfoUserPage,
   DisableUserPage,
   AssetListPage,
-  AssetDetailPage
+  AssetDetailPage,
+  AssignmentDetailPage,
+  AssignmentListPage,
+  CreateAssetPage,
+  CreateCategoryPage
 } from "./AdminPage";
 
 export {
   LoginPage,
   ChangePasswordPage,
   LogoutPage,
-  ChangePasswordFirstTimePage,
+  ChangePasswordFirstTimePage
 } from "./AuthenticationPage";
