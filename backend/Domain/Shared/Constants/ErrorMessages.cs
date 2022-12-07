@@ -15,7 +15,7 @@ public static class ErrorMessages
         "There are valid assignments belongings to this user. Please close all assignments before disabling user.";
     public const string InvalidLocation = "Location is invalid!";
     public const string InvalidCategoryPrefix = "Category prefix is invalid!";
-    public const string DuplicateCategoryPrefix = "Prefix is already existed.Please enter a different prefix!";
+    public const string DuplicateCategoryPrefix = "Prefix is already existed. Please enter a different prefix!";
     public const string DuplicateCategoryName = "Category is already existed. Please enter a different category!";
     public const string UnexistedCategory = "Category is not existed!";
 }

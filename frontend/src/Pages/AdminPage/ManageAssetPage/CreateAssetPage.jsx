@@ -84,6 +84,10 @@ export function CreateAssetPage() {
   };
 
   const handleCancel = () => {
+    navigate("/admin/manage-asset");
+  };
+
+  const handleSuccess = () => {
     navigate("/admin/manage-asset", { state: { newAsset: createdAsset } });
   };
 
@@ -263,9 +267,9 @@ export function CreateAssetPage() {
 
       <Modal
         open={isModalOpen}
-        onOk={handleCancel}
-        onCancel={handleCancel}
-        closable={handleCancel}
+        onOk={handleSuccess}
+        onCancel={handleSuccess}
+        closable={handleSuccess}
         footer={[]}
       >
         <h1 className="mb-5 text-2xl font-bold text-red-600">
@@ -276,7 +280,7 @@ export function CreateAssetPage() {
           className="content-end"
           danger
           key="back"
-          onClick={handleCancel}
+          onClick={handleSuccess}
         >
           Close
         </Button>
