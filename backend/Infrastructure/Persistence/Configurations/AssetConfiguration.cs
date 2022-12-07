@@ -1,4 +1,4 @@
-using Domain.Entities.Assets;
+﻿using Domain.Entities.Assets;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 

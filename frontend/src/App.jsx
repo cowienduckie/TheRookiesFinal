@@ -19,7 +19,12 @@ import {
   DetailedInfoUserPage,
   DisableUserPage,
   AssetListPage,
-  AssetDetailPage
+  AssetDetailPage,
+  DetailedInfoHomePage,
+  AcceptAssignmentPage,
+  DeclineAssignmentPage,
+  AssignmentDetailPage,
+  AssignmentListPage
 } from "./Pages";
 import { AssignmentDeletePage } from "./Pages/AdminPage/ManageAssignmentPage";
 
@@ -63,12 +68,16 @@ function App() {
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
           >
+            <Route index={true} element={<AssignmentListPage />} />
+            <Route
+              path="/admin/manage-assignment/:assignmentId"
+              element={<AssignmentDetailPage />}
+            />
             <Route
             path="/admin/manage-assignment/delete-assigment/:id"
             element={<AssignmentDeletePage />}
-          />
+          ></Route>
           </Route>
-          
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
@@ -98,14 +107,27 @@ function App() {
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
       />
+      <Route path="/assignments/:assignmentId" element={<DetailedInfoHomePage />} />
+      <Route
+        path="/assignments/accept/:assignmentId"
+        element={<AcceptAssignmentPage />}
+      />
+      <Route
+        path="/assignments/decline/:assignmentId"
+        element={<DeclineAssignmentPage />}
+      />
       <Route
         path="/admin/manage-asset/:assetId"
         element={<AssetDetailPage />}
       />
       <Route
-            path="/admin/manage-assignment/delete-assigment/:id"
-            element={<AssignmentDeletePage />}
-          />
+        path="/admin/manage-assignment/delete-assigment/:id"
+        element={<AssignmentDeletePage />}
+      />
+      <Route
+        path="/admin/manage-assignment/:assignmentId"
+        element={<AssignmentDetailPage />}
+      />
     </Routes>
   );
 

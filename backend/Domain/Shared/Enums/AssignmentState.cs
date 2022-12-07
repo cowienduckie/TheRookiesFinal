@@ -1,8 +1,13 @@
+using System.ComponentModel;
+
 namespace Domain.Shared.Enums;
 
 public enum AssignmentState
 {
-    Waiting,
+    [Description("Waiting for acceptance")]
+    WaitingForAcceptance,
+    [Description("Accepted")]
     Accepted,
+    [Description("Declined")]
     Declined
 }
