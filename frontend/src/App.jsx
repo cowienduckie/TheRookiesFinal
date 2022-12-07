@@ -22,7 +22,6 @@ import {
   AssetDetailPage,
   CreateAssetPage,
   CreateCategoryPage,
-  EditAssetPage
 } from "./Pages";
 
 function App() {
@@ -41,8 +40,8 @@ function App() {
               element={<CreateAssetPage />}
             />
             <Route
-              path="/admin/manage-asset/edit-asset"
-              element={<EditAssetPage />}
+              path="/admin/manage-asset/create-category"
+              element={<CreateCategoryPage />}
             />
             <Route index={true} element={<AssetListPage />} />
             <Route
@@ -103,11 +102,7 @@ function App() {
         element={<DisableUserPage />}
       />
       <Route
-        path="/admin/manage-user/disable/:id"
-        element={<DisableUserPage />}
-      />
-      <Route
-        path="/admin/manage-asset/create-asset/create-category"
+        path="/admin/manage-asset/create-category"
         element={<CreateCategoryPage />}
       />
     </Routes>

@@ -10,7 +10,7 @@ import {
   Space
 } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import utc from "dayjs/plugin/utc";
@@ -30,13 +30,35 @@ import {
   STATE_AVAILABLE_ENUM,
   STATE_NOT_AVAILABLE_ENUM
 } from "../../../Constants/CreateAssetConstants";
+import { getAllCategories } from "../../../Apis/CategoryApis";
+import { createAsset } from "../../../Apis/AssetApis";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(customParseFormat);
 
+function useLoader() {
+  const location = useLocation();
+  const [categoryList, setCategoryList] = useState([]);
+  useEffect(() => {
+    const loadCategories = async () => {
+      const res = await getAllCategories();
+
+      setCategoryList(res);
+    };
+
+    loadCategories();
+  }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return {
+    categoryList
+  };
+}
+
 export function CreateAssetPage() {
+  const { categoryList } = useLoader();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [createdAsset, setCreatedAsset] = useState({});
   const location = useLocation();
   const [form] = Form.useForm();
   const dateFormat = "YYYY/MM/DD";
@@ -47,12 +69,23 @@ export function CreateAssetPage() {
     return current && current > dayjs().endOf("day");
   };
 
-  const onFinish = () => {
-    setIsModalOpen(true);
+  const onFinish = async (values) => {
+    values = {
+      ...values,
+      name: values.name.trim(),
+      categoryId: values.categoryId,
+      installedDate: dayjs(values.installedDate).add(7, "h"),
+      state: parseInt(values.state)
+    };
+    await createAsset(values).then((data) => {
+      console.log(data);
+      setCreatedAsset(data);
+      setIsModalOpen(true);
+    });
   };
 
   const handleCancel = () => {
-    navigate("/admin/manage-asset");
+    navigate("/admin/manage-asset", { state: { newAsset: createdAsset } });
   };
 
   const layout = {
@@ -110,17 +143,17 @@ export function CreateAssetPage() {
         </Form.Item>
 
         <Form.Item
-          name="category"
+          name="categoryId"
           label="Category"
           rules={[{ required: true, message: CATEGORY_REQUIRED }]}
         >
           <Select
-            name="role"
+            name="categoryId"
             dropdownRender={(menu) => (
               <>
                 {menu}
                 <Link
-                  to="/admin/manage-asset/create-asset/create-category"
+                  to="/admin/manage-asset/create-category"
                   state={{ background: location }}
                 >
                   <Button
@@ -129,7 +162,6 @@ export function CreateAssetPage() {
                     block
                     onClick={() => enterLoading(1)}
                     loading={loadings[1]}
-                    //onClick={onCategoryOpen}
                   >
                     <em style={{ fontStyle: "normal", color: "red" }}>+ </em>
                     Add New Category
@@ -137,10 +169,10 @@ export function CreateAssetPage() {
                 </Link>
               </>
             )}
-            options={[
-              { value: "first", label: "First Category" },
-              { value: "second", label: "Second Category" }
-            ]}
+            options={categoryList.map((value) => ({
+              label: value.name,
+              value: value.id
+            }))}
           />
         </Form.Item>
 
@@ -211,7 +243,7 @@ export function CreateAssetPage() {
                 htmlType="submit"
                 disabled={
                   !form.isFieldsTouched(
-                    ["name", "category", "installedDate", "specification"],
+                    ["name", "categoryId", "installedDate", "specification"],
                     true
                   ) ||
                   form.getFieldsError().filter(({ errors }) => errors.length)
