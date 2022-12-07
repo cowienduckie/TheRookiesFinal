@@ -24,7 +24,5 @@ public class Asset : AuditableEntity<Guid>
 
     public Location Location { get; set; }
 
-    public bool HasHistoricalAssignment { get; set; } = false;
-
     public ICollection<Assignment> Assignments { get; set; } = null!;
 }

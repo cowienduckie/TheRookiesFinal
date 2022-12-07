@@ -209,7 +209,6 @@ export function AssetListPage() {
             className="ml-2"
             danger
             icon={<CloseOutlined className="align-middle" />}
-            disabled={record.hasHistoricalAssignment}
           />
         </div>
       )
