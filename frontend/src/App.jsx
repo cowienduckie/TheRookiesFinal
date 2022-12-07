@@ -17,9 +17,9 @@ import {
   ReportPage,
   UserListPage,
   DetailedInfoUserPage,
-  DisableUserPage
+  DisableUserPage,
+  DeleteAssetPage
 } from "./Pages";
-import { DeleteAssetPage } from "./Pages/AdminPage/ManageAssetPage/DeleteAssetPage";
 
 function App() {
   const location = useLocation();
@@ -31,11 +31,12 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
-          <Route path="/admin/manage-asset" element={<ManageAssetPage />} />
-          <Route
-            path="/admin/manage-asset/delete-asset/:id"
-            element={<DeleteAssetPage />}
-          />
+          <Route path="/admin/manage-asset" element={<ManageAssetPage />}>
+            <Route
+              path="/admin/manage-asset/delete-asset/:id"
+              element={<DeleteAssetPage />}
+            />
+          </Route>
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
             <Route index={true} element={<UserListPage />} />
             <Route

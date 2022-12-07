@@ -797,6 +797,10 @@ video {
   padding-right: 1.25rem !important;
 }
 
+.pb-2 {
+  padding-bottom: 0.5rem !important;
+}
+
 .text-center {
   text-align: center !important;
 }
@@ -818,6 +822,11 @@ video {
 .text-base {
   font-size: 1rem !important;
   line-height: 1.5rem !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
 }
 
 .font-bold {
