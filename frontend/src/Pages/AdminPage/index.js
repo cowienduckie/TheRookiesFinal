@@ -9,9 +9,18 @@ export {
   DisableUserPage
 } from "./ManageUserPage";
 
-export { ManageAssetPage, DeleteAssetPage } from "./ManageAssetPage";
+export {
+  ManageAssetPage,
+  AssetListPage,
+  AssetDetailPage,
+  DeleteAssetPage
+} from "./ManageAssetPage";
 
-export { ManageAssignmentPage } from "./ManageAssignmentPage";
+export {
+  ManageAssignmentPage,
+  AssignmentDetailPage,
+  AssignmentListPage
+} from "./ManageAssignmentPage";
 
 export { ReportPage } from "./ReportPage";
 

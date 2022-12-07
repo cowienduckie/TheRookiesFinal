@@ -19,7 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTOs\Assets\GetListAssets\" />
+    <Folder Include="DTOs\Assignments\GetListAssignments\" />
     <Folder Include="DTOs\Users\DisableUser\" />
+    <Folder Include="Queries\Assets\" />
+    <Folder Include="Queries\Assignments\" />
   </ItemGroup>
 
 </Project>

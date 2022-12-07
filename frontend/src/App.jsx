@@ -18,7 +18,14 @@ import {
   UserListPage,
   DetailedInfoUserPage,
   DisableUserPage,
-  DeleteAssetPage
+  DeleteAssetPage,
+  AssetListPage,
+  AssetDetailPage,
+  DetailedInfoHomePage,
+  AcceptAssignmentPage,
+  DeclineAssignmentPage,
+  AssignmentDetailPage,
+  AssignmentListPage
 } from "./Pages";
 
 function App() {
@@ -35,6 +42,11 @@ function App() {
             <Route
               path="/admin/manage-asset/delete-asset/:id"
               element={<DeleteAssetPage />}
+            />
+            <Route index={true} element={<AssetListPage />} />
+            <Route
+              path="/admin/manage-asset/:assetId"
+              element={<AssetDetailPage />}
             />
           </Route>
           <Route path="/admin/manage-user" element={<ManageUserPage />}>
@@ -59,7 +71,13 @@ function App() {
           <Route
             path="/admin/manage-assignment"
             element={<ManageAssignmentPage />}
-          />
+          >
+            <Route index={true} element={<AssignmentListPage />} />
+            <Route
+              path="/admin/manage-assignment/:assignmentId"
+              element={<AssignmentDetailPage />}
+            />
+          </Route>
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
@@ -93,6 +111,23 @@ function App() {
       <Route
         path="/admin/manage-asset/delete-asset/:id"
         element={<DeleteAssetPage />}
+      />
+      <Route path="/assignments/:assignmentId" element={<DetailedInfoHomePage />} />
+      <Route
+        path="/assignments/accept/:assignmentId"
+        element={<AcceptAssignmentPage />}
+      />
+      <Route
+        path="/assignments/decline/:assignmentId"
+        element={<DeclineAssignmentPage />}
+      />
+      <Route
+        path="/admin/manage-asset/:assetId"
+        element={<AssetDetailPage />}
+      />
+      <Route
+        path="/admin/manage-assignment/:assignmentId"
+        element={<AssignmentDetailPage />}
       />
     </Routes>
   );

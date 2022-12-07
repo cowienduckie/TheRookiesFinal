@@ -12,12 +12,12 @@ public class AssignmentConfiguration : IEntityTypeConfiguration<Assignment>
                 .WithMany(u => u.OwnedAssignments)
                 .HasForeignKey(a => a.AssignedTo)
                 .OnDelete(DeleteBehavior.NoAction);
-        
+
         builder.HasOne(a => a.Assigner)
                 .WithMany(u => u.CreatedAssignments)
                 .HasForeignKey(a => a.AssignedBy)
                 .OnDelete(DeleteBehavior.NoAction);
-        
+
         builder.HasOne(a => a.Asset)
             .WithMany(a => a.Assignments)
             .HasForeignKey(a => a.AssetId);

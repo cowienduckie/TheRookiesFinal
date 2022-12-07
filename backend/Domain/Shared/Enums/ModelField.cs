@@ -7,5 +7,13 @@ public enum ModelField
     FullName,
     Role,
     Username,
-    JoinedDate
+    JoinedDate,
+    Name,
+    AssetCode,
+    Category,
+    State,
+    AssetName,
+    AssignedTo,
+    AssignedBy,
+    AssignedDate
 }
