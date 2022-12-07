@@ -15,7 +15,6 @@ public class GetAssetResponse
         InstalledDate = asset.InstalledDate.ToString("dd/MM/yyyy");
         State = asset.State.GetDescription() ?? asset.State.ToString();
         Location = asset.Location.GetDescription() ?? asset.Location.ToString();
-        HasHistoricalAssignment = asset.HasHistoricalAssignment;
     }
 
     public Guid Id { get; }
@@ -33,6 +32,4 @@ public class GetAssetResponse
     public string State { get; }
 
     public string Location { get; }
-
-    public bool HasHistoricalAssignment { get; }
 }

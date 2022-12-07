@@ -22,8 +22,6 @@ public static class AssetConstants
     public const Location AssetLocation = Location.HaNoi;
     public const string LocationString = "Ha Noi";
 
-    public const bool HasHistoricalAssignment = true;
-
     public const string CategoryName = "Sample Category";
     public const string CategoryPrefix = "SC";
 
@@ -44,7 +42,6 @@ public static class AssetConstants
         Specification = Specification,
         InstalledDate = InstalledDate,
         State = State,
-        Location = AssetLocation,
-        HasHistoricalAssignment = HasHistoricalAssignment
+        Location = AssetLocation
     };
 }
