@@ -1,9 +1,13 @@
 import { Button, Divider, Modal, Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { respondAssignment } from "../../Apis/AssignmentApis";
+import { DECLINED_ENUM } from "../../Constants/AssignmentState";
 
 export function DeclineAssignmentPage() {
   const navigate = useNavigate();
+
+  const { assignmentId } = useParams();
 
   const [isModalOpen, setIsModalOpen] = useState(true);
 
@@ -30,6 +34,11 @@ export function DeclineAssignmentPage() {
 
   const handleDecline = async () => {
     enterLoading(0);
+
+    await respondAssignment({id : assignmentId, state: DECLINED_ENUM}).then(() => {
+      setIsModalOpen(false);
+      navigate("/", { state: { isReload : true } });
+    });
   };
 
   return (

@@ -1,11 +1,15 @@
 import { Button, Divider, Modal, Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { ACCEPTED_ENUM } from "../../Constants/AssignmentState";
+import { respondAssignment } from "../../Apis/AssignmentApis";
 
 export function AcceptAssignmentPage() {
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const { assignmentId } = useParams();
 
   const onCancel = () => {
     setIsModalOpen(false);
@@ -30,6 +34,11 @@ export function AcceptAssignmentPage() {
 
   const handleAccept = async () => {
     enterLoading(0);
+
+    await respondAssignment({id : assignmentId, state: ACCEPTED_ENUM}).then(() => {
+      setIsModalOpen(false);
+      navigate("/", { state: { isReload : true } });
+    });
   };
 
   return (
