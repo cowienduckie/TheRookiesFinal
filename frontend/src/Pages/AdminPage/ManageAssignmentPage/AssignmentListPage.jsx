@@ -9,6 +9,8 @@ import { queryObjectToString } from "../../../Helpers/ApiHelper";
 import { ASSET_CODE_ENUM, ASSET_NAME_ENUM, ASSIGNED_BY_ENUM, ASSIGNED_DATE_ENUM, ASSIGNED_TO_ENUM, STATE_ENUM } from "../../../Constants/ModelFieldConstants";
 import { ACCEPTED, DECLINED, WAITING_FOR_ACCEPTANCE } from "../../../Constants/AssignmentState";
 
+const dateFormat = "DD/MM/YYYY";
+
 function useLoader() {
   const { search, state } = useLocation();
   const navigate = useNavigate();
@@ -131,7 +133,7 @@ export function AssignmentListPage() {
   const onAssignedDateFilter = (value) => {
     const newQueries = {
       ...queries,
-      assignedDate: !!value ? dayjs(value).format("DD/MM/YYYY").toString() : ""
+      assignedDate: !!value ? dayjs(value).format(dateFormat).toString() : ""
     };
 
     navigateByQueries(newQueries);
@@ -258,7 +260,7 @@ export function AssignmentListPage() {
             className="w-4/12 min-w-fit ml-3"
             allowClear
             placeholder="Assigned Date"
-            format={"DD/MM/YYYY"}
+            format={(date) => date.utc().format(dateFormat)}
             onChange={onAssignedDateFilter}
           />
         </div>
