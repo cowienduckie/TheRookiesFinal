@@ -101,7 +101,7 @@ public class EfContextInitializer
 
             _context.Assets.Add(new Asset
             {
-                AssetCode = "LA0000001",
+                AssetCode = "LA000001",
                 Name = "MacBook Pro 2015",
                 Category = laptopCategory,
                 Specification = "15-inch, Core i7, 16GB RAM, 256GB SSD, MacOs",
@@ -113,7 +113,7 @@ public class EfContextInitializer
 
             _context.Assets.Add(new Asset
             {
-                AssetCode = "LA0000003",
+                AssetCode = "LA000003",
                 Name = "ThinkPad X1 Nano",
                 Category = laptopCategory,
                 Specification = "13-inch, Core i7, 32GB RAM, 512GB SSD, Windows 10",
@@ -125,7 +125,7 @@ public class EfContextInitializer
 
             _context.Assets.Add(new Asset
             {
-                AssetCode = "PC0000001",
+                AssetCode = "PC000001",
                 Name = "Mid-tier Personal Computer",
                 Category = pcCategory,
                 Specification = "Core i5, 16GB RAM, 256GB SSD, 512GB HDD, Windows 10",
@@ -137,7 +137,7 @@ public class EfContextInitializer
 
             _context.Assets.Add(new Asset
             {
-                AssetCode = "LA0000002",
+                AssetCode = "LA000002",
                 Name = "Dell XPS 9370",
                 Category = laptopCategory,
                 Specification = "13-inch, Core i5, 16GB RAM, 512GB SSD, Windows 11",

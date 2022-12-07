@@ -113,4 +113,27 @@ public class AssetsController : BaseController
             return HandleException(exception);
         }
     }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPut("delete")]
+    public async Task<ActionResult<Response>> DeleteById([FromBody] Guid id)
+    {
+        if (CurrentUser == null) return BadRequest(new Response(false, ErrorMessages.BadRequest));
+
+        try
+        {
+            var response = await _assetService.DeleteAssetAsync(id);
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
 }

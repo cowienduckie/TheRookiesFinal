@@ -141,5 +141,20 @@ public class AssetService : BaseService, IAssetService
         return new Response<GetAssetResponse>(true, Messages.ActionSuccess, responseModel);
     }
 
+    public async Task<Response> DeleteAssetAsync(Guid id)
+    {
+        var existAsset = await _assetRepository.GetAsync(asset => asset.Id == id && !asset.IsDeleted);
 
+        if (existAsset == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
+
+        existAsset.IsDeleted = true;
+
+        await _assetRepository.UpdateAsync(existAsset);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response(true, Messages.ActionSuccess);
+    }
 }
