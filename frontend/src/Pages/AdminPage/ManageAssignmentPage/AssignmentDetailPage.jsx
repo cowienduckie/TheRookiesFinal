@@ -51,7 +51,7 @@ export function AssignmentDetailPage() {
               </tr>
               <tr>
                 <td className="font-bold">Specification:</td>
-                <td>{data.specification}</td>
+                <td className="break-all">{data.specification}</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned to:</td>
@@ -71,7 +71,7 @@ export function AssignmentDetailPage() {
               </tr>
               <tr>
                 <td className="font-bold">Note:</td>
-                <td>{data.note}</td>
+                <td className="break-all">{data.note}</td>
               </tr>
             </tbody>
           </table>

@@ -784,6 +784,10 @@ video {
   white-space: nowrap !important;
 }
 
+.break-all {
+  word-break: break-all !important;
+}
+
 .border-gray-700 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(55 65 81 / var(--tw-border-opacity)) !important;

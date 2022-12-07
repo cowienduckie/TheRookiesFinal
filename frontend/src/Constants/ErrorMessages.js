@@ -47,7 +47,13 @@ export const CATEGORY_NAME_REQUIRED = "Please enter category name!";
 export const CATEGORY_NAME_MAX_LENGTH =
   "Category name length should be 6 - 50 characters!";
 export const CATEGORY_NAME_ONLY =
-  "Category name should contain alphabetic characters and only one space in between characters!";
+  "Category name should contain alphanumeric characters and only one space in between characters!";
 export const CATEGORY_PREFIX_REQUIRED = "Please enter prefix!";
-export const CATEGORY_PREFIX_MAX_LENGTH = "Prefix length should be 2 - 8 characters!";
-export const CATEGORY_PREFIX_ONLY = "Prefix should contain only uppercase alphabetic characters!";
+export const CATEGORY_PREFIX_MAX_LENGTH =
+  "Prefix length should be 2 - 8 characters!";
+export const CATEGORY_PREFIX_ONLY =
+  "Prefix should contain only uppercase alphabetic characters!";
+export const CATEGORY_NAME_EXISTED =
+  "Category is already existed. Please enter a different category!";
+export const CATEGORY_PREFIX_EXISTED =
+  "Prefix is already existed. Please enter a different prefix!";

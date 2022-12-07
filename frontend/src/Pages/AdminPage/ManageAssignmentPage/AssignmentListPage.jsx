@@ -1,13 +1,31 @@
 import { Button, DatePicker, Select, Table } from "antd";
-import { FilterFilled, EditOutlined, CloseOutlined, UndoOutlined } from "@ant-design/icons";
+import {
+  FilterFilled,
+  EditOutlined,
+  CloseOutlined,
+  UndoOutlined
+} from "@ant-design/icons";
 import Search from "antd/es/input/Search";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getAssignmentList } from "../../../Apis/AssignmentApis";
 import { queryObjectToString } from "../../../Helpers/ApiHelper";
-import { ASSET_CODE_ENUM, ASSET_NAME_ENUM, ASSIGNED_BY_ENUM, ASSIGNED_DATE_ENUM, ASSIGNED_TO_ENUM, STATE_ENUM } from "../../../Constants/ModelFieldConstants";
-import { ACCEPTED, DECLINED, WAITING_FOR_ACCEPTANCE } from "../../../Constants/AssignmentState";
+import {
+  ASSET_CODE_ENUM,
+  ASSET_NAME_ENUM,
+  ASSIGNED_BY_ENUM,
+  ASSIGNED_DATE_ENUM,
+  ASSIGNED_TO_ENUM,
+  STATE_ENUM
+} from "../../../Constants/ModelFieldConstants";
+import {
+  ACCEPTED,
+  DECLINED,
+  WAITING_FOR_ACCEPTANCE
+} from "../../../Constants/AssignmentState";
+
+const dateFormat = "DD/MM/YYYY";
 
 function useLoader() {
   const { search, state } = useLocation();
@@ -131,7 +149,7 @@ export function AssignmentListPage() {
   const onAssignedDateFilter = (value) => {
     const newQueries = {
       ...queries,
-      assignedDate: !!value ? dayjs(value).format("DD/MM/YYYY").toString() : ""
+      assignedDate: !!value ? dayjs(value).format(dateFormat).toString() : ""
     };
 
     navigateByQueries(newQueries);
@@ -207,19 +225,37 @@ export function AssignmentListPage() {
       dataIndex: "",
       key: "actions",
       render: (_, record) => (
-        <div className="min-w-fit p-0 flex flex-nowrap">
+        <div className="flex min-w-fit flex-nowrap p-0">
           <Button
             className="mr-1"
             icon={<EditOutlined className="align-middle" />}
           />
           <Button
             className="mx-1"
+            disabled={record.state === ACCEPTED}
             danger
-            icon={<CloseOutlined className="align-middle" />}
+            icon={
+              <CloseOutlined
+                className={
+                  record.state === ACCEPTED
+                    ? "align-middle text-gray-300"
+                    : "align-middle"
+                }
+              />
+            }
           />
           <Button
-            className="ml-1 border-blue-500"
-            icon={<UndoOutlined className="align-middle text-blue-500" />}
+            className="ml-1 border-blue-500 disabled:border-gray-200"
+            disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            icon={
+              <UndoOutlined
+                className={
+                  record.state === WAITING_FOR_ACCEPTANCE
+                    ? "align-middle text-gray-300"
+                    : "align-middle text-blue-500"
+                }
+              />
+            }
           />
         </div>
       )
@@ -232,7 +268,7 @@ export function AssignmentListPage() {
       <div className="flex w-full flex-row justify-between py-5">
         <div className="w-1/2 p-0">
           <Select
-            className="w-3/12 min-w-fit mr-3"
+            className="mr-3 w-3/12 min-w-fit"
             popupClassName="min-w-fit"
             allowClear
             placeholder="State"
@@ -255,10 +291,10 @@ export function AssignmentListPage() {
             ]}
           />
           <DatePicker
-            className="w-4/12 min-w-fit ml-3"
+            className="ml-3 w-4/12 min-w-fit"
             allowClear
             placeholder="Assigned Date"
-            format={"DD/MM/YYYY"}
+            format={(date) => date.utc().format(dateFormat)}
             onChange={onAssignedDateFilter}
           />
         </div>
