@@ -1,9 +1,9 @@
 using API.Attributes;
 using Application.Common.Models;
+using Application.DTOs.Assignments.CreateAssignment;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.GetListAssignments;
 using Application.DTOs.Assignments.RespondAssignment;
-using Application.DTOs.Users.ChangePassword;
 using Application.Queries;
 using Application.Queries.Assignments;
 using Application.Services.Interfaces;
@@ -74,7 +74,8 @@ public class AssignmentsController : BaseController
             sortQuery.SortField = ModelField.AssetName;
         }
 
-        var request = new GetListAssignmentsRequest(pagingQuery, sortQuery, searchQuery, assignmentFilter, CurrentUser.Location);
+        var request = new GetListAssignmentsRequest(pagingQuery, sortQuery, searchQuery, assignmentFilter,
+            CurrentUser.Location);
 
         try
         {
@@ -156,6 +157,34 @@ public class AssignmentsController : BaseController
             if (!response.IsSuccess)
             {
                 return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPost]
+    public async Task<ActionResult<Response<GetAssignmentResponse>>> Create([FromBody] CreateAssignmentRequest request)
+    {
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
+
+        request.AssignedBy = CurrentUser.Id;
+
+        try
+        {
+            var response = await _assignmentService.CreateAsync(request);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
             }
 
             return Ok(response);
