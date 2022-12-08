@@ -208,12 +208,6 @@ public class AssetServiceTests
         //    HasHistoricalAssignment = AssetConstants.HasHistoricalAssignment,
         //};
 
-        _categoryRepository
-            .Setup(cat => cat.GetAsync(
-                It.IsAny<Expression<Func<Category, bool>>>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(null as Category);
-
         var listAsset = new List<Asset>
         {
             new Asset{
@@ -253,6 +247,12 @@ public class AssetServiceTests
                                 It.IsAny<Expression<Func<Asset, bool>>>(),
                                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(listAsset);
+
+        _categoryRepository
+            .Setup(cat => cat.GetAsync(
+                It.IsAny<Expression<Func<Category, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(null as Category);
 
         var result = await _assetService.CreateAssetAsync(newAsset);
 

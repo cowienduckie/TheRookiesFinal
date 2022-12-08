@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Shared.Enums;
 using Domain.Shared.Constants;
 using Application.Services;
+using Application.DTOs.Assets;
 
 namespace API.Controllers;
 
@@ -134,13 +135,16 @@ public class AssetsController : BaseController
 
     [Authorize(UserRole.Admin)]
     [HttpPut("delete")]
-    public async Task<ActionResult<Response>> DeleteById([FromBody] Guid id)
+    public async Task<ActionResult<Response>> DeleteById([FromBody] DeleteAssetRequest requestModel)
     {
-        if (CurrentUser == null) return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
 
         try
         {
-            var response = await _assetService.DeleteAssetAsync(id);
+            var response = await _assetService.DeleteAssetAsync(requestModel);
 
             if (!response.IsSuccess)
             {

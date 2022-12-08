@@ -1,4 +1,5 @@
 using Application.Common.Models;
+using Application.DTOs.Assets;
 using Application.DTOs.Assets.CreateAsset;
 using Application.DTOs.Assets.GetAsset;
 using Application.DTOs.Assets.GetListAssets;
@@ -142,13 +143,20 @@ public class AssetService : BaseService, IAssetService
         return new Response<GetAssetResponse>(true, Messages.ActionSuccess, responseModel);
     }
 
-    public async Task<Response> DeleteAssetAsync(Guid id)
+    public async Task<Response> DeleteAssetAsync(DeleteAssetRequest requestModel)
     {
-        var existAsset = await _assetRepository.GetAsync(asset => asset.Id == id && !asset.IsDeleted);
+        var existAsset = await _assetRepository.GetAsync(asset => asset.Id == requestModel.Id);
 
         if (existAsset == null)
         {
             return new Response(false, ErrorMessages.NotFound);
+        }
+
+        var hasHistoricalAssignment = await HasHistoricalAssignment(requestModel.Id);
+
+        if (hasHistoricalAssignment)
+        {
+            return new Response(false, ErrorMessages.CannotDeleteAsset);
         }
 
         existAsset.IsDeleted = true;
