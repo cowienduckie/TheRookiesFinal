@@ -83,15 +83,18 @@ export function CreateAssetPage() {
       return newLoadings;
     });
 
-    await createAsset(values).then((data) => {
-      setCreatedAsset(data);
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[2] = false;
-        return newLoadings;
+    await createAsset(values)
+      .then((data) => {
+        setCreatedAsset(data);
+        setIsModalOpen(true);
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[2] = false;
+          return newLoadings;
+        });
       });
-      setIsModalOpen(true);
-    });
   };
 
   const handleCancel = () => {

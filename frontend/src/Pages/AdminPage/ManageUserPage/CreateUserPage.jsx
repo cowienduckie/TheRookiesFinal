@@ -74,15 +74,18 @@ export function CreateUserPage() {
       return newLoadings;
     });
 
-    await createUser(values).then((data) => {
-      setCreatedUser(data);
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[1] = false;
-        return newLoadings;
+    await createUser(values)
+      .then((data) => {
+        setCreatedUser(data);
+        setIsModalOpen(true);
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[1] = false;
+          return newLoadings;
+        });
       });
-      setIsModalOpen(true);
-    });
   };
 
   const handleCancelModal = () => {
