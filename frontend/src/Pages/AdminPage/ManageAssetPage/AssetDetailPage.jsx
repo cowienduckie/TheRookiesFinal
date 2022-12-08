@@ -55,7 +55,7 @@ export function AssetDetailPage() {
               </tr>
               <tr>
                 <td className="font-bold">Specification:</td>
-                <td>{data.specification}</td>
+                <td className="break-all">{data.specification}</td>
               </tr>
               <tr>
                 <td className="font-bold">Installed Date:</td>

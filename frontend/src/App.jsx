@@ -25,7 +25,9 @@ import {
   AcceptAssignmentPage,
   DeclineAssignmentPage,
   AssignmentDetailPage,
-  AssignmentListPage
+  AssignmentListPage,
+  CreateAssetPage,
+  CreateCategoryPage
 } from "./Pages";
 
 function App() {
@@ -42,6 +44,14 @@ function App() {
             <Route
               path="/admin/manage-asset/delete-asset/:id"
               element={<DeleteAssetPage />}
+            />
+            <Route
+              path="/admin/manage-asset/create-asset"
+              element={<CreateAssetPage />}
+            />
+            <Route
+              path="/admin/manage-asset/create-category"
+              element={<CreateCategoryPage />}
             />
             <Route index={true} element={<AssetListPage />} />
             <Route
@@ -81,7 +91,7 @@ function App() {
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
-          />
+          ></Route>
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
 
@@ -112,7 +122,18 @@ function App() {
         path="/admin/manage-asset/delete-asset/:id"
         element={<DeleteAssetPage />}
       />
-      <Route path="/assignments/:assignmentId" element={<DetailedInfoHomePage />} />
+      <Route
+        path="/assignments/:assignmentId"
+        element={<DetailedInfoHomePage />}
+      />
+      <Route
+        path="/admin/manage-asset/:assetId"
+        element={<AssetDetailPage />}
+      />
+      <Route
+        path="/assignments/:assignmentId"
+        element={<DetailedInfoHomePage />}
+      />
       <Route
         path="/assignments/accept/:assignmentId"
         element={<AcceptAssignmentPage />}
@@ -122,8 +143,8 @@ function App() {
         element={<DeclineAssignmentPage />}
       />
       <Route
-        path="/admin/manage-asset/:assetId"
-        element={<AssetDetailPage />}
+        path="/admin/manage-asset/create-category"
+        element={<CreateCategoryPage />}
       />
       <Route
         path="/admin/manage-assignment/:assignmentId"

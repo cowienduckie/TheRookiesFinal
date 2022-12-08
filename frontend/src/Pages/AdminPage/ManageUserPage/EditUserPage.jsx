@@ -51,11 +51,14 @@ export function EditUserPage() {
       form.setFieldValue("firstName", res.firstName);
       form.setFieldValue("lastName", res.lastName);
       form.setFieldValue("gender", res.gender === "Male" ? "0" : "1");
-      form.setFieldValue("dateOfBirth", dayjs.utc(res.dateOfBirth, "DD/MM/YYYY"));
+      form.setFieldValue(
+        "dateOfBirth",
+        dayjs.utc(res.dateOfBirth, "DD/MM/YYYY")
+      );
       form.setFieldValue("role", res.role === "Admin" ? "0" : "1");
-      form.setFieldValue("joinedDate", dayjs().utc(res.dateOfBirth, "DD/MM/YYYY"));
+      form.setFieldValue("joinedDate", dayjs.utc(res.joinedDate, "DD/MM/YYYY"));
     });
-  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
     labelCol: { span: 7 },
@@ -88,7 +91,7 @@ export function EditUserPage() {
 
   const handleCancelForm = () => {
     navigate(-1);
-  }
+  };
 
   const disabledDate = (current) => {
     return current && current > dayjs().endOf("day");
@@ -99,7 +102,15 @@ export function EditUserPage() {
       ...values,
       role: parseInt(values.role),
       gender: parseInt(values.gender),
-      id: userId
+      id: userId,
+      dateOfBirth: dayjs(values.dateOfBirth)
+        .add(7, "h")
+        .utcOffset(0)
+        .startOf("date"),
+      joinedDate: dayjs(values.joinedDate)
+        .add(7, "h")
+        .utcOffset(0)
+        .startOf("date")
     };
 
     await editUser(values).then((data) => {
@@ -140,7 +151,7 @@ export function EditUserPage() {
           <DatePicker
             style={{ width: "100%" }}
             disabledDate={disabledDate}
-            format={(date) => date.utc().format(dateFormat)}
+            format={dateFormat}
           />
         </Form.Item>
 
@@ -198,7 +209,7 @@ export function EditUserPage() {
           <DatePicker
             style={{ width: "100%" }}
             disabledDate={disabledDate}
-            format={(date) => date.utc().format(dateFormat)}
+            format={dateFormat}
           />
         </Form.Item>
         <Form.Item
@@ -212,28 +223,28 @@ export function EditUserPage() {
           </Select>
         </Form.Item>
         <Form.Item {...tailLayout} shouldUpdate>
-        {() => (
-          <div>
-            <Button
-            className="mx-2"
-            type="primary"
-            danger
-            onSubmit={onFinish}
-            htmlType="submit"
-            disabled={
-              form.getFieldsError().filter(({ errors }) => errors.length)
-                .length > 0
-            }
-            onClick={() => enterLoading(1)}
-            loading={loadings[1]}
-          >
-            Save
-          </Button>
-          <Button className="mx-5" onClick={handleCancelForm} danger>
-            Cancel
-          </Button>
-          </div>
-        )}
+          {() => (
+            <div>
+              <Button
+                className="mx-2"
+                type="primary"
+                danger
+                onSubmit={onFinish}
+                htmlType="submit"
+                disabled={
+                  form.getFieldsError().filter(({ errors }) => errors.length)
+                    .length > 0
+                }
+                onClick={() => enterLoading(1)}
+                loading={loadings[1]}
+              >
+                Save
+              </Button>
+              <Button className="mx-5" onClick={handleCancelForm} danger>
+                Cancel
+              </Button>
+            </div>
+          )}
         </Form.Item>
       </Form>
 

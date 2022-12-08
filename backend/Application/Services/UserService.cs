@@ -268,16 +268,6 @@ public class UserService : BaseService, IUserService
         return new Response(true, Messages.ActionSuccess);
     }
 
-    private async Task<bool> HasValidAssignment(Guid userId)
-    {
-        var assignmentRepository = UnitOfWork.AsyncRepository<Assignment>();
-
-        var assignments = await assignmentRepository.ListAsync(a => !a.IsDeleted &&
-                                                                    a.AssignedTo == userId);
-
-        return assignments.Any();
-    }
-
     public async Task<Response<GetUserResponse>> EditUserAsync(EditUserRequest requestModel)
     {
         var userRepository = UnitOfWork.AsyncRepository<User>();
@@ -319,5 +309,15 @@ public class UserService : BaseService, IUserService
         await UnitOfWork.SaveChangesAsync();
 
         return new Response<GetUserResponse>(true, "Success", new GetUserResponse(user));
+    }
+
+    private async Task<bool> HasValidAssignment(Guid userId)
+    {
+        var assignmentRepository = UnitOfWork.AsyncRepository<Assignment>();
+
+        var assignments = await assignmentRepository.ListAsync(a => !a.IsDeleted &&
+                                                                    a.AssignedTo == userId);
+
+        return assignments.Any();
     }
 }

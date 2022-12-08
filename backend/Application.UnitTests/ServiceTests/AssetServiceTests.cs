@@ -92,8 +92,6 @@ public class AssetServiceTests
             Assert.That(result.Data!.State, Is.EqualTo(AssetConstants.StateString));
 
             Assert.That(result.Data!.Location, Is.EqualTo(AssetConstants.LocationString));
-
-            Assert.That(result.Data!.HasHistoricalAssignment, Is.EqualTo(AssetConstants.HasHistoricalAssignment));
         });
     }
 }

@@ -10,3 +10,7 @@ export async function getAssetList(queries = "") {
 export async function getAssetById(id) {
   return await callApi("get", url + "/" + id);
 }
+
+export async function createAsset(data) {
+  return await callApi("post", url, data);
+}

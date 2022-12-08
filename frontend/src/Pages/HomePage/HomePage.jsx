@@ -96,7 +96,7 @@ export function HomePage() {
       sorter: true,
       render: (text, record) => (
         <Link
-          to={`/admin/manage-assignment/${record.id}`}
+          to={`/assignments/${record.id}`}
           state={{ background: location }}
         >
           <p>{text}</p>

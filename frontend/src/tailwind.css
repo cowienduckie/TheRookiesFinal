@@ -649,6 +649,10 @@ video {
   margin-left: 2.5rem !important;
 }
 
+.block {
+  display: block !important;
+}
+
 .flex {
   display: flex !important;
 }
@@ -778,6 +782,10 @@ video {
 
 .whitespace-nowrap {
   white-space: nowrap !important;
+}
+
+.break-all {
+  word-break: break-all !important;
 }
 
 .border-gray-700 {

@@ -1,6 +1,7 @@
 using Domain.Base;
 using Domain.Entities.Assets;
 using Domain.Entities.Users;
+using Domain.Entities.RequestsForReturning;
 using Domain.Shared.Enums;
 
 namespace Domain.Entities.Assignments;
@@ -24,4 +25,6 @@ public class Assignment : AuditableEntity<Guid>
     public AssignmentState State { get; set; }
 
     public string? Note { get; set; }
+
+    public ICollection<RequestForReturning> RequestsForReturning { get; set; } = null!;
 }

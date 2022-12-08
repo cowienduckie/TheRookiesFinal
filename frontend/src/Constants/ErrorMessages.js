@@ -17,7 +17,7 @@ export const PASSWORD_COMPARED =
   "The new password cannot match the old password!";
 export const PASSWORD_ONLY_ALLOW = "Please enter a valid value!";
 export const NAME_ONLY_ALLOW =
-  "Name should only contain alphabetic: A to Z or a to z and one space between words";
+  "Name should only contain alphabetic: A to Z or a to z and one space between words!";
 export const FIRST_NAME_REQUIRED = "Please enter your first name!";
 export const LAST_NAME_REQUIRED = "Please enter your last name!";
 export const DOB_UNDER_18 = "User is under 18. Please select a different date!";
@@ -31,3 +31,29 @@ export const JOINED_DATE_NOT_WEEKENDS =
 export const ROLE_REQUIRED = "Please select user type!";
 export const NAME_MAX_LENGTH =
   "Input value for name must be below 255 characters!";
+export const ASSET_NAME_REQUIRED = "Please enter asset name!";
+export const ASSET_NAME_ONLY =
+  "Asset Name should contain alphanumeric characters and only one space in between characters!";
+export const ASSET_MAX_LENGTH = "Asset name length should be 6 - 50 characters";
+export const SPECIFICATION_REQUIRED = "Please enter specification!";
+export const SPECIFICATION_NAME_ONLY =
+  "Specification should contain alphanumeric, special characters and only one space in between characters!";
+export const SPECIFICATION_MAX_LENGTH =
+  "Specification length should be 6 - 255 characters!";
+export const INSTALLED_DATE_REQUIRED = "Please enter installed date!";
+export const STATE_REQUIRED = "Please select asset state!";
+export const CATEGORY_REQUIRED = "Please enter category!";
+export const CATEGORY_NAME_REQUIRED = "Please enter category name!";
+export const CATEGORY_NAME_MAX_LENGTH =
+  "Category name length should be 6 - 50 characters!";
+export const CATEGORY_NAME_ONLY =
+  "Category name should contain alphanumeric characters and only one space in between characters!";
+export const CATEGORY_PREFIX_REQUIRED = "Please enter prefix!";
+export const CATEGORY_PREFIX_MAX_LENGTH =
+  "Prefix length should be 2 - 8 characters!";
+export const CATEGORY_PREFIX_ONLY =
+  "Prefix should contain only uppercase alphabetic characters!";
+export const CATEGORY_NAME_EXISTED =
+  "Category is already existed. Please enter a different category!";
+export const CATEGORY_PREFIX_EXISTED =
+  "Prefix is already existed. Please enter a different prefix!";

@@ -1,6 +1,7 @@
 using Application.Common.Models;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.GetListAssignments;
+using Application.DTOs.Assignments.RespondAssignment;
 using Application.Helpers;
 using Application.Queries;
 using Application.Services.Interfaces;
@@ -43,7 +44,7 @@ public class AssignmentService : BaseService, IAssignmentService
         var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted))
             .Where(a => a.Asset.Location == request.Location)
             .AsQueryable()
-            .SortByField(new [] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
+            .SortByField(new[] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(a => new GetAssignmentResponse(a))
             .AsQueryable();
 
@@ -106,7 +107,7 @@ public class AssignmentService : BaseService, IAssignmentService
 
     public async Task<Response<GetListAssignmentsResponse>> GetOwnedListAsync(GetListOwnedAssignmentsRequest request)
     {
-        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted && 
+        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted &&
                                                                       a.AssignedTo == request.CurrentUser.Id &&
                                                                       a.State != AssignmentState.Declined &&
                                                                       DateTime.Compare(DateTime.Today, a.AssignedDate.Date) >= 0))
@@ -132,5 +133,28 @@ public class AssignmentService : BaseService, IAssignmentService
         var responseData = new GetListAssignmentsResponse(pagedList);
 
         return new Response<GetListAssignmentsResponse>(true, responseData);
+    }
+
+    public async Task<Response> RespondAssignmentAsync(RespondAssignmentRequest request)
+    {
+        var assignment = await _assignmentRepository.GetAsync(a => !a.IsDeleted && a.Id == request.Id);
+
+        if (assignment == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
+
+        if (assignment.State != AssignmentState.WaitingForAcceptance)
+        {
+            return new Response(false, ErrorMessages.InvalidState);
+        }
+
+        assignment.State = request.State;
+
+        await _assignmentRepository.UpdateAsync(assignment);
+
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response(true, Messages.ActionSuccess);
     }
 }
