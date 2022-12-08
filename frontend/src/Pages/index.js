@@ -21,6 +21,7 @@ export {
   UserListPage,
   DetailedInfoUserPage,
   DisableUserPage,
+  DeleteAssetPage,
   AssetListPage,
   AssetDetailPage,
   AssignmentDetailPage,

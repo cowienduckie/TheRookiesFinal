@@ -18,6 +18,7 @@ import {
   UserListPage,
   DetailedInfoUserPage,
   DisableUserPage,
+  DeleteAssetPage,
   AssetListPage,
   AssetDetailPage,
   DetailedInfoHomePage,
@@ -40,6 +41,10 @@ function App() {
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/manage-asset" element={<ManageAssetPage />}>
+            <Route
+              path="/admin/manage-asset/delete-asset/:id"
+              element={<DeleteAssetPage />}
+            />
             <Route
               path="/admin/manage-asset/create-asset"
               element={<CreateAssetPage />}
@@ -86,10 +91,10 @@ function App() {
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
-          >
-          </Route>
+          ></Route>
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
+
         <Route path="/change-password" element={<ChangePasswordPage />} />
         <Route
           path="/change-password-first-time"
@@ -112,6 +117,14 @@ function App() {
       <Route
         path="/admin/manage-user/disable/:id"
         element={<DisableUserPage />}
+      />
+      <Route
+        path="/admin/manage-asset/delete-asset/:id"
+        element={<DeleteAssetPage />}
+      />
+      <Route
+        path="/assignments/:assignmentId"
+        element={<DetailedInfoHomePage />}
       />
       <Route
         path="/admin/manage-asset/:assetId"

@@ -8,7 +8,8 @@ export {
   CreateCategoryPage,
   EditAssetPage,
   AssetListPage,
-  AssetDetailPage
+  AssetDetailPage,
+  DeleteAssetPage
 } from "./ManageAssetPage";
 
 export {
