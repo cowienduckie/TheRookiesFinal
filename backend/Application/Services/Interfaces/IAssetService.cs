@@ -11,4 +11,5 @@ public interface IAssetService
     Task<Response<GetAssetResponse>> GetAsync(GetAssetRequest request);
     Task<Response<GetListAssetsResponse>> GetListAsync(GetListAssetsRequest request);
     Task<Response> DeleteAssetAsync(Guid Id);
+    Task<Response> IsAbleToDeleteAsset(Guid assetId);
 }

@@ -143,7 +143,6 @@ public class AssetServiceTests
                 InstalledDate = AssetConstants.InstalledDate,
                 State = AssetConstants.State,
                 Location = AssetConstants.AssetLocation,
-                HasHistoricalAssignment = AssetConstants.HasHistoricalAssignment,
             },
             new Asset{
                 Id = Guid.NewGuid(),
@@ -154,7 +153,6 @@ public class AssetServiceTests
                 InstalledDate = AssetConstants.InstalledDate,
                 State = AssetConstants.State,
                 Location = AssetConstants.AssetLocation,
-                HasHistoricalAssignment = AssetConstants.HasHistoricalAssignment,
             }
         };
 
@@ -227,7 +225,6 @@ public class AssetServiceTests
                 InstalledDate = AssetConstants.InstalledDate,
                 State = AssetConstants.State,
                 Location = AssetConstants.AssetLocation,
-                HasHistoricalAssignment = AssetConstants.HasHistoricalAssignment,
             },
             new Asset{
                 Id = Guid.NewGuid(),
@@ -238,7 +235,6 @@ public class AssetServiceTests
                 InstalledDate = AssetConstants.InstalledDate,
                 State = AssetConstants.State,
                 Location = AssetConstants.AssetLocation,
-                HasHistoricalAssignment = AssetConstants.HasHistoricalAssignment,
             }
         };
 

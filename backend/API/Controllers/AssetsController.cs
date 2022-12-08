@@ -10,6 +10,7 @@ using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Shared.Enums;
 using Domain.Shared.Constants;
+using Application.Services;
 
 namespace API.Controllers;
 
@@ -106,6 +107,22 @@ public class AssetsController : BaseController
             {
                 return BadRequest(response);
             }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpGet("delete-availability/{id}")]
+    public async Task<ActionResult<Response>> CheckDeleteAvailability(Guid id)
+    {
+        try
+        {
+            var response = await _assetService.IsAbleToDeleteAsset(id);
 
             return Ok(response);
         }

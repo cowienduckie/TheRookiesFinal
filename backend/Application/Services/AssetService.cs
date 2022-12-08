@@ -6,6 +6,7 @@ using Application.Helpers;
 using Application.Queries;
 using Application.Services.Interfaces;
 using Domain.Entities.Assets;
+using Domain.Entities.Assignments;
 using Domain.Entities.Categories;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
@@ -156,5 +157,27 @@ public class AssetService : BaseService, IAssetService
         await UnitOfWork.SaveChangesAsync();
 
         return new Response(true, Messages.ActionSuccess);
+    }
+
+    public async Task<Response> IsAbleToDeleteAsset(Guid assetId)
+    {
+        var hasHistoricalAssignment = await HasHistoricalAssignment(assetId);
+
+        if (hasHistoricalAssignment)
+        {
+            return new Response(false, ErrorMessages.CannotDeleteAsset);
+        }
+
+        return new Response(true, Messages.CanDeleteAsset);
+    }
+
+    private async Task<bool> HasHistoricalAssignment(Guid assetId)
+    {
+        var assignmentRepository = UnitOfWork.AsyncRepository<Assignment>();
+
+        var assignments = await assignmentRepository.ListAsync(a => !a.IsDeleted &&
+                                                                    a.AssetId == assetId);
+
+        return assignments.Any();
     }
 }
