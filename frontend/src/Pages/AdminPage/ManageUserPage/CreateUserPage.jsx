@@ -68,6 +68,7 @@ export function CreateUserPage() {
         .utcOffset(0)
         .startOf("date")
     };
+    enterLoading(2);
     await createUser(values).then((data) => {
       setCreatedUser(data);
       setIsModalOpen(true);
@@ -256,7 +257,6 @@ export function CreateUserPage() {
                 className="mx-2"
                 type="primary"
                 danger
-                onSubmit={onFinish}
                 htmlType="submit"
                 disabled={
                   !form.isFieldsTouched(
@@ -272,8 +272,7 @@ export function CreateUserPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
-                onClick={() => enterLoading(1)}
-                loading={loadings[1]}
+                loading={loadings[2]}
               >
                 Save
               </Button>

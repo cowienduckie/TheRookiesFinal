@@ -77,6 +77,7 @@ export function CreateAssetPage() {
       installedDate: dayjs(values.installedDate).add(7, "h"),
       state: parseInt(values.state)
     };
+    enterLoading(1);
     await createAsset(values).then((data) => {
       setCreatedAsset(data);
       setIsModalOpen(true);
@@ -242,7 +243,6 @@ export function CreateAssetPage() {
                 className="mx-2"
                 type="primary"
                 danger
-                onSubmit={onFinish}
                 htmlType="submit"
                 disabled={
                   !form.isFieldsTouched(
@@ -252,8 +252,7 @@ export function CreateAssetPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
-                onClick={() => enterLoading(2)}
-                loading={loadings[2]}
+                loading={loadings[1]}
               >
                 Save
               </Button>
