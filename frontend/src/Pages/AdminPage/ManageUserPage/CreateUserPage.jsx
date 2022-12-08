@@ -68,10 +68,24 @@ export function CreateUserPage() {
         .utcOffset(0)
         .startOf("date")
     };
-    await createUser(values).then((data) => {
-      setCreatedUser(data);
-      setIsModalOpen(true);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[1] = true;
+      return newLoadings;
     });
+
+    await createUser(values)
+      .then((data) => {
+        setCreatedUser(data);
+        setIsModalOpen(true);
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[1] = false;
+          return newLoadings;
+        });
+      });
   };
 
   const handleCancelModal = () => {
@@ -92,20 +106,6 @@ export function CreateUserPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 2000);
-  };
 
   return (
     <>
@@ -256,7 +256,6 @@ export function CreateUserPage() {
                 className="mx-2"
                 type="primary"
                 danger
-                onSubmit={onFinish}
                 htmlType="submit"
                 disabled={
                   !form.isFieldsTouched(
@@ -272,7 +271,6 @@ export function CreateUserPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
-                onClick={() => enterLoading(1)}
                 loading={loadings[1]}
               >
                 Save

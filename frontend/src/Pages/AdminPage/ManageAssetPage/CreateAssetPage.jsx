@@ -77,10 +77,24 @@ export function CreateAssetPage() {
       installedDate: dayjs(values.installedDate).add(7, "h"),
       state: parseInt(values.state)
     };
-    await createAsset(values).then((data) => {
-      setCreatedAsset(data);
-      setIsModalOpen(true);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[2] = true;
+      return newLoadings;
     });
+
+    await createAsset(values)
+      .then((data) => {
+        setCreatedAsset(data);
+        setIsModalOpen(true);
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[2] = false;
+          return newLoadings;
+        });
+      });
   };
 
   const handleCancel = () => {
@@ -242,7 +256,6 @@ export function CreateAssetPage() {
                 className="mx-2"
                 type="primary"
                 danger
-                onSubmit={onFinish}
                 htmlType="submit"
                 disabled={
                   !form.isFieldsTouched(
@@ -252,7 +265,6 @@ export function CreateAssetPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
-                onClick={() => enterLoading(2)}
                 loading={loadings[2]}
               >
                 Save
