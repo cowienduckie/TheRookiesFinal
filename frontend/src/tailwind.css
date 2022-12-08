@@ -703,6 +703,12 @@ video {
   width: 33.333333% !important;
 }
 
+.w-fit {
+  width: -webkit-fit-content !important;
+  width: -moz-fit-content !important;
+  width: fit-content !important;
+}
+
 .w-4\/12 {
   width: 33.333333% !important;
 }

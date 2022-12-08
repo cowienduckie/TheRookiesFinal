@@ -1,12 +1,12 @@
 import { Button, Divider, Modal, Space } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export function DeleteAssetPage() {
-  let { id } = useParams();
+  let { id } = useParams(); // eslint-disable-line
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [hasHistoricalAssignment, sethasHistoricalAssignment] = useState(false);
+  const [hasHistoricalAssignment, setHasHistoricalAssignment] = useState(false); // eslint-disable-line
   const [loadings, setLoadings] = useState([]);
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
