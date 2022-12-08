@@ -17,28 +17,26 @@ export function AcceptAssignmentPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 2000);
-  };
 
   const handleAccept = async () => {
-    enterLoading(0);
-
-    await respondAssignment({id : assignmentId, state: ACCEPTED_ENUM}).then(() => {
-      setIsModalOpen(false);
-      navigate("/", { state: { isReload : true } });
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[1] = true;
+      return newLoadings;
     });
+
+    await respondAssignment({ id: assignmentId, state: ACCEPTED_ENUM })
+      .then(() => {
+        setIsModalOpen(false);
+        navigate("/", { state: { isReload: true } });
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[1] = false;
+          return newLoadings;
+        });
+      });
   };
 
   return (
@@ -59,7 +57,7 @@ export function AcceptAssignmentPage() {
               type="primary"
               danger
               className="mr-2"
-              loading={loadings[0]}
+              loading={loadings[1]}
               onClick={handleAccept}
             >
               Accept
