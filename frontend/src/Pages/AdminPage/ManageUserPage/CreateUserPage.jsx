@@ -68,9 +68,19 @@ export function CreateUserPage() {
         .utcOffset(0)
         .startOf("date")
     };
-    enterLoading(2);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[1] = true;
+      return newLoadings;
+    });
+
     await createUser(values).then((data) => {
       setCreatedUser(data);
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[1] = false;
+        return newLoadings;
+      });
       setIsModalOpen(true);
     });
   };
@@ -93,20 +103,6 @@ export function CreateUserPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 2000);
-  };
 
   return (
     <>
@@ -272,7 +268,7 @@ export function CreateUserPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
-                loading={loadings[2]}
+                loading={loadings[1]}
               >
                 Save
               </Button>

@@ -77,9 +77,19 @@ export function CreateAssetPage() {
       installedDate: dayjs(values.installedDate).add(7, "h"),
       state: parseInt(values.state)
     };
-    enterLoading(1);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[2] = true;
+      return newLoadings;
+    });
+
     await createAsset(values).then((data) => {
       setCreatedAsset(data);
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[2] = false;
+        return newLoadings;
+      });
       setIsModalOpen(true);
     });
   };
@@ -252,7 +262,7 @@ export function CreateAssetPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
-                loading={loadings[1]}
+                loading={loadings[2]}
               >
                 Save
               </Button>
