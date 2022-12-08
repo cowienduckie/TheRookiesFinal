@@ -29,6 +29,7 @@ import {
   CreateAssetPage,
   CreateCategoryPage
 } from "./Pages";
+import { AssignmentDeletePage } from "./Pages/AdminPage/ManageAssignmentPage";
 
 function App() {
   const location = useLocation();
@@ -87,6 +88,10 @@ function App() {
               path="/admin/manage-assignment/:assignmentId"
               element={<AssignmentDetailPage />}
             />
+            <Route
+            path="/admin/manage-assignment/delete-assigment/:id"
+            element={<AssignmentDeletePage />}
+          ></Route>
           </Route>
           <Route
             path="/admin/manage-returning"
@@ -145,6 +150,10 @@ function App() {
       <Route
         path="/admin/manage-asset/create-category"
         element={<CreateCategoryPage />}
+      />
+      <Route
+        path="/admin/manage-assignment/delete-assigment/:id"
+        element={<AssignmentDeletePage />}
       />
       <Route
         path="/admin/manage-assignment/:assignmentId"
