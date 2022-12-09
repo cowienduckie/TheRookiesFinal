@@ -1,11 +1,15 @@
 import { Button, Divider, Modal, Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { ACCEPTED_ENUM } from "../../Constants/AssignmentState";
+import { respondAssignment } from "../../Apis/AssignmentApis";
 
 export function AcceptAssignmentPage() {
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const { assignmentId } = useParams();
 
   const onCancel = () => {
     setIsModalOpen(false);
@@ -13,23 +17,26 @@ export function AcceptAssignmentPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 2000);
-  };
 
   const handleAccept = async () => {
-    enterLoading(0);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[1] = true;
+      return newLoadings;
+    });
+
+    await respondAssignment({ id: assignmentId, state: ACCEPTED_ENUM })
+      .then(() => {
+        setIsModalOpen(false);
+        navigate("/", { state: { isReload: true } });
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[1] = false;
+          return newLoadings;
+        });
+      });
   };
 
   return (
@@ -50,7 +57,7 @@ export function AcceptAssignmentPage() {
               type="primary"
               danger
               className="mr-2"
-              loading={loadings[0]}
+              loading={loadings[1]}
               onClick={handleAccept}
             >
               Accept
