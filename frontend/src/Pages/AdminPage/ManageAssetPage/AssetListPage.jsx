@@ -205,11 +205,16 @@ export function AssetListPage() {
             className="mr-2"
             icon={<EditOutlined className="align-middle" />}
           />
-          <Button
-            className="ml-2"
-            danger
-            icon={<CloseOutlined className="align-middle" />}
-          />
+          <Link
+            to={`/admin/manage-asset/delete-asset/${record.id}`}
+            state={{ background: location }}
+          >
+            <Button
+              className="ml-2"
+              danger
+              icon={<CloseOutlined className="align-middle" />}
+            />
+          </Link>
         </div>
       )
     }

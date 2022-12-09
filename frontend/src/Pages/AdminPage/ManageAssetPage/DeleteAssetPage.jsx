@@ -1,12 +1,13 @@
 import { Button, Divider, Modal, Space } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { checkCanDeleteAsset, deleteAsset } from "../../../Apis/AssetApis";
 
 export function DeleteAssetPage() {
   let { id } = useParams(); // eslint-disable-line
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [hasHistoricalAssignment, setHasHistoricalAssignment] = useState(false); // eslint-disable-line
+  const [hasHistoricalAssignment, setHasHistoricalAssignment] = useState(); // eslint-disable-line
   const [loadings, setLoadings] = useState([]);
   const enterLoading = (index) => {
     setLoadings((prevLoadings) => {
@@ -23,14 +24,30 @@ export function DeleteAssetPage() {
     }, 6000);
   };
 
+  useEffect(() => {
+    async function checkValid() {
+      var result = await checkCanDeleteAsset(id);
+
+      if (result.isSuccess === true) {
+        setHasHistoricalAssignment(true);
+      } else {
+        setHasHistoricalAssignment(false);
+      }
+    }
+
+    checkValid();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const onCancel = () => {
     navigate(-1);
   };
 
-  const handleDelete = ()=>{
+  const handleDelete = async ()=>{
     enterLoading();
-    setIsModalOpen(false);
-    navigate(-1)
+    await deleteAsset({ id }).finally(() => {
+      setIsModalOpen(false);
+      navigate("/admin/manage-asset", { state: { isReload: true } });
+    });
   }
 
   const handleCancel = ()=>{
@@ -42,7 +59,7 @@ export function DeleteAssetPage() {
     <>
       {
         !!hasHistoricalAssignment &&
-        (!hasHistoricalAssignment ? (
+        (hasHistoricalAssignment ? (
           <Modal open={isModalOpen} closable={false} footer={false} className="w-fit">
             <div className="flex content-center justify-between">
               <h1 className="pl-5 text-2xl font-bold text-red-600">
@@ -73,7 +90,7 @@ export function DeleteAssetPage() {
             </div>
           </Modal>
         ) : (
-          <Modal open={isModalOpen} closable={true} footer={false} onCancel={onCancel}>
+          <Modal open={isModalOpen} closable={true} footer={false} onCancel={onCancel} className="w-fit">
             <div className=" flex content-center justify-between">
               <h1 className="pl-5 text-2xl font-bold text-red-600">
                 Cannot Delete Asset
