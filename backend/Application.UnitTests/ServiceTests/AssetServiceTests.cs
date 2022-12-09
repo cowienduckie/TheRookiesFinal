@@ -2,11 +2,13 @@ using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Xml.Linq;
 using Application.Common.Models;
+using Application.DTOs.Assets;
 using Application.DTOs.Assets.CreateAsset;
 using Application.DTOs.Assets.GetAsset;
 using Application.Services;
 using Application.UnitTests.Common;
 using Domain.Entities.Assets;
+using Domain.Entities.Assignments;
 using Domain.Entities.Categories;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
@@ -19,6 +21,7 @@ public class AssetServiceTests
 {
     private Mock<IAssetRepository> _assetRepository = null!;
     private Mock<ICategoryRepository> _categoryRepository = null!;
+    private Mock<IAssignmentRepository> _assignmentRepository = null!;
     private AssetService _assetService = null!;
     private Mock<IUnitOfWork> _unitOfWork = null!;
 
@@ -28,6 +31,8 @@ public class AssetServiceTests
         _assetRepository = new Mock<IAssetRepository>();
         _categoryRepository = new Mock<ICategoryRepository>();
         _unitOfWork = new Mock<IUnitOfWork>();
+        _unitOfWork.Setup(unit => unit.AsyncRepository<Category>()).Returns(_categoryRepository.Object);
+        _unitOfWork.Setup(unit => unit.AsyncRepository<Assignment>()).Returns(_assignmentRepository.Object);
 
         _assetService = new AssetService(_unitOfWork.Object, _assetRepository.Object);
     }
@@ -103,133 +108,12 @@ public class AssetServiceTests
     }
 
     [Test]
-    public async Task CreateAsset_ValidInput_ReturnsSuccessResponse()
+    public async Task CreateAssetAsync_NullCategory_ReturnsUnexistedCategory()
     {
-        var newCategory = new Category
-        {
-            Id = Guid.NewGuid(),
-            Prefix = "LA",
-            Name = "Laptop"
-        };
-
-        //var asset = new Asset
-        //{
-        //    Id = Guid.NewGuid(),
-        //    AssetCode = "LA000001",
-        //    Name = AssetConstants.Name,
-        //    CategoryId = newCategory.Id,
-        //    Category = newCategory,
-        //    Specification = AssetConstants.Specification,
-        //    InstalledDate = AssetConstants.InstalledDate,
-        //    State = AssetConstants.State,
-        //    Location = AssetConstants.AssetLocation,
-        //    HasHistoricalAssignment = AssetConstants.HasHistoricalAssignment,
-        //};
-
-        _categoryRepository
-            .Setup(cat => cat.GetAsync(
-                It.IsAny<Expression<Func<Category, bool>>>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(newCategory);
-
         var listAsset = new List<Asset>
         {
-            new Asset{
-                Id = Guid.NewGuid(),
-                AssetCode = "LA000001",
-                Name = AssetConstants.Name,
-                CategoryId = newCategory.Id,
-                Specification = AssetConstants.Specification,
-                InstalledDate = AssetConstants.InstalledDate,
-                State = AssetConstants.State,
-                Location = AssetConstants.AssetLocation,
-            },
-            new Asset{
-                Id = Guid.NewGuid(),
-                AssetCode = "LA000002",
-                Name = AssetConstants.Name + "NEW",
-                CategoryId = newCategory.Id,
-                Specification = AssetConstants.Specification,
-                InstalledDate = AssetConstants.InstalledDate,
-                State = AssetConstants.State,
-                Location = AssetConstants.AssetLocation,
-            }
-        };
-
-        var newAsset = new CreateAssetRequest
-        {
-            Name = AssetConstants.Name,
-            CategoryId = newCategory.Id,
-            Specification = AssetConstants.Specification,
-            InstalledDate = AssetConstants.InstalledDate,
-            State = AssetConstants.State,
-            Location = AssetConstants.AssetLocation,
-        };
-
-        _assetRepository
-            .Setup(ur => ur.ListAsync(
-                                It.IsAny<Expression<Func<Asset, bool>>>(),
-                                It.IsAny<CancellationToken>()))
-            .ReturnsAsync(listAsset);
-
-        var result = await _assetService.CreateAssetAsync(newAsset);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(result, Is.Not.Null);
-
-            Assert.That(result, Is.InstanceOf<Response<GetAssetResponse>>());
-
-            Assert.That(result.IsSuccess, Is.True);
-
-            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
-
-            Assert.That(result.Data, Is.Not.Null);
-
-            Assert.That(result.Data!.AssetCode, Is.EqualTo("LA000003"));
-        });
-    }
-
-    [Test]
-    public async Task CreateAsset_NullCategory_ReturnsUnexistedCategory()
-    {
-
-        //var asset = new Asset
-        //{
-        //    Id = Guid.NewGuid(),
-        //    AssetCode = "LA000001",
-        //    Name = AssetConstants.Name,
-        //    CategoryId = newCategory.Id,
-        //    Category = newCategory,
-        //    Specification = AssetConstants.Specification,
-        //    InstalledDate = AssetConstants.InstalledDate,
-        //    State = AssetConstants.State,
-        //    Location = AssetConstants.AssetLocation,
-        //    HasHistoricalAssignment = AssetConstants.HasHistoricalAssignment,
-        //};
-
-        var listAsset = new List<Asset>
-        {
-            new Asset{
-                Id = Guid.NewGuid(),
-                AssetCode = "LA000001",
-                Name = AssetConstants.Name,
-                CategoryId = AssetConstants.CategoryId,
-                Specification = AssetConstants.Specification,
-                InstalledDate = AssetConstants.InstalledDate,
-                State = AssetConstants.State,
-                Location = AssetConstants.AssetLocation,
-            },
-            new Asset{
-                Id = Guid.NewGuid(),
-                AssetCode = "LA000002",
-                Name = AssetConstants.Name + "NEW",
-                CategoryId = AssetConstants.CategoryId,
-                Specification = AssetConstants.Specification,
-                InstalledDate = AssetConstants.InstalledDate,
-                State = AssetConstants.State,
-                Location = AssetConstants.AssetLocation,
-            }
+            AssetConstants.SampleAsset1,
+            AssetConstants.SampleAsset2
         };
 
         var newAsset = new CreateAssetRequest
@@ -265,6 +149,134 @@ public class AssetServiceTests
             Assert.That(result.IsSuccess, Is.False);
 
             Assert.That(result.Message, Is.EqualTo(ErrorMessages.UnexistedCategory));
+        });
+    }
+
+    [Test]
+    public async Task CreateAssetAsync_ValidInput_ReturnsSuccessResponse()
+    {
+        _categoryRepository
+            .Setup(cat => cat.GetAsync(
+                It.IsAny<Expression<Func<Category, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(AssetConstants.SampleCategory);
+
+        var listAsset = new List<Asset>
+        {
+            AssetConstants.SampleAsset1,
+            AssetConstants.SampleAsset2
+        };
+
+        _assetRepository
+            .Setup(ur => ur.ListAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(listAsset);
+
+        var newAsset = new CreateAssetRequest
+        {
+            Name = AssetConstants.Name,
+            CategoryId = AssetConstants.CategoryId,
+            Specification = AssetConstants.Specification,
+            InstalledDate = AssetConstants.InstalledDate,
+            State = AssetConstants.State,
+            Location = AssetConstants.AssetLocation,
+        };
+
+        var result = await _assetService.CreateAssetAsync(newAsset);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response<GetAssetResponse>>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
+
+            Assert.That(result.Data, Is.Not.Null);
+
+            Assert.That(result.Data!.AssetCode, Is.EqualTo("SC000003"));
+        });
+    }
+
+    [Test]
+    public async Task DeleteAssetAsync_InvalidAssetId_ReturnsNotFound()
+    {
+        var listAsset = new List<Asset>
+        {
+            AssetConstants.SampleAsset1,
+            AssetConstants.SampleAsset2
+        };
+
+        _assetRepository
+            .Setup(ur => ur.ListAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(listAsset);
+
+        var requestModel = new DeleteAssetRequest
+        {
+            Id = Guid.NewGuid(),
+        };
+
+        var result = await _assetService.DeleteAssetAsync(requestModel);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.NotFound));
+        });
+    }
+
+
+    [Test]
+    public async Task DeleteAssetAsync_HasHistoricalAssignment_ReturnsNotFound()
+    {
+        var listAsset = new List<Asset>
+        {
+            AssetConstants.SampleAsset1,
+            AssetConstants.SampleAsset2
+        };
+
+        _assetRepository
+            .Setup(ur => ur.ListAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(listAsset);
+
+        var listAssignment = new List<Assignment>
+        {
+
+        };
+
+        _assignmentRepository.Setup(ur => ur.ListAsync(
+                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .Returns(listAssignment);
+
+        var requestModel = new DeleteAssetRequest
+        {
+            Id = Guid.NewGuid(),
+        };
+
+        var result = await _assetService.DeleteAssetAsync(requestModel);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.NotFound));
         });
     }
 }

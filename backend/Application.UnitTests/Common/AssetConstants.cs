@@ -9,7 +9,7 @@ public static class AssetConstants
 {
     public static readonly Guid Id = new();
     public static readonly Guid CategoryId = new();
-    public const string AssetCode = "LA000001";
+    public const string AssetCode = "SC000001";
     public const string Name = "Sample Asset";
     public const string Specification = "A detailed description";
 
@@ -36,6 +36,31 @@ public static class AssetConstants
     {
         Id = Id,
         AssetCode = AssetCode,
+        Name = Name,
+        CategoryId = CategoryId,
+        Category = SampleCategory,
+        Specification = Specification,
+        InstalledDate = InstalledDate,
+        State = State,
+        Location = AssetLocation
+    };
+
+    public static readonly Asset SampleAsset1 = new()
+    {
+        Id = Id,
+        AssetCode = "LA000001",
+        Name = Name,
+        CategoryId = CategoryId,
+        Category = SampleCategory,
+        Specification = Specification,
+        InstalledDate = InstalledDate,
+        State = State,
+        Location = AssetLocation
+    };
+    public static readonly Asset SampleAsset2 = new()
+    {
+        Id = Id,
+        AssetCode = "LA000002",
         Name = Name,
         CategoryId = CategoryId,
         Category = SampleCategory,
