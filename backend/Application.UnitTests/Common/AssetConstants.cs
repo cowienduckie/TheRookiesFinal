@@ -8,7 +8,7 @@ public static class AssetConstants
 {
     public static readonly Guid Id = new();
     public static readonly Guid CategoryId = new();
-    public const string AssetCode = "LA0000001";
+    public const string AssetCode = "LA000001";
     public const string Name = "Sample Asset";
     public const string Specification = "A detailed description";
 

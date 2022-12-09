@@ -19,4 +19,5 @@ public static class ErrorMessages
     public const string DuplicateCategoryName = "Category is already existed. Please enter a different category!";
     public const string UnexistedCategory = "Category is not existed!";
     public const string InvalidState = "State of assignment is not waiting!";
+    public const string CannotDeleteAsset = "There are valid assignments relating to this asset. Please close all assignments before deleting this asset.";
 }
