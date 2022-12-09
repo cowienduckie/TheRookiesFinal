@@ -111,7 +111,7 @@ export function AssignmentCreatePage() {
 
   return (
     <>
-      <h1 className="mb-5 text-2xl font-bold text-red-600">Create New Asset</h1>
+      <h1 className="mb-5 text-2xl font-bold text-red-600">Create New Assignment</h1>
       <Form
         {...formLayout}
         form={form}
