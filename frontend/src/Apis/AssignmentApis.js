@@ -18,3 +18,11 @@ export async function getOwnedAssignmentList(queries = "") {
 export async function getOwnedAssignmentById(id) {
   return await callApi("get", url + "/owned-assignments/" + id);
 }
+
+export async function createAssignment(data) {
+  return await callApi("post", url, data);
+}
+
+export async function respondAssignment(data) {
+  return await callApi("put", url + "/response" , data);
+}

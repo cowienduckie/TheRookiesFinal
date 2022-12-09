@@ -12,6 +12,7 @@ import {
   STATE_ENUM
 } from "../../../Constants/ModelFieldConstants";
 import { getAllCategories } from "../../../Apis/CategoryApis";
+import { ASSIGNED } from "../../../Constants/AssetStates";
 
 function useLoader() {
   const { search, state } = useLocation();
@@ -209,11 +210,20 @@ export function AssetListPage() {
             to={`/admin/manage-asset/delete-asset/${record.id}`}
             state={{ background: location }}
           >
-            <Button
-              className="ml-2"
-              danger
-              icon={<CloseOutlined className="align-middle" />}
-            />
+           <Button
+            className="ml-2"
+            disabled={record.state === ASSIGNED}
+            danger
+            icon={
+              <CloseOutlined
+                className={
+                  record.state === ASSIGNED
+                    ? "align-middle text-gray-300"
+                    : "align-middle"
+                }
+              />
+            }
+          />
           </Link>
         </div>
       )

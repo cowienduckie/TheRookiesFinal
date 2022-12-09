@@ -27,7 +27,10 @@ export {
   AssignmentDetailPage,
   AssignmentListPage,
   CreateAssetPage,
-  CreateCategoryPage
+  CreateCategoryPage,
+  AssignmentCreatePage,
+  AssetListModal,
+  UserListModal
 } from "./AdminPage";
 
 export {

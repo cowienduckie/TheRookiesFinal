@@ -9,11 +9,9 @@ using Application.Services.Interfaces;
 using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
 using Domain.Entities.Categories;
-using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
-using Infrastructure.Persistence.Repositories;
 
 namespace Application.Services;
 
@@ -32,8 +30,8 @@ public class AssetService : BaseService, IAssetService
     {
         var asset = await _assetRepository
             .GetAsync(a => !a.IsDeleted &&
-                            a.Id == request.Id &&
-                            a.Location == request.Location);
+                           a.Id == request.Id &&
+                           a.Location == request.Location);
 
         if (asset == null)
         {
@@ -49,8 +47,8 @@ public class AssetService : BaseService, IAssetService
     {
         var assets = (await _assetRepository.ListAsync(a => !a.IsDeleted &&
                                                             a.Location == request.Location))
-                    .Select(a => new GetAssetResponse(a))
-                    .AsQueryable();
+            .Select(a => new GetAssetResponse(a))
+            .AsQueryable();
 
         var validSortFields = new[]
         {
@@ -66,7 +64,7 @@ public class AssetService : BaseService, IAssetService
             ModelField.AssetCode
         };
 
-        var validFilterFields = new []
+        var validFilterFields = new[]
         {
             ModelField.Category,
             ModelField.State
@@ -76,7 +74,7 @@ public class AssetService : BaseService, IAssetService
 
         if (!string.IsNullOrEmpty(request.AssetFilter.AssetState))
         {
-            filterQueries.Add(new()
+            filterQueries.Add(new FilterQuery
             {
                 FilterField = ModelField.State,
                 FilterValue = request.AssetFilter.AssetState
@@ -85,7 +83,7 @@ public class AssetService : BaseService, IAssetService
 
         if (!string.IsNullOrEmpty(request.AssetFilter.Category))
         {
-            filterQueries.Add(new()
+            filterQueries.Add(new FilterQuery
             {
                 FilterField = ModelField.Category,
                 FilterValue = request.AssetFilter.Category
@@ -98,9 +96,9 @@ public class AssetService : BaseService, IAssetService
             .SortByField(validSortFields, request.SortQuery.SortField, request.SortQuery.SortDirection);
 
         var pagedList = new PagedList<GetAssetResponse>(
-                                processedList,
-                                request.PagingQuery.PageIndex,
-                                request.PagingQuery.PageSize);
+            processedList,
+            request.PagingQuery.PageIndex,
+            request.PagingQuery.PageSize);
 
         var responseData = new GetListAssetsResponse(pagedList);
 

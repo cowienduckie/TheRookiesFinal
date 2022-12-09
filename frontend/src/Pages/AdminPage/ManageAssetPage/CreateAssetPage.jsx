@@ -115,21 +115,7 @@ export function CreateAssetPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 2000);
-  };
-
+  
   return (
     <>
       <h1 className="mb-5 text-2xl font-bold text-red-600">Create New Asset</h1>
@@ -177,8 +163,6 @@ export function CreateAssetPage() {
                     type="text"
                     style={{ textAlign: "left" }}
                     block
-                    onClick={() => enterLoading(1)}
-                    loading={loadings[1]}
                   >
                     <em style={{ fontStyle: "normal", color: "red" }}>+ </em>
                     Add New Category

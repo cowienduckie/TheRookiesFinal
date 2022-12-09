@@ -1,11 +1,14 @@
 using Application.Common.Models;
+using Application.DTOs.Assignments.CreateAssignment;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.GetListAssignments;
 using Application.DTOs.Assignments.RespondAssignment;
 using Application.Helpers;
 using Application.Queries;
 using Application.Services.Interfaces;
+using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
+using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
@@ -44,7 +47,7 @@ public class AssignmentService : BaseService, IAssignmentService
         var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted))
             .Where(a => a.Asset.Location == request.Location)
             .AsQueryable()
-            .SortByField(new[] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
+            .SortByField(new[] {ModelField.AssignedDate}, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(a => new GetAssignmentResponse(a))
             .AsQueryable();
 
@@ -107,12 +110,15 @@ public class AssignmentService : BaseService, IAssignmentService
 
     public async Task<Response<GetListAssignmentsResponse>> GetOwnedListAsync(GetListOwnedAssignmentsRequest request)
     {
-        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted &&
-                                                                      a.AssignedTo == request.CurrentUser.Id &&
-                                                                      a.State != AssignmentState.Declined &&
-                                                                      DateTime.Compare(DateTime.Today, a.AssignedDate.Date) >= 0))
+        var assignments =
+            (await _assignmentRepository
+                .ListAsync(a =>
+                    !a.IsDeleted &&
+                    a.AssignedTo == request.CurrentUser.Id &&
+                    a.State != AssignmentState.Declined &&
+                    DateTime.Compare(DateTime.Today, a.AssignedDate.Date) >= 0))
             .AsQueryable()
-            .SortByField(new [] { ModelField.AssignedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
+            .SortByField(new[] {ModelField.AssignedDate}, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(a => new GetAssignmentResponse(a))
             .AsQueryable();
 
@@ -123,7 +129,8 @@ public class AssignmentService : BaseService, IAssignmentService
             ModelField.State
         };
 
-        var processedList = assignments.SortByField(validSortFields, request.SortQuery.SortField, request.SortQuery.SortDirection);
+        var processedList = assignments.SortByField(validSortFields, request.SortQuery.SortField,
+            request.SortQuery.SortDirection);
 
         var pagedList = new PagedList<GetAssignmentResponse>(
             processedList,
@@ -156,5 +163,59 @@ public class AssignmentService : BaseService, IAssignmentService
         await UnitOfWork.SaveChangesAsync();
 
         return new Response(true, Messages.ActionSuccess);
+    }
+
+    public async Task<Response<GetAssignmentResponse>> CreateAsync(CreateAssignmentRequest request)
+    {
+        var assetRepository = UnitOfWork.AsyncRepository<Asset>();
+
+        var assignedAsset = await assetRepository
+            .GetAsync(a => !a.IsDeleted &&
+                           a.Id == request.AssetId &&
+                           a.State == AssetState.Available);
+
+        if (assignedAsset == null)
+        {
+            return new Response<GetAssignmentResponse>(false, ErrorMessages.BadRequest);
+        }
+
+        var userRepository = UnitOfWork.AsyncRepository<User>();
+
+        var assignee = await userRepository
+            .GetAsync(u => !u.IsDeleted &&
+                           u.Id == request.AssignedTo);
+
+        var assigner = await userRepository
+            .GetAsync(u => !u.IsDeleted &&
+                           u.Id == request.AssignedBy);
+
+        if (assignee == null || assigner == null)
+        {
+            return new Response<GetAssignmentResponse>(false, ErrorMessages.BadRequest);
+        }
+
+        var newAssignment = new Assignment
+        {
+            Id = Guid.NewGuid(),
+            AssetId = request.AssetId,
+            Asset = assignedAsset,
+            AssignedTo = request.AssignedTo,
+            Assignee = assignee,
+            AssignedBy = request.AssignedBy,
+            Assigner = assigner,
+            AssignedDate = request.AssignedDate.Date,
+            Note = request.Note,
+            State = AssignmentState.WaitingForAcceptance
+        };
+
+        assignedAsset.State = AssetState.Assigned;
+
+        await assetRepository.UpdateAsync(assignedAsset);
+        await _assignmentRepository.AddAsync(newAssignment);
+        await UnitOfWork.SaveChangesAsync();
+
+        var responseData = new GetAssignmentResponse(newAssignment);
+
+        return new Response<GetAssignmentResponse>(true, responseData);
     }
 }
