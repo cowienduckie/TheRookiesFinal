@@ -187,8 +187,8 @@ export function AssignmentCreatePage() {
                 danger
                 htmlType="submit"
                 disabled={
-                  (!!assignedUser || !!assignedUser.id) ||
-                  (!!assignedAsset || !!assignedAsset.id) ||
+                  !(!!assignedUser && !!assignedUser.id) ||
+                  !(!!assignedAsset && !!assignedAsset.id) ||
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
