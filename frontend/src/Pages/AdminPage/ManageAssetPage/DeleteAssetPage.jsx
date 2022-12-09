@@ -58,7 +58,8 @@ export function DeleteAssetPage() {
   return (
     <>
       {
-        !!hasHistoricalAssignment &&
+        hasHistoricalAssignment !== undefined &&
+        hasHistoricalAssignment !== null &&
         (hasHistoricalAssignment ? (
           <Modal open={isModalOpen} closable={false} footer={false} className="w-fit">
             <div className="flex content-center justify-between">
