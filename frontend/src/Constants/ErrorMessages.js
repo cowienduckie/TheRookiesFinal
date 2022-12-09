@@ -9,6 +9,8 @@ export const PASSWORD_AT_LEAST_ONE_SPECIAL_CHARACTER =
   "Please input at least one special character without space and the unsupported special characters!";
 export const PASSWORD_RANGE_FROM_8_TO_16_CHARACTERS =
   "Please input from the range of 8 to 16 characters!";
+export const NOTE_RANGE_FROM_6_TO_255_CHARACTERS = 
+  "Note length should be 6 - 255 characters!";
 export const INCORRECT_LOGIN =
   "Username or password is incorrect. Please try again!";
 export const INCORRECT_OLD_PASSWORD =
