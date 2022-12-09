@@ -1,9 +1,13 @@
 import { Button, Divider, Modal, Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
+import { respondAssignment } from "../../Apis/AssignmentApis";
+import { DECLINED_ENUM } from "../../Constants/AssignmentState";
 
 export function DeclineAssignmentPage() {
   const navigate = useNavigate();
+
+  const { assignmentId } = useParams();
 
   const [isModalOpen, setIsModalOpen] = useState(true);
 
@@ -13,23 +17,26 @@ export function DeclineAssignmentPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 2000);
-  };
 
   const handleDecline = async () => {
-    enterLoading(0);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[1] = true;
+      return newLoadings;
+    });
+
+    await respondAssignment({ id: assignmentId, state: DECLINED_ENUM })
+      .then(() => {
+        setIsModalOpen(false);
+        navigate("/", { state: { isReload : true } });
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[1] = false;
+          return newLoadings;
+        });
+      });
   };
 
   return (
@@ -50,7 +57,7 @@ export function DeclineAssignmentPage() {
               type="primary"
               danger
               className="mr-2"
-              loading={loadings[0]}
+              loading={loadings[1]}
               onClick={handleDecline}
             >
               Decline

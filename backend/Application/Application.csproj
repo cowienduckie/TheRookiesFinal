@@ -21,6 +21,7 @@
   <ItemGroup>
     <Folder Include="DTOs\Assets\GetListAssets\" />
     <Folder Include="DTOs\Assignments\GetListAssignments\" />
+    <Folder Include="DTOs\Assignments\CreateAssignment\" />
     <Folder Include="DTOs\RequestsForReturning\GetRequestForReturning\" />
     <Folder Include="DTOs\Users\DisableUser\" />
     <Folder Include="Queries\Assets\" />

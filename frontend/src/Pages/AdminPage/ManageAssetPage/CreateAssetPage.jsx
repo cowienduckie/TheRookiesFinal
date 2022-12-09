@@ -77,10 +77,24 @@ export function CreateAssetPage() {
       installedDate: dayjs(values.installedDate).add(7, "h"),
       state: parseInt(values.state)
     };
-    await createAsset(values).then((data) => {
-      setCreatedAsset(data);
-      setIsModalOpen(true);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[2] = true;
+      return newLoadings;
     });
+
+    await createAsset(values)
+      .then((data) => {
+        setCreatedAsset(data);
+        setIsModalOpen(true);
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[2] = false;
+          return newLoadings;
+        });
+      });
   };
 
   const handleCancel = () => {
@@ -101,21 +115,7 @@ export function CreateAssetPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 2000);
-  };
-
+  
   return (
     <>
       <h1 className="mb-5 text-2xl font-bold text-red-600">Create New Asset</h1>
@@ -163,8 +163,6 @@ export function CreateAssetPage() {
                     type="text"
                     style={{ textAlign: "left" }}
                     block
-                    onClick={() => enterLoading(1)}
-                    loading={loadings[1]}
                   >
                     <em style={{ fontStyle: "normal", color: "red" }}>+ </em>
                     Add New Category
@@ -242,7 +240,6 @@ export function CreateAssetPage() {
                 className="mx-2"
                 type="primary"
                 danger
-                onSubmit={onFinish}
                 htmlType="submit"
                 disabled={
                   !form.isFieldsTouched(
@@ -252,7 +249,6 @@ export function CreateAssetPage() {
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
-                onClick={() => enterLoading(2)}
                 loading={loadings[2]}
               >
                 Save

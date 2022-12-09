@@ -21,12 +21,16 @@ export {
   UserListPage,
   DetailedInfoUserPage,
   DisableUserPage,
+  DeleteAssetPage,
   AssetListPage,
   AssetDetailPage,
   AssignmentDetailPage,
   AssignmentListPage,
   CreateAssetPage,
-  CreateCategoryPage
+  CreateCategoryPage,
+  AssignmentCreatePage,
+  AssetListModal,
+  UserListModal
 } from "./AdminPage";
 
 export {

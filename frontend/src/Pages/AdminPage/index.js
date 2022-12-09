@@ -8,13 +8,17 @@ export {
   CreateCategoryPage,
   EditAssetPage,
   AssetListPage,
-  AssetDetailPage
+  AssetDetailPage,
+  DeleteAssetPage
 } from "./ManageAssetPage";
 
 export {
   ManageAssignmentPage,
   AssignmentDetailPage,
-  AssignmentListPage
+  AssignmentListPage,
+  AssignmentCreatePage,
+  UserListModal,
+  AssetListModal
 } from "./ManageAssignmentPage";
 
 export { ReportPage } from "./ReportPage";

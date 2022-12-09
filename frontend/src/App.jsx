@@ -18,6 +18,7 @@ import {
   UserListPage,
   DetailedInfoUserPage,
   DisableUserPage,
+  DeleteAssetPage,
   AssetListPage,
   AssetDetailPage,
   DetailedInfoHomePage,
@@ -28,6 +29,12 @@ import {
   CreateAssetPage,
   CreateCategoryPage
 } from "./Pages";
+import {
+  AssetListModal,
+  AssignmentCreatePage,
+  AssignmentDeletePage,
+  UserListModal
+} from "./Pages/AdminPage/ManageAssignmentPage";
 
 function App() {
   const location = useLocation();
@@ -40,6 +47,10 @@ function App() {
         <Route index={true} element={<HomePage />} />
         <Route path="/admin" element={<AdminPage />}>
           <Route path="/admin/manage-asset" element={<ManageAssetPage />}>
+            <Route
+              path="/admin/manage-asset/delete-asset/:id"
+              element={<DeleteAssetPage />}
+            />
             <Route
               path="/admin/manage-asset/create-asset"
               element={<CreateAssetPage />}
@@ -82,14 +93,31 @@ function App() {
               path="/admin/manage-assignment/:assignmentId"
               element={<AssignmentDetailPage />}
             />
+            <Route
+              path="/admin/manage-assignment/create-assignment"
+              element={<AssignmentCreatePage />}
+            >
+              <Route
+                path="/admin/manage-assignment/create-assignment/user-list"
+                element={<UserListModal />}
+              />
+              <Route
+                path="/admin/manage-assignment/create-assignment/asset-list"
+                element={<AssetListModal />}
+              />
+            </Route>
+            <Route
+              path="/admin/manage-assignment/delete-assignment/:id"
+              element={<AssignmentDeletePage />}
+            ></Route>
           </Route>
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
-          >
-          </Route>
+          ></Route>
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
+
         <Route path="/change-password" element={<ChangePasswordPage />} />
         <Route
           path="/change-password-first-time"
@@ -114,6 +142,14 @@ function App() {
         element={<DisableUserPage />}
       />
       <Route
+        path="/admin/manage-asset/delete-asset/:id"
+        element={<DeleteAssetPage />}
+      />
+      <Route
+        path="/assignments/:assignmentId"
+        element={<DetailedInfoHomePage />}
+      />
+      <Route
         path="/admin/manage-asset/:assetId"
         element={<AssetDetailPage />}
       />
@@ -134,8 +170,20 @@ function App() {
         element={<CreateCategoryPage />}
       />
       <Route
+        path="/admin/manage-assignment/delete-assignment/:id"
+        element={<AssignmentDeletePage />}
+      />
+      <Route
         path="/admin/manage-assignment/:assignmentId"
         element={<AssignmentDetailPage />}
+      />
+      <Route
+        path="/admin/manage-assignment/create-assignment/user-list"
+        element={<UserListModal />}
+      />
+      <Route
+        path="/admin/manage-assignment/create-assignment/asset-list"
+        element={<AssetListModal />}
       />
     </Routes>
   );
