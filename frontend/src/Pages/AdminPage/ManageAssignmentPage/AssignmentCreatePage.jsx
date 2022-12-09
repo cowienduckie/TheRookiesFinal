@@ -91,7 +91,7 @@ export function AssignmentCreatePage() {
         .add(7, "h")
         .utcOffset(0)
         .startOf("date"),
-      note: values.note.trim()
+      note: values.note && values.note.trim()
     };
 
     await createAssignment(inputData)

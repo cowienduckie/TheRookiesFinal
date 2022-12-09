@@ -16,7 +16,9 @@ import {
 } from "../../Constants/AssignmentState";
 
 function useLoader() {
-  const { search } = useLocation();
+  const { search, state } = useLocation();
+  const navigate  = useNavigate();
+  const isReload = state && state.isReload;
 
   const [queries, setQueries] = useState({
     pageIndex: "",
@@ -61,6 +63,14 @@ function useLoader() {
     }
     getList();
   }, [search]);
+
+  if (!!isReload) {
+    if (isReload) {
+      navigate(0);
+    }
+
+    window.history.replaceState({}, "");
+  }
 
   return { pagedData, queries, loading };
 }
