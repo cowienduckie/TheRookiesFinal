@@ -57,3 +57,6 @@ export const CATEGORY_NAME_EXISTED =
   "Category is already existed. Please enter a different category!";
 export const CATEGORY_PREFIX_EXISTED =
   "Prefix is already existed. Please enter a different prefix!";
+export const ASSIGNED_DATE_REQUIRED = "Please enter assigned date!";
+export const ASSIGNED_USER_REQUIRED = "Please choose an user to assign!";
+export const ASSIGNED_ASSET_REQUIRED = "Please choose an asset to assign!";

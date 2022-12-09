@@ -18,3 +18,7 @@ export async function getOwnedAssignmentList(queries = "") {
 export async function getOwnedAssignmentById(id) {
   return await callApi("get", url + "/owned-assignments/" + id);
 }
+
+export async function createAssignment(data) {
+  return await callApi("post", url, data);
+}

@@ -208,6 +208,9 @@ public class AssignmentService : BaseService, IAssignmentService
             State = AssignmentState.WaitingForAcceptance
         };
 
+        assignedAsset.State = AssetState.Assigned;
+
+        await assetRepository.UpdateAsync(assignedAsset);
         await _assignmentRepository.AddAsync(newAssignment);
         await UnitOfWork.SaveChangesAsync();
 

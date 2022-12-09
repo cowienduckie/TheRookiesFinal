@@ -300,9 +300,11 @@ export function AssignmentListPage() {
         </div>
         <div className="flex w-1/2 flex-row justify-end p-0">
           <Search className="mr-3 w-1/3" onSearch={onSearch} />
-          <Button className="ml-3" type="primary" danger>
-            Create New Assignment
-          </Button>
+          <Link to="/admin/manage-assignment/create-assignment">
+            <Button className="ml-3" type="primary" danger>
+              Create New Assignment
+            </Button>
+          </Link>
         </div>
       </div>
       <Table

@@ -15,7 +15,10 @@ export {
 export {
   ManageAssignmentPage,
   AssignmentDetailPage,
-  AssignmentListPage
+  AssignmentListPage,
+  AssignmentCreatePage,
+  UserListModal,
+  AssetListModal
 } from "./ManageAssignmentPage";
 
 export { ReportPage } from "./ReportPage";
