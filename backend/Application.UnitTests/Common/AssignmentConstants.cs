@@ -25,4 +25,17 @@ public static class AssignmentConstants
         AssignedDate = AssignedDate,
         State = State
     };
+
+    public static readonly Assignment SampleAcceptedAssignment = new()
+    {
+        Id = Id,
+        AssetId = AssetConstants.Id,
+        Asset = AssetConstants.SampleAsset,
+        AssignedTo = Constants.SampleUser.Id,
+        Assignee = Constants.SampleUser,
+        AssignedBy = Constants.SampleUser.Id,
+        Assigner = Constants.SampleUser,
+        AssignedDate = AssignedDate,
+        State = AssignmentState.Accepted
+    };
 }

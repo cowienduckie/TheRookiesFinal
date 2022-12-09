@@ -22,3 +22,7 @@ export async function getOwnedAssignmentById(id) {
 export async function createAssignment(data) {
   return await callApi("post", url, data);
 }
+
+export async function respondAssignment(data) {
+  return await callApi("put", url + "/response" , data);
+}

@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
 using Application.Common.Models;
 using Application.DTOs.Assignments.GetAssignment;
+using Application.DTOs.Assignments.RespondAssignment;
+using Application.DTOs.Users.GetUser;
 using Application.Services;
 using Application.UnitTests.Common;
 using Domain.Entities.Assignments;
@@ -134,6 +136,103 @@ public class AssignmentServiceTests
             Assert.That(result.Data!.AssignedDate, Is.EqualTo(AssignmentConstants.AssignedDateString));
 
             Assert.That(result.Data!.Note, Is.Null);
+        });
+    }
+
+    [Test]
+    public async Task RespondAssignmentAsync_NullAssignment_ReturnsNotFound()
+    {
+        _assignmentRepository
+        .Setup(ar => ar.GetAsync(
+                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(null as Assignment);
+
+        var input = new RespondAssignmentRequest
+        {
+            Id = It.IsAny<Guid>(),
+            State = AssignmentState.WaitingForAcceptance,
+        };
+
+        var result = await _assignmentService.RespondAssignmentAsync(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.NotFound));
+        });
+    }
+
+    [Test]
+    public async Task RespondAssignmentAsync_ValidAssignment_ReturnsActionSuccess()
+    {
+        var entity = AssignmentConstants.SampleAssignment;
+
+        _assignmentRepository
+        .Setup(ar => ar.GetAsync(
+                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(entity);
+
+        var input = new RespondAssignmentRequest
+        {
+            Id = AssignmentConstants.Id,
+            State = AssignmentState.Accepted,
+        };
+
+        var result = await _assignmentService.RespondAssignmentAsync(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
+        });
+    }
+
+    [Test]
+    public async Task RespondAssignmentAsync_StateIsNotWaiting_ReturnsInvalidState()
+    {
+        var entity = AssignmentConstants.SampleAcceptedAssignment;
+
+        _assignmentRepository
+        .Setup(ar => ar.GetAsync(
+                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(entity);
+
+        var input = new RespondAssignmentRequest
+        {
+            Id = AssignmentConstants.Id,
+            State = AssignmentState.Accepted,
+        };
+
+        var result = await _assignmentService.RespondAssignmentAsync(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidState));
         });
     }
 }
