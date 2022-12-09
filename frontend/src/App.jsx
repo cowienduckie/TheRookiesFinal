@@ -29,7 +29,12 @@ import {
   CreateAssetPage,
   CreateCategoryPage
 } from "./Pages";
-import { AssignmentDeletePage } from "./Pages/AdminPage/ManageAssignmentPage";
+import {
+  AssetListModal,
+  AssignmentCreatePage,
+  AssignmentDeletePage,
+  UserListModal
+} from "./Pages/AdminPage/ManageAssignmentPage";
 
 function App() {
   const location = useLocation();
@@ -89,9 +94,22 @@ function App() {
               element={<AssignmentDetailPage />}
             />
             <Route
-            path="/admin/manage-assignment/delete-assigment/:id"
-            element={<AssignmentDeletePage />}
-          ></Route>
+              path="/admin/manage-assignment/create-assignment"
+              element={<AssignmentCreatePage />}
+            >
+              <Route
+                path="/admin/manage-assignment/create-assignment/user-list"
+                element={<UserListModal />}
+              />
+              <Route
+                path="/admin/manage-assignment/create-assignment/asset-list"
+                element={<AssetListModal />}
+              />
+            </Route>
+            <Route
+              path="/admin/manage-assignment/delete-assignment/:id"
+              element={<AssignmentDeletePage />}
+            ></Route>
           </Route>
           <Route
             path="/admin/manage-returning"
@@ -152,12 +170,20 @@ function App() {
         element={<CreateCategoryPage />}
       />
       <Route
-        path="/admin/manage-assignment/delete-assigment/:id"
+        path="/admin/manage-assignment/delete-assignment/:id"
         element={<AssignmentDeletePage />}
       />
       <Route
         path="/admin/manage-assignment/:assignmentId"
         element={<AssignmentDetailPage />}
+      />
+      <Route
+        path="/admin/manage-assignment/create-assignment/user-list"
+        element={<UserListModal />}
+      />
+      <Route
+        path="/admin/manage-assignment/create-assignment/asset-list"
+        element={<AssetListModal />}
       />
     </Routes>
   );
