@@ -15,6 +15,7 @@ export {
   ManageAssetPage,
   ManageAssignmentPage,
   ManageRequestForReturningPage,
+  ManageRequestForReturningListPage,
   ReportPage,
   CreateUserPage,
   EditUserPage,

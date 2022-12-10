@@ -11,3 +11,6 @@ export const ASSET_NAME_ENUM = "10";
 export const ASSIGNED_TO_ENUM = "11";
 export const ASSIGNED_BY_ENUM = "12";
 export const ASSIGNED_DATE_ENUM = "13";
+export const REQUESTED_BY_ENUM = "14";
+export const ACCEPTED_BY_ENUM = "15";
+export const RETURNED_DATE_ENUM = "16";

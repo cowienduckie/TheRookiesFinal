@@ -13,6 +13,7 @@ import {
   ManageAssetPage,
   ManageAssignmentPage,
   ManageRequestForReturningPage,
+  ManageRequestForReturningListPage,
   ManageUserPage,
   ReportPage,
   UserListPage,
@@ -114,7 +115,12 @@ function App() {
           <Route
             path="/admin/manage-returning"
             element={<ManageRequestForReturningPage />}
-          ></Route>
+          >
+            <Route
+              index={true}
+              element={<ManageRequestForReturningListPage />}
+            />
+          </Route>
           <Route path="/admin/report" element={<ReportPage />} />
         </Route>
 
