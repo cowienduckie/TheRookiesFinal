@@ -23,9 +23,20 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
 
     public async Task<Response<GetListRequestsForReturningResponse>> GetListAsync(GetListRequestsForReturningRequest request)
     {
-        var requestsForReturning = (await _requestForReturningRepository.ListAsync(rfr => !rfr.IsDeleted))
-            .Where(rfr => rfr.Assignment.Asset.Location == request.Location)
-            .AsQueryable()
+        var entities = (await _requestForReturningRepository.ListAsync(rfr => !rfr.IsDeleted))
+            .Where(rfr => rfr.Assignment.Asset.Location == request.Location);
+
+        if (request.SortQuery.SortField == ModelField.AssignedDate)
+        {
+            entities = request.SortQuery.SortDirection switch
+            {
+                SortDirection.Ascending => entities.OrderBy(r => r.Assignment.AssignedDate),
+                SortDirection.Descending => entities.OrderByDescending(r => r.Assignment.AssignedDate),
+                _ => entities.OrderBy(r => r.Assignment.AssignedDate)
+            };
+        }
+
+        var requestsForReturning = entities.AsQueryable()
             .SortByField(new[] { ModelField.ReturnedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(rfr => new GetRequestForReturningResponse(rfr))
             .AsQueryable();
