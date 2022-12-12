@@ -1,36 +1,31 @@
 import { Button, DatePicker, Select, Table } from "antd";
-import {
-  FilterFilled,
-  EditOutlined,
-  CloseOutlined,
-  UndoOutlined
-} from "@ant-design/icons";
+import { FilterFilled, CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getAssignmentList } from "../../../Apis/AssignmentApis";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getRequestForReturningList } from "../../../Apis/RequestForReturningApis";
 import { queryObjectToString } from "../../../Helpers/ApiHelper";
 import {
+  ACCEPTED_BY_ENUM,
   ASSET_CODE_ENUM,
   ASSET_NAME_ENUM,
-  ASSIGNED_BY_ENUM,
   ASSIGNED_DATE_ENUM,
-  ASSIGNED_TO_ENUM,
+  REQUESTED_BY_ENUM,
+  RETURNED_DATE_ENUM,
   STATE_ENUM
 } from "../../../Constants/ModelFieldConstants";
 import {
-  ACCEPTED,
-  DECLINED,
-  WAITING_FOR_ACCEPTANCE
-} from "../../../Constants/AssignmentState";
+  COMPLETED,
+  WAITING_FOR_RETURNING
+} from "../../../Constants/RequestForReturningState";
 
 const dateFormat = "DD/MM/YYYY";
 
 function useLoader() {
   const { search, state } = useLocation();
   const navigate = useNavigate();
-  const newAssignment = state && state.newAssignment;
+  const newRequest = state && state.newRequest;
   const isReload = state && state.isReload;
 
   const [queries, setQueries] = useState({
@@ -38,8 +33,8 @@ function useLoader() {
     pageSize: "",
     sortField: "",
     sortDirection: "",
-    assignmentState: "",
-    assignedDate: "",
+    state: "",
+    returnedDate: "",
     searchValue: ""
   });
 
@@ -59,8 +54,8 @@ function useLoader() {
       const pageSize = searchParams.get("pageSize") ?? "";
       const sortField = searchParams.get("sortField") ?? "";
       const sortDirection = searchParams.get("sortDirection") ?? "";
-      const assignmentState = searchParams.get("assignmentState") ?? "";
-      const assignedDate = searchParams.get("assignedDate") ?? "";
+      const state = searchParams.get("state") ?? "";
+      const returnedDate = searchParams.get("returnedDate") ?? "";
       const searchValue = searchParams.get("searchValue") ?? "";
 
       const queriesFromUrl = {
@@ -68,13 +63,13 @@ function useLoader() {
         pageSize,
         sortField,
         sortDirection,
-        assignmentState,
-        assignedDate,
+        state,
+        returnedDate,
         searchValue
       };
 
       const queryString = queryObjectToString(queriesFromUrl);
-      const data = await getAssignmentList(queryString);
+      const data = await getRequestForReturningList(queryString);
 
       setQueries(queriesFromUrl);
       setPagedData({
@@ -87,19 +82,19 @@ function useLoader() {
   }, [search]);
 
   if (
-    !!newAssignment &&
+    !!newRequest &&
     pagedData.items.length > 0 &&
-    pagedData.items[0].id !== newAssignment.id
+    pagedData.items[0].id !== newRequest.id
   ) {
     const duplicateId = pagedData.items.findIndex(
-      (value) => value.id === newAssignment.id
+      (value) => value.id === newRequest.id
     );
 
     if (duplicateId >= 0) {
       pagedData.items.splice(duplicateId, 1);
     }
 
-    pagedData.items.unshift(newAssignment);
+    pagedData.items.unshift(newRequest);
     window.history.replaceState({}, "");
   }
 
@@ -114,10 +109,9 @@ function useLoader() {
   return { pagedData, queries, loading };
 }
 
-export function AssignmentListPage() {
+export function ManageRequestForReturningListPage() {
   const { pagedData, queries, loading } = useLoader();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const navigateByQueries = (queries) => {
     const queryString = queryObjectToString(queries);
@@ -146,10 +140,10 @@ export function AssignmentListPage() {
     navigateByQueries(newQueries);
   };
 
-  const onAssignedDateFilter = (value) => {
+  const onReturnedDateFilter = (value) => {
     const newQueries = {
       ...queries,
-      assignedDate: !!value ? dayjs(value).format(dateFormat).toString() : ""
+      returnedDate: !!value ? dayjs(value).format(dateFormat).toString() : ""
     };
 
     navigateByQueries(newQueries);
@@ -158,7 +152,7 @@ export function AssignmentListPage() {
   const onStateFilter = (value) => {
     const newQueries = {
       ...queries,
-      assignmentState: !!value ? value : ""
+      state: !!value ? value : ""
     };
 
     navigateByQueries(newQueries);
@@ -179,15 +173,7 @@ export function AssignmentListPage() {
       title: "Asset Code",
       dataIndex: "assetCode",
       key: ASSET_CODE_ENUM,
-      sorter: true,
-      render: (text, record) => (
-        <Link
-          to={`/admin/manage-assignment/${record.id}`}
-          state={{ background: location }}
-        >
-          <p>{text}</p>
-        </Link>
-      )
+      sorter: true
     },
     {
       title: "Asset Name",
@@ -198,16 +184,9 @@ export function AssignmentListPage() {
       ellipsis: true
     },
     {
-      title: "Assigned To",
-      dataIndex: "assignedTo",
-      key: ASSIGNED_TO_ENUM,
-      sorter: true,
-      ellipsis: true
-    },
-    {
-      title: "Assigned By",
-      dataIndex: "assignedBy",
-      key: ASSIGNED_BY_ENUM,
+      title: "Requested By",
+      dataIndex: "requestedBy",
+      key: REQUESTED_BY_ENUM,
       sorter: true,
       ellipsis: true
     },
@@ -215,6 +194,18 @@ export function AssignmentListPage() {
       title: "Assigned Date",
       dataIndex: "assignedDate",
       key: ASSIGNED_DATE_ENUM,
+      sorter: true
+    },
+    {
+      title: "Accepted By",
+      dataIndex: "acceptedBy",
+      key: ACCEPTED_BY_ENUM,
+      sorter: true
+    },
+    {
+      title: "Returned Date",
+      dataIndex: "returnedDate",
+      key: RETURNED_DATE_ENUM,
       sorter: true
     },
     {
@@ -230,32 +221,28 @@ export function AssignmentListPage() {
       render: (_, record) => (
         <div className="flex min-w-fit flex-nowrap p-0">
           <Button
-            className="mr-1"
-            icon={<EditOutlined className="align-middle" />}
-          />
-          <Button
-            className="mx-1"
-            disabled={record.state === ACCEPTED}
-            danger
+            className="mr-1 border-green-500 disabled:border-gray-200"
+            disabled={record.state === COMPLETED}
             icon={
-              <CloseOutlined
+              <CheckOutlined
                 className={
-                  record.state === ACCEPTED
+                  record.state === COMPLETED
                     ? "align-middle text-gray-300"
-                    : "align-middle"
+                    : "align-middle text-green-500"
                 }
               />
             }
           />
           <Button
-            className="ml-1 border-blue-500 disabled:border-gray-200"
-            disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            className="mx-1"
+            disabled={record.state === COMPLETED}
+            danger
             icon={
-              <UndoOutlined
+              <CloseOutlined
                 className={
-                  record.state === WAITING_FOR_ACCEPTANCE
+                  record.state === COMPLETED
                     ? "align-middle text-gray-300"
-                    : "align-middle text-blue-500"
+                    : "align-middle"
                 }
               />
             }
@@ -267,7 +254,7 @@ export function AssignmentListPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-red-600">Assignment List</h1>
+      <h1 className="text-2xl font-bold text-red-600">Request List</h1>
       <div className="flex w-full flex-row justify-between py-5">
         <div className="w-1/2 p-0">
           <Select
@@ -280,34 +267,25 @@ export function AssignmentListPage() {
             onChange={onStateFilter}
             options={[
               {
-                label: WAITING_FOR_ACCEPTANCE,
-                value: WAITING_FOR_ACCEPTANCE
+                label: WAITING_FOR_RETURNING,
+                value: WAITING_FOR_RETURNING
               },
               {
-                label: ACCEPTED,
-                value: ACCEPTED
-              },
-              {
-                label: DECLINED,
-                value: DECLINED
+                label: COMPLETED,
+                value: COMPLETED
               }
             ]}
           />
           <DatePicker
             className="ml-3 w-4/12 min-w-fit"
             allowClear
-            placeholder="Assigned Date"
+            placeholder="Returned Date"
             format={(date) => date.utc().format(dateFormat)}
-            onChange={onAssignedDateFilter}
+            onChange={onReturnedDateFilter}
           />
         </div>
         <div className="flex w-1/2 flex-row justify-end p-0">
           <Search className="mr-3 w-1/3" onSearch={onSearch} />
-          <Link to="/admin/manage-assignment/create-assignment">
-            <Button className="ml-3" type="primary" danger>
-              Create New Assignment
-            </Button>
-          </Link>
         </div>
       </div>
       <Table

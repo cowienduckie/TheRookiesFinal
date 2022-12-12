@@ -182,13 +182,15 @@ export function AssetListPage() {
       dataIndex: "name",
       key: NAME_ENUM,
       sorter: true,
-      defaultSortOrder: "ascend"
+      defaultSortOrder: "ascend",
+      ellipsis: true
     },
     {
       title: "Category",
       dataIndex: "category",
       key: CATEGORY_ENUM,
-      sorter: true
+      sorter: true,
+      ellipsis: true
     },
     {
       title: "State",

@@ -2,7 +2,11 @@ import { Divider, Modal } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserById } from "../../../Apis/UserApis";
-import { CITY_ONE, CITY_TWO, LOCATION } from "../../../Constants/DetailUserInfoConstants";
+import {
+  CITY_ONE,
+  CITY_TWO,
+  LOCATION
+} from "../../../Constants/DetailUserInfoConstants";
 
 export function DetailedInfoUserPage() {
   const [data, setData] = useState({});
@@ -48,11 +52,13 @@ export function DetailedInfoUserPage() {
               </tr>
               <tr>
                 <td className="font-bold">Full Name:</td>
-                <td>{data.fullName}</td>
+                <td className="break-all">
+                {data.fullName}
+                </td>
               </tr>
               <tr>
                 <td className="font-bold">User Name:</td>
-                <td>{data.username}</td>
+                <td className="break-all">{data.username}</td>
               </tr>
               <tr>
                 <td className="font-bold">Date of birth:</td>
@@ -68,9 +74,7 @@ export function DetailedInfoUserPage() {
               </tr>
               <tr>
                 <td className="font-bold">Location:</td>
-                <td>
-                  {data.location === LOCATION ? CITY_ONE : CITY_TWO}
-                </td>
+                <td>{data.location === LOCATION ? CITY_ONE : CITY_TWO}</td>
               </tr>
             </tbody>
           </table>

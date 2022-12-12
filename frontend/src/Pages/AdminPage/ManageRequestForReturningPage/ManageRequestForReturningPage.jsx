@@ -1,7 +1,9 @@
+import { Outlet } from "react-router-dom";
+
 export function ManageRequestForReturningPage() {
   return (
     <>
-      <h1>Returning Request Page</h1>
+      <Outlet />
     </>
   );
 }

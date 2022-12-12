@@ -15,5 +15,8 @@ public enum ModelField
     AssetName,
     AssignedTo,
     AssignedBy,
-    AssignedDate
+    AssignedDate,
+    ReturnedDate,
+    RequestedBy,
+    AcceptedBy
 }
