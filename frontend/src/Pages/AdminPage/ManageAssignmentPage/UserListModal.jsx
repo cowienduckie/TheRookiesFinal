@@ -127,7 +127,8 @@ export function UserListModal() {
       dataIndex: "fullName",
       key: FULL_NAME_ENUM,
       sorter: true,
-      defaultSortOrder: "ascend"
+      defaultSortOrder: "ascend",
+      ellipsis: true
     },
     {
       title: "Type",

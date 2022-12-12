@@ -47,11 +47,11 @@ export function AssetDetailPage() {
               </tr>
               <tr>
                 <td className="font-bold">Asset Name:</td>
-                <td>{data.name}</td>
+                <td className="break-all">{data.name}</td>
               </tr>
               <tr>
                 <td className="font-bold">Category:</td>
-                <td>{data.category}</td>
+                <td className="break-all">{data.category}</td>
               </tr>
               <tr>
                 <td className="font-bold">Specification:</td>
