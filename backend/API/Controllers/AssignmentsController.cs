@@ -1,11 +1,14 @@
 using API.Attributes;
 using Application.Common.Models;
+using Application.DTOs.Assets;
 using Application.DTOs.Assignments.CreateAssignment;
+using Application.DTOs.Assignments.DeleteAssignment;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.GetListAssignments;
 using Application.DTOs.Assignments.RespondAssignment;
 using Application.Queries;
 using Application.Queries.Assignments;
+using Application.Services;
 using Application.Services.Interfaces;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
@@ -207,6 +210,32 @@ public class AssignmentsController : BaseController
         try
         {
             var response = await _assignmentService.RespondAssignmentAsync(request);
+
+            if (!response.IsSuccess)
+            {
+                return NotFound(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPut("delete")]
+    public async Task<ActionResult<Response>> DeleteById([FromBody] DeleteAssignmentRequest requestModel)
+    {
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
+
+        try
+        {
+            var response = await _assignmentService.DeleteAssignmentAsync(requestModel);
 
             if (!response.IsSuccess)
             {

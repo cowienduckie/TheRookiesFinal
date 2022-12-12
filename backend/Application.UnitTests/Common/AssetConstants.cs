@@ -46,7 +46,7 @@ public static class AssetConstants
 
     public static readonly Asset SampleAsset1 = new()
     {
-        Id = Id,
+        Id = new Guid("71990173-999c-45d6-b135-fc8206055154"),
         AssetCode = "LA000001",
         Name = Name,
         CategoryId = CategoryId,
@@ -58,7 +58,7 @@ public static class AssetConstants
     };
     public static readonly Asset SampleAsset2 = new()
     {
-        Id = Id,
+        Id = new Guid("c39f5239-34c7-4ba4-ab62-98d8d3ae8581"),
         AssetCode = "LA000002",
         Name = Name,
         CategoryId = CategoryId,

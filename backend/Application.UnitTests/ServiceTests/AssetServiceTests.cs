@@ -10,6 +10,7 @@ using Application.UnitTests.Common;
 using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
 using Domain.Entities.Categories;
+using Domain.Interfaces;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
@@ -21,7 +22,6 @@ public class AssetServiceTests
 {
     private Mock<IAssetRepository> _assetRepository = null!;
     private Mock<ICategoryRepository> _categoryRepository = null!;
-    private Mock<IAssignmentRepository> _assignmentRepository = null!;
     private AssetService _assetService = null!;
     private Mock<IUnitOfWork> _unitOfWork = null!;
 
@@ -32,7 +32,6 @@ public class AssetServiceTests
         _categoryRepository = new Mock<ICategoryRepository>();
         _unitOfWork = new Mock<IUnitOfWork>();
         _unitOfWork.Setup(unit => unit.AsyncRepository<Category>()).Returns(_categoryRepository.Object);
-        _unitOfWork.Setup(unit => unit.AsyncRepository<Assignment>()).Returns(_assignmentRepository.Object);
 
         _assetService = new AssetService(_unitOfWork.Object, _assetRepository.Object);
     }
@@ -246,20 +245,36 @@ public class AssetServiceTests
         };
 
         _assetRepository
-            .Setup(ur => ur.ListAsync(
+            .Setup(ar => ar.ListAsync(
                                 It.IsAny<Expression<Func<Asset, bool>>>(),
                                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(listAsset);
+            .ReturnsAsync(new List<Asset>
+                        {
+                            It.IsAny<Asset>()
+                        });
+
+        _assetRepository
+            .Setup(ar => ar.GetAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Asset());
 
         var listAssignment = new List<Assignment>
         {
-
+                AssignmentConstants.SampleAssignment,
+                AssignmentConstants.SampleAcceptedAssignment  
         };
 
-        _assignmentRepository.Setup(ur => ur.ListAsync(
+        var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
+
+        assignmentRepository
+            .Setup(ur => ur.ListAsync(
                                 It.IsAny<Expression<Func<Assignment, bool>>>(),
                                 It.IsAny<CancellationToken>()))
-            .Returns(listAssignment);
+            .ReturnsAsync(new List<Assignment>
+                        {
+                            It.IsAny<Assignment>()
+                        });
 
         var requestModel = new DeleteAssetRequest
         {
@@ -276,7 +291,58 @@ public class AssetServiceTests
 
             Assert.That(result.IsSuccess, Is.False);
 
-            Assert.That(result.Message, Is.EqualTo(ErrorMessages.NotFound));
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.CannotDeleteAsset));
+        });
+    }
+
+    [Test]
+    public async Task DeleteAssetAsync_ValidInput_ReturnsSuccessResponse()
+    {
+        var listAsset = new List<Asset>
+        {
+            AssetConstants.SampleAsset1,
+            AssetConstants.SampleAsset2
+        };
+
+        _assetRepository
+            .Setup(ur => ur.ListAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(listAsset);
+
+        var listAssignment = new List<Assignment>
+        {
+                AssignmentConstants.SampleAssignment,
+                AssignmentConstants.SampleAssignment2
+        };
+
+        var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
+
+        assignmentRepository
+            .Setup(ur => ur.ListAsync(
+                                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Assignment>
+                        {
+                            It.IsAny<Assignment>()
+                        });
+
+        var requestModel = new DeleteAssetRequest
+        {
+            Id = new Guid("71990173-999c-45d6-b135-fc8206055154"),
+        };
+
+        var result = await _assetService.DeleteAssetAsync(requestModel);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
         });
     }
 }

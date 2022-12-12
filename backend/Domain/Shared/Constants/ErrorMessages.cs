@@ -20,4 +20,5 @@ public static class ErrorMessages
     public const string UnexistedCategory = "Category is not existed!";
     public const string InvalidState = "State of assignment is not waiting!";
     public const string CannotDeleteAsset = "There are valid assignments relating to this asset. Please close all assignments before deleting this asset.";
+    public const string CannotDeleteAssignment = "Current assignment is not on valid state. Please change it to Waiting to accepted or Declined in order to continue!";
 }
