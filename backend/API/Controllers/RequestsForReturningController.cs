@@ -70,7 +70,7 @@ public class RequestsForReturningController : BaseController
         }
     }
 
-    [Authorize(UserRole.Admin)]
+    [Authorize(UserRole.Admin, UserRole.Staff)]
     [HttpPost]
     public async Task<ActionResult<Response<GetRequestForReturningResponse>>> Create([FromBody] CreateRequestForReturningRequest request)
     {
