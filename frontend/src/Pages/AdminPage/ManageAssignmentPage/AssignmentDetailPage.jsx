@@ -47,7 +47,7 @@ export function AssignmentDetailPage() {
               </tr>
               <tr>
                 <td className="font-bold">Asset Name:</td>
-                <td>{data.assetName}</td>
+                <td className="break-all">{data.assetName}</td>
               </tr>
               <tr>
                 <td className="font-bold">Specification:</td>
@@ -55,11 +55,11 @@ export function AssignmentDetailPage() {
               </tr>
               <tr>
                 <td className="font-bold">Assigned to:</td>
-                <td>{data.assignedTo}</td>
+                <td className="break-all">{data.assignedTo}</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned by:</td>
-                <td>{data.assignedBy}</td>
+                <td className="break-all">{data.assignedBy}</td>
               </tr>
               <tr>
                 <td className="font-bold">Assigned date:</td>

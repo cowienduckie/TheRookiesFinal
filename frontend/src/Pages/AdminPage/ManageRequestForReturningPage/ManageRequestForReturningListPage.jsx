@@ -180,13 +180,15 @@ export function ManageRequestForReturningListPage() {
       dataIndex: "assetName",
       key: ASSET_NAME_ENUM,
       sorter: true,
-      defaultSortOrder: "ascend"
+      defaultSortOrder: "ascend",
+      ellipsis: true
     },
     {
       title: "Requested By",
       dataIndex: "requestedBy",
       key: REQUESTED_BY_ENUM,
-      sorter: true
+      sorter: true,
+      ellipsis: true
     },
     {
       title: "Assigned Date",
@@ -204,7 +206,8 @@ export function ManageRequestForReturningListPage() {
       title: "Returned Date",
       dataIndex: "returnedDate",
       key: RETURNED_DATE_ENUM,
-      sorter: true
+      sorter: true,
+      ellipsis: true
     },
     {
       title: "State",
