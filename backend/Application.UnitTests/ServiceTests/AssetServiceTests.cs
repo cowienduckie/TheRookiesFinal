@@ -276,6 +276,8 @@ public class AssetServiceTests
                             It.IsAny<Assignment>()
                         });
 
+        _unitOfWork.Setup(unit => unit.AsyncRepository<Assignment>()).Returns(assignmentRepository.Object);
+
         var requestModel = new DeleteAssetRequest
         {
             Id = Guid.NewGuid(),
