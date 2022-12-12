@@ -1,4 +1,4 @@
-import { callApi } from "../Helpers/ApiHelper";
+import { callApi, callApiTakeSuccessWrapper } from "../Helpers/ApiHelper";
 import { API_BASE_URL } from "../Constants/SystemConstants";
 
 const url = `${API_BASE_URL}/api/assignments`;
@@ -25,4 +25,8 @@ export async function createAssignment(data) {
 
 export async function respondAssignment(data) {
   return await callApi("put", url + "/response" , data);
+}
+
+export async function deleteAssignmentById(id) {
+  return await callApiTakeSuccessWrapper("put", url + "/delete/" + id);
 }

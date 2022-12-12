@@ -230,20 +230,25 @@ export function AssignmentListPage() {
             className="mr-1"
             icon={<EditOutlined className="align-middle" />}
           />
-          <Button
-            className="mx-1"
-            disabled={record.state === ACCEPTED}
-            danger
-            icon={
-              <CloseOutlined
-                className={
-                  record.state === ACCEPTED
-                    ? "align-middle text-gray-300"
-                    : "align-middle"
-                }
-              />
-            }
-          />
+          <Link
+            to={`/admin/manage-assignment/delete-assignment/${record.id}`}
+            state={{ background: location }}
+          >
+            <Button
+              className="mx-1"
+              disabled={record.state === ACCEPTED}
+              danger
+              icon={
+                <CloseOutlined
+                  className={
+                    record.state === ACCEPTED
+                      ? "align-middle text-gray-300"
+                      : "align-middle"
+                  }
+                />
+              }
+            />
+          </Link>
           <Button
             className="ml-1 border-blue-500 disabled:border-gray-200"
             disabled={record.state === WAITING_FOR_ACCEPTANCE}
