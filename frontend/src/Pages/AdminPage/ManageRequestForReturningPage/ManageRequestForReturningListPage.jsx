@@ -1,4 +1,4 @@
-import { ConfigProvider, Button, DatePicker, Select, Table } from "antd";
+import { Button, DatePicker, Select, Table } from "antd";
 import { FilterFilled, CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
 import dayjs from "dayjs";
@@ -206,8 +206,7 @@ export function ManageRequestForReturningListPage() {
       title: "Returned Date",
       dataIndex: "returnedDate",
       key: RETURNED_DATE_ENUM,
-      sorter: true,
-      ellipsis: true
+      sorter: true
     },
     {
       title: "State",
@@ -221,27 +220,19 @@ export function ManageRequestForReturningListPage() {
       key: "actions",
       render: (_, record) => (
         <div className="flex min-w-fit flex-nowrap p-0">
-          <ConfigProvider
-            theme={{
-              token: {
-                colorPrimary: "#00b96b"
-              }
-            }}
-          >
-            <Button
-              className="mr-1"
-              disabled={record.state === COMPLETED}
-              icon={
-                <CheckOutlined
-                  className={
-                    record.state === COMPLETED
-                      ? "align-middle text-gray-300"
-                      : "align-middle text-green-500"
-                  }
-                />
-              }
-            />
-          </ConfigProvider>
+          <Button
+            className="mr-1 border-green-500 disabled:border-gray-200"
+            disabled={record.state === COMPLETED}
+            icon={
+              <CheckOutlined
+                className={
+                  record.state === COMPLETED
+                    ? "align-middle text-gray-300"
+                    : "align-middle text-green-500"
+                }
+              />
+            }
+          />
           <Button
             className="mx-1"
             disabled={record.state === COMPLETED}

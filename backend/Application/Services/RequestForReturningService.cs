@@ -36,6 +36,16 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
             };
         }
 
+        if (request.SortQuery.SortField == ModelField.ReturnedDate)
+        {
+            entities = request.SortQuery.SortDirection switch
+            {
+                SortDirection.Ascending => entities.OrderBy(r => r.ReturnDate),
+                SortDirection.Descending => entities.OrderByDescending(r => r.ReturnDate),
+                _ => entities.OrderBy(r => r.ReturnDate)
+            };
+        }
+
         var requestsForReturning = entities.AsQueryable()
             .SortByField(new[] { ModelField.ReturnedDate }, request.SortQuery.SortField, request.SortQuery.SortDirection)
             .Select(rfr => new GetRequestForReturningResponse(rfr))
