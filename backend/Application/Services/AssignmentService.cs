@@ -231,8 +231,7 @@ public class AssignmentService : BaseService, IAssignmentService
             return new Response(false, ErrorMessages.NotFound);
         }
 
-        if (existAssignment.State != AssignmentState.WaitingForAcceptance
-            || existAssignment.State != AssignmentState.Declined)
+        if (existAssignment.State == AssignmentState.Accepted)
         {
             return new Response(false, ErrorMessages.CannotDeleteAssignment);
         }
