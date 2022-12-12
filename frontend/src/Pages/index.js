@@ -2,7 +2,8 @@ export {
   HomePage,
   DetailedInfoHomePage,
   AcceptAssignmentPage,
-  DeclineAssignmentPage
+  DeclineAssignmentPage,
+  ReturnAssignmentPage
 } from "./HomePage";
 
 export { ErrorPage } from "./ErrorPage";
