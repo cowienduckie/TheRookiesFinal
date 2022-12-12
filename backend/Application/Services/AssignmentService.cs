@@ -1,5 +1,7 @@
 using Application.Common.Models;
+using Application.DTOs.Assets;
 using Application.DTOs.Assignments.CreateAssignment;
+using Application.DTOs.Assignments.DeleteAssignment;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.GetListAssignments;
 using Application.DTOs.Assignments.RespondAssignment;
@@ -12,6 +14,7 @@ using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
+using Infrastructure.Persistence.Repositories;
 
 namespace Application.Services;
 
@@ -217,5 +220,28 @@ public class AssignmentService : BaseService, IAssignmentService
         var responseData = new GetAssignmentResponse(newAssignment);
 
         return new Response<GetAssignmentResponse>(true, responseData);
+    }
+
+    public async Task<Response> DeleteAssignmentAsync(DeleteAssignmentRequest requestModel)
+    {
+        var existAssignment = await _assignmentRepository.GetAsync(assignment => assignment.Id == requestModel.Id);
+
+        if (existAssignment == null)
+        {
+            return new Response(false, ErrorMessages.NotFound);
+        }
+
+        if (existAssignment.State != AssignmentState.WaitingForAcceptance
+            || existAssignment.State != AssignmentState.Declined)
+        {
+            return new Response(false, ErrorMessages.CannotDeleteAssignment);
+        }
+
+        existAssignment.IsDeleted = true;
+
+        await _assignmentRepository.UpdateAsync(existAssignment);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response(true, Messages.ActionSuccess);
     }
 }
