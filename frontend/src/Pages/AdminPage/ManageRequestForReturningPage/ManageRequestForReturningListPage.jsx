@@ -33,7 +33,7 @@ function useLoader() {
     pageSize: "",
     sortField: "",
     sortDirection: "",
-    returningState: "",
+    state: "",
     returnedDate: "",
     searchValue: ""
   });
