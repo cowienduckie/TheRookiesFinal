@@ -178,6 +178,11 @@ export function HomePage() {
           <Button
             className="ml-1 border-blue-500 disabled:border-gray-200"
             disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            onClick={() =>
+              navigate(`/assignments/return/${record.id}`, {
+                state: { background: location }
+              })
+            }
             icon={
               <UndoOutlined
                 className={
