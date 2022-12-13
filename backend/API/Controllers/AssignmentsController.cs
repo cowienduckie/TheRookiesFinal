@@ -239,7 +239,7 @@ public class AssignmentsController : BaseController
 
             if (!response.IsSuccess)
             {
-                return NotFound(response);
+                return BadRequest(response);
             }
 
             return Ok(response);

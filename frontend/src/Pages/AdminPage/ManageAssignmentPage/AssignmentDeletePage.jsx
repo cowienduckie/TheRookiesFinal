@@ -16,18 +16,18 @@ export function AssignmentDeletePage() {
       return newLoadings;
     });
 
-    await deleteAssignmentById({ id }).then(() => {
-      setTimeout(() => {
+    await deleteAssignmentById({ id })
+      .then(() => {
         setIsModalOpen(false);
         navigate("/admin/manage-assignment", { state: { isReload: true } });
-      }, 1000);
-      
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[0] = true;
-        return newLoadings;
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[0] = false;
+          return newLoadings;
+        });
       });
-    });
   };
 
   const handleOnclick = () => {
