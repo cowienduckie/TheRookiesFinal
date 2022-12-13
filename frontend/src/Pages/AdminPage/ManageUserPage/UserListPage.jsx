@@ -158,13 +158,15 @@ export function UserListPage() {
       dataIndex: "fullName",
       key: FULL_NAME_ENUM,
       sorter: true,
-      defaultSortOrder: "ascend"
+      defaultSortOrder: "ascend",
+      ellipsis: true
     },
     {
       title: "Username",
       dataIndex: "username",
       key: USERNAME_ENUM,
-      sorter: true
+      sorter: true,
+      ellipsis: true
     },
     {
       title: "Joined Date",

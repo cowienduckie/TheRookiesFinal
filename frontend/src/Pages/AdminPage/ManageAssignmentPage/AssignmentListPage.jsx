@@ -194,19 +194,22 @@ export function AssignmentListPage() {
       dataIndex: "assetName",
       key: ASSET_NAME_ENUM,
       sorter: true,
-      defaultSortOrder: "ascend"
+      defaultSortOrder: "ascend",
+      ellipsis: true
     },
     {
       title: "Assigned To",
       dataIndex: "assignedTo",
       key: ASSIGNED_TO_ENUM,
-      sorter: true
+      sorter: true,
+      ellipsis: true
     },
     {
       title: "Assigned By",
       dataIndex: "assignedBy",
       key: ASSIGNED_BY_ENUM,
-      sorter: true
+      sorter: true,
+      ellipsis: true
     },
     {
       title: "Assigned Date",

@@ -2,7 +2,8 @@ export {
   HomePage,
   DetailedInfoHomePage,
   AcceptAssignmentPage,
-  DeclineAssignmentPage
+  DeclineAssignmentPage,
+  ReturnAssignmentPage
 } from "./HomePage";
 
 export { ErrorPage } from "./ErrorPage";
@@ -15,6 +16,7 @@ export {
   ManageAssetPage,
   ManageAssignmentPage,
   ManageRequestForReturningPage,
+  ManageRequestForReturningListPage,
   ReportPage,
   CreateUserPage,
   EditUserPage,

@@ -1,23 +1,31 @@
-import { Button, Select, Table } from "antd";
-import { FilterFilled, EditOutlined, CloseOutlined } from "@ant-design/icons";
+import { Button, DatePicker, Select, Table } from "antd";
+import { FilterFilled, CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getAssetList } from "../../../Apis/AssetApis";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getRequestForReturningList } from "../../../Apis/RequestForReturningApis";
 import { queryObjectToString } from "../../../Helpers/ApiHelper";
 import {
+  ACCEPTED_BY_ENUM,
   ASSET_CODE_ENUM,
-  CATEGORY_ENUM,
-  NAME_ENUM,
+  ASSET_NAME_ENUM,
+  ASSIGNED_DATE_ENUM,
+  REQUESTED_BY_ENUM,
+  RETURNED_DATE_ENUM,
   STATE_ENUM
 } from "../../../Constants/ModelFieldConstants";
-import { getAllCategories } from "../../../Apis/CategoryApis";
-import { ASSIGNED } from "../../../Constants/AssetStates";
+import {
+  COMPLETED,
+  WAITING_FOR_RETURNING
+} from "../../../Constants/RequestForReturningState";
+
+const dateFormat = "DD/MM/YYYY";
 
 function useLoader() {
   const { search, state } = useLocation();
   const navigate = useNavigate();
-  const newAsset = state && state.newAsset;
+  const newRequest = state && state.newRequest;
   const isReload = state && state.isReload;
 
   const [queries, setQueries] = useState({
@@ -25,8 +33,8 @@ function useLoader() {
     pageSize: "",
     sortField: "",
     sortDirection: "",
-    assetState: "",
-    category: "",
+    state: "",
+    returnedDate: "",
     searchValue: ""
   });
 
@@ -46,8 +54,8 @@ function useLoader() {
       const pageSize = searchParams.get("pageSize") ?? "";
       const sortField = searchParams.get("sortField") ?? "";
       const sortDirection = searchParams.get("sortDirection") ?? "";
-      const assetState = searchParams.get("assetState") ?? "";
-      const category = searchParams.get("category") ?? "";
+      const state = searchParams.get("state") ?? "";
+      const returnedDate = searchParams.get("returnedDate") ?? "";
       const searchValue = searchParams.get("searchValue") ?? "";
 
       const queriesFromUrl = {
@@ -55,13 +63,13 @@ function useLoader() {
         pageSize,
         sortField,
         sortDirection,
-        assetState,
-        category,
+        state,
+        returnedDate,
         searchValue
       };
 
       const queryString = queryObjectToString(queriesFromUrl);
-      const data = await getAssetList(queryString);
+      const data = await getRequestForReturningList(queryString);
 
       setQueries(queriesFromUrl);
       setPagedData({
@@ -74,19 +82,19 @@ function useLoader() {
   }, [search]);
 
   if (
-    !!newAsset &&
+    !!newRequest &&
     pagedData.items.length > 0 &&
-    pagedData.items[0].id !== newAsset.id
+    pagedData.items[0].id !== newRequest.id
   ) {
     const duplicateId = pagedData.items.findIndex(
-      (value) => value.id === newAsset.id
+      (value) => value.id === newRequest.id
     );
 
     if (duplicateId >= 0) {
       pagedData.items.splice(duplicateId, 1);
     }
 
-    pagedData.items.unshift(newAsset);
+    pagedData.items.unshift(newRequest);
     window.history.replaceState({}, "");
   }
 
@@ -101,21 +109,9 @@ function useLoader() {
   return { pagedData, queries, loading };
 }
 
-export function AssetListPage() {
+export function ManageRequestForReturningListPage() {
   const { pagedData, queries, loading } = useLoader();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [categoryList, setCategoryList] = useState([]);
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      const res = await getAllCategories();
-
-      setCategoryList(res);
-    };
-
-    loadCategories();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigateByQueries = (queries) => {
     const queryString = queryObjectToString(queries);
@@ -144,10 +140,10 @@ export function AssetListPage() {
     navigateByQueries(newQueries);
   };
 
-  const onCategoryFilter = (value) => {
+  const onReturnedDateFilter = (value) => {
     const newQueries = {
       ...queries,
-      category: !!value ? value : ""
+      returnedDate: !!value ? dayjs(value).format(dateFormat).toString() : ""
     };
 
     navigateByQueries(newQueries);
@@ -156,7 +152,7 @@ export function AssetListPage() {
   const onStateFilter = (value) => {
     const newQueries = {
       ...queries,
-      assetState: !!value ? value : ""
+      state: !!value ? value : ""
     };
 
     navigateByQueries(newQueries);
@@ -164,33 +160,53 @@ export function AssetListPage() {
 
   const columns = [
     {
+      title: "No.",
+      dataIndex: "",
+      key: "sequence",
+      render: (_, record, index) => {
+        return (
+          <p>{pagedData.pageSize * (pagedData.pageIndex - 1) + index + 1}</p>
+        );
+      }
+    },
+    {
       title: "Asset Code",
       dataIndex: "assetCode",
       key: ASSET_CODE_ENUM,
-      sorter: true,
-      render: (text, record) => (
-        <Link
-          to={`/admin/manage-asset/${record.id}`}
-          state={{ background: location }}
-        >
-          <p>{text}</p>
-        </Link>
-      )
+      sorter: true
     },
     {
       title: "Asset Name",
-      dataIndex: "name",
-      key: NAME_ENUM,
+      dataIndex: "assetName",
+      key: ASSET_NAME_ENUM,
       sorter: true,
       defaultSortOrder: "ascend",
       ellipsis: true
     },
     {
-      title: "Category",
-      dataIndex: "category",
-      key: CATEGORY_ENUM,
+      title: "Requested By",
+      dataIndex: "requestedBy",
+      key: REQUESTED_BY_ENUM,
       sorter: true,
       ellipsis: true
+    },
+    {
+      title: "Assigned Date",
+      dataIndex: "assignedDate",
+      key: ASSIGNED_DATE_ENUM,
+      sorter: true
+    },
+    {
+      title: "Accepted By",
+      dataIndex: "acceptedBy",
+      key: ACCEPTED_BY_ENUM,
+      sorter: true
+    },
+    {
+      title: "Returned Date",
+      dataIndex: "returnedDate",
+      key: RETURNED_DATE_ENUM,
+      sorter: true
     },
     {
       title: "State",
@@ -203,30 +219,34 @@ export function AssetListPage() {
       dataIndex: "",
       key: "actions",
       render: (_, record) => (
-        <div className="max-w-fit p-0">
+        <div className="flex min-w-fit flex-nowrap p-0">
           <Button
-            className="mr-2"
-            icon={<EditOutlined className="align-middle" />}
+            className="mr-1 border-green-500 disabled:border-gray-200"
+            disabled={record.state === COMPLETED}
+            icon={
+              <CheckOutlined
+                className={
+                  record.state === COMPLETED
+                    ? "align-middle text-gray-300"
+                    : "align-middle text-green-500"
+                }
+              />
+            }
           />
-          <Link
-            to={`/admin/manage-asset/delete-asset/${record.id}`}
-            state={{ background: location }}
-          >
-           <Button
-            className="ml-2"
-            disabled={record.state === ASSIGNED}
+          <Button
+            className="mx-1"
+            disabled={record.state === COMPLETED}
             danger
             icon={
               <CloseOutlined
                 className={
-                  record.state === ASSIGNED
+                  record.state === COMPLETED
                     ? "align-middle text-gray-300"
                     : "align-middle"
                 }
               />
             }
           />
-          </Link>
         </div>
       )
     }
@@ -234,7 +254,7 @@ export function AssetListPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-red-600">Asset List</h1>
+      <h1 className="text-2xl font-bold text-red-600">Request List</h1>
       <div className="flex w-full flex-row justify-between py-5">
         <div className="w-1/2 p-0">
           <Select
@@ -247,48 +267,25 @@ export function AssetListPage() {
             onChange={onStateFilter}
             options={[
               {
-                label: "Available",
-                value: "Available"
+                label: WAITING_FOR_RETURNING,
+                value: WAITING_FOR_RETURNING
               },
               {
-                label: "Not available",
-                value: "Not available"
-              },
-              {
-                label: "Assigned",
-                value: "Assigned"
-              },
-              {
-                label: "Waiting for recycling",
-                value: "Waiting for recycling"
-              },
-              {
-                label: "Recycled",
-                value: "Recycled"
+                label: COMPLETED,
+                value: COMPLETED
               }
             ]}
           />
-          <Select
-            className="ml-3 w-3/12 min-w-fit"
-            popupClassName="min-w-fit"
+          <DatePicker
+            className="ml-3 w-4/12 min-w-fit"
             allowClear
-            placeholder="Category"
-            suffixIcon={<FilterFilled className="align-middle" />}
-            clearIcon={<CloseOutlined className="align-middle" />}
-            onChange={onCategoryFilter}
-            options={categoryList.map((value) => ({
-              label: value.name,
-              value: value.name
-            }))}
+            placeholder="Returned Date"
+            format={(date) => date.utc().format(dateFormat)}
+            onChange={onReturnedDateFilter}
           />
         </div>
         <div className="flex w-1/2 flex-row justify-end p-0">
           <Search className="mr-3 w-1/3" onSearch={onSearch} />
-          <Link to="/admin/manage-asset/create-asset">
-            <Button className="ml-3" type="primary" danger>
-              Create New Asset
-            </Button>
-          </Link>
         </div>
       </div>
       <Table
