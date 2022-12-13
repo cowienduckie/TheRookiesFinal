@@ -6,10 +6,13 @@ using Application.DTOs.Assignments.RespondAssignment;
 using Application.DTOs.Users.GetUser;
 using Application.Services;
 using Application.UnitTests.Common;
+using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
+using Domain.Interfaces;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
+using Infrastructure.Persistence.Repositories;
 using Moq;
 
 namespace Application.UnitTests.ServiceTests;
@@ -309,6 +312,16 @@ public class AssignmentServiceTests
                 It.IsAny<Expression<Func<Assignment, bool>>>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(entity);
+
+        var assetRepository = new Mock<IAsyncRepository<Asset>>();
+
+        assetRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+        .ReturnsAsync(AssetConstants.SampleAsset1);
+
+        _unitOfWork.Setup(unit => unit.AsyncRepository<Asset>()).Returns(assetRepository.Object);
 
         var input = new DeleteAssignmentRequest
         {
