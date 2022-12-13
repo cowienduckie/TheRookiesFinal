@@ -22,7 +22,8 @@ import {
 import {
   ACCEPTED,
   DECLINED,
-  WAITING_FOR_ACCEPTANCE
+  WAITING_FOR_ACCEPTANCE,
+  WAITING_FOR_RETURNING
 } from "../../../Constants/AssignmentState";
 
 const dateFormat = "DD/MM/YYYY";
@@ -230,17 +231,34 @@ export function AssignmentListPage() {
       render: (_, record) => (
         <div className="flex min-w-fit flex-nowrap p-0">
           <Button
-            className="mr-1"
-            icon={<EditOutlined className="align-middle" />}
+            className="mx-1 border-gray-700 disabled:border-gray-200"
+            disabled={
+              record.state === ACCEPTED ||
+              record.state === WAITING_FOR_RETURNING
+            }
+            icon={
+              <EditOutlined
+                className={
+                  record.state === ACCEPTED ||
+                  record.state === WAITING_FOR_RETURNING
+                    ? "align-middle text-gray-300"
+                    : "align-middle text-gray-700"
+                }
+              />
+            }
           />
           <Button
             className="mx-1"
-            disabled={record.state === ACCEPTED}
+            disabled={
+              record.state === ACCEPTED ||
+              record.state === WAITING_FOR_RETURNING
+            }
             danger
             icon={
               <CloseOutlined
                 className={
-                  record.state === ACCEPTED
+                  record.state === ACCEPTED ||
+                  record.state === WAITING_FOR_RETURNING
                     ? "align-middle text-gray-300"
                     : "align-middle"
                 }
@@ -249,11 +267,23 @@ export function AssignmentListPage() {
           />
           <Button
             className="ml-1 border-blue-500 disabled:border-gray-200"
-            disabled={record.state === WAITING_FOR_ACCEPTANCE}
+            disabled={
+              record.state === WAITING_FOR_ACCEPTANCE ||
+              record.state === WAITING_FOR_RETURNING
+            }
+            onClick={() =>
+              navigate(
+                `/admin/manage-assignment/return-assignment/${record.id}`,
+                {
+                  state: { background: location }
+                }
+              )
+            }
             icon={
               <UndoOutlined
                 className={
-                  record.state === WAITING_FOR_ACCEPTANCE
+                  record.state === WAITING_FOR_ACCEPTANCE ||
+                  record.state === WAITING_FOR_RETURNING
                     ? "align-middle text-gray-300"
                     : "align-middle text-blue-500"
                 }
