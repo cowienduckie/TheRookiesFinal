@@ -240,8 +240,6 @@ public class AssignmentServiceTests
     [Test]
     public async Task DeleteAssignmentAsync_UnexistedAssignment_ReturnsNotFound()
     {
-        var entity = AssignmentConstants.SampleAcceptedAssignment;
-
         _assignmentRepository
         .Setup(ar => ar.GetAsync(
                 It.IsAny<Expression<Func<Assignment, bool>>>(),
