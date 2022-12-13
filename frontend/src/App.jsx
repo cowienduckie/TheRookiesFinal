@@ -14,6 +14,8 @@ import {
   ManageAssignmentPage,
   ManageRequestForReturningPage,
   ManageRequestForReturningListPage,
+  ManageRequestForReturningCompletePage,
+  ManageRequestForReturningCancelPage,
   ManageUserPage,
   ReportPage,
   UserListPage,
@@ -204,6 +206,14 @@ function App() {
       <Route
         path="/admin/manage-assignment/create-assignment/asset-list"
         element={<AssetListModal />}
+      />
+      <Route
+        path="/admin/manage-returning/complete-returning/:id"
+        element={<ManageRequestForReturningCompletePage />}
+      />
+      <Route
+        path="/admin/manage-returning/cancel-returning/:id"
+        element={<ManageRequestForReturningCancelPage />}
       />
     </Routes>
   );
