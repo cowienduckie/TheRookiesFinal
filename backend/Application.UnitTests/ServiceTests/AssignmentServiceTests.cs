@@ -6,10 +6,13 @@ using Application.DTOs.Assignments.RespondAssignment;
 using Application.DTOs.Users.GetUser;
 using Application.Services;
 using Application.UnitTests.Common;
+using Domain.Entities.Assets;
 using Domain.Entities.Assignments;
+using Domain.Interfaces;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
+using Infrastructure.Persistence.Repositories;
 using Moq;
 
 namespace Application.UnitTests.ServiceTests;
@@ -309,6 +312,58 @@ public class AssignmentServiceTests
                 It.IsAny<Expression<Func<Assignment, bool>>>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(entity);
+
+        var assetRepository = new Mock<IAsyncRepository<Asset>>();
+
+        assetRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+        .ReturnsAsync(AssetConstants.SampleAsset1);
+
+        _unitOfWork.Setup(unit => unit.AsyncRepository<Asset>()).Returns(assetRepository.Object);
+
+        var input = new DeleteAssignmentRequest
+        {
+            Id = AssignmentConstants.SampleAssignment.Id
+        };
+
+        var result = await _assignmentService.DeleteAssignmentAsync(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
+        });
+    }
+
+    [Test]
+    public async Task DeleteAssignmentAsync_ValidInput_ReturnsActionSuccess()
+    {
+        var entity = AssignmentConstants.SampleAssignment;
+
+        _assignmentRepository
+        .Setup(ar => ar.GetAsync(
+                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(entity);
+
+        var assetRepository = new Mock<IAsyncRepository<Asset>>();
+
+        assetRepository
+            .Setup(ur => ur.GetAsync(
+                                It.IsAny<Expression<Func<Asset, bool>>>(),
+                                It.IsAny<CancellationToken>()))
+        .ReturnsAsync(AssetConstants.SampleAsset1);
+
+        _unitOfWork.Setup(unit => unit.AsyncRepository<Asset>()).Returns(assetRepository.Object);
 
         var input = new DeleteAssignmentRequest
         {
