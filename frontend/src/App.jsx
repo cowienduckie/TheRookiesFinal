@@ -27,6 +27,7 @@ import {
   DetailedInfoHomePage,
   AcceptAssignmentPage,
   DeclineAssignmentPage,
+  ReturnAssignmentPage,
   AssignmentDetailPage,
   AssignmentListPage,
   CreateAssetPage,
@@ -172,6 +173,10 @@ function App() {
       <Route
         path="/assignments/decline/:assignmentId"
         element={<DeclineAssignmentPage />}
+      />
+      <Route
+        path="/assignments/return/:assignmentId"
+        element={<ReturnAssignmentPage />}
       />
       <Route
         path="/admin/manage-asset/create-category"
