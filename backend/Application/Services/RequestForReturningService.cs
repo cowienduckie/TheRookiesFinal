@@ -10,15 +10,14 @@ using Domain.Entities.RequestsForReturning;
 using Domain.Shared.Enums;
 using Domain.Entities.Users;
 using Domain.Shared.Constants;
-using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
+using Application.DTOs.RequestsForReturning.ApproveRequestForReturning;
 
 namespace Application.Services;
 
 public class RequestForReturningService : BaseService, IRequestForReturningService
 {
     private readonly IRequestForReturningRepository _requestForReturningRepository;
-
     private readonly IAssignmentRepository _assignmentRepository;
 
     public RequestForReturningService(
@@ -27,14 +26,44 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
         IUnitOfWork unitOfWork) : base(unitOfWork)
     {
         _requestForReturningRepository = requestForReturningRepository;
-        _assignmentRepository = assignmentRepository;  
+        _assignmentRepository = assignmentRepository;
+    }
+
+    public async Task<Response> ApproveAsync(ApproveRequestForReturningRequest request)
+    {
+        var returningRequest = await _requestForReturningRepository.GetAsync(rfr => rfr.Id == request.Id);
+
+        if (returningRequest == null ||
+            returningRequest.State != RequestForReturningState.WaitingForReturning ||
+            returningRequest.Assignment.Asset.Location != request.Approver.Location)
+        {
+            return new Response(false, ErrorMessages.BadRequest);
+        }
+
+        if (request.IsCompleted)
+        {
+            returningRequest.State = RequestForReturningState.Completed;
+            returningRequest.AcceptedBy = request.Approver.Id;
+            returningRequest.ReturnDate = DateTime.UtcNow.AddHours(7).Date;
+            returningRequest.Assignment.IsDeleted = true;
+            returningRequest.Assignment.Asset.State = AssetState.Available;
+        }
+        else
+        {
+            returningRequest.IsDeleted = true;
+        }
+
+        await _requestForReturningRepository.UpdateAsync(returningRequest);
+        await UnitOfWork.SaveChangesAsync();
+
+        return new Response(true, Messages.ActionSuccess);
     }
 
     public async Task<Response<GetRequestForReturningResponse>> CreateAsync(CreateRequestForReturningRequest request)
     {
         var returnAssignment = await _assignmentRepository
             .GetAsync(a => !a.IsDeleted &&
-                           a.Id == request.AssignmentId ); 
+                           a.Id == request.AssignmentId);
 
         if (returnAssignment == null)
         {
@@ -44,7 +73,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
         if (returnAssignment.State != AssignmentState.Accepted)
         {
             return new Response<GetRequestForReturningResponse>(false, ErrorMessages.InvalidStateReturn);
-        }    
+        }
 
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
@@ -52,7 +81,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
             .GetAsync(u => !u.IsDeleted &&
                            u.Id == request.RequestedBy);
 
-        if (requester == null )
+        if (requester == null)
         {
             return new Response<GetRequestForReturningResponse>(false, ErrorMessages.BadRequest);
         }
@@ -61,7 +90,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
         {
             Id = Guid.NewGuid(),
             AssignmentId = request.AssignmentId,
-            Assignment = returnAssignment,    
+            Assignment = returnAssignment,
             RequestedBy = request.RequestedBy,
             Requester = requester,
             State = RequestForReturningState.WaitingForReturning
