@@ -24,6 +24,7 @@ export {
   AssignmentDetailPage,
   AssignmentListPage,
   AssignmentCreatePage,
+  AssignmentReturnPage,
   UserListModal,
   AssetListModal
 } from "./ManageAssignmentPage";
