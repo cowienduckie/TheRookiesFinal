@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Application.Common.Models;
+using Application.DTOs.Assignments.DeleteAssignment;
 using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.Assignments.RespondAssignment;
 using Application.DTOs.Users.GetUser;
@@ -233,6 +234,100 @@ public class AssignmentServiceTests
             Assert.That(result.Message, Is.Not.Null);
 
             Assert.That(result.Message, Is.EqualTo(ErrorMessages.InvalidState));
+        });
+    }
+
+    [Test]
+    public async Task DeleteAssignmentAsync_UnexistedAssignment_ReturnsNotFound()
+    {
+        _assignmentRepository
+        .Setup(ar => ar.GetAsync(
+                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(It.IsAny<Assignment>);
+
+        var input = new DeleteAssignmentRequest
+        {
+            Id = new Guid()
+        };
+
+        var result = await _assignmentService.DeleteAssignmentAsync(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.NotFound));
+        });
+    }
+
+    [Test]
+    public async Task DeleteAssignmentAsync_AcceptedAssignment_ReturnsCannotDeleteAssignment()
+    {
+        var entity = AssignmentConstants.SampleAcceptedAssignment;
+
+        _assignmentRepository
+        .Setup(ar => ar.GetAsync(
+                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(entity);
+
+        var input = new DeleteAssignmentRequest
+        {
+            Id = AssignmentConstants.SampleAcceptedAssignment.Id
+        };
+
+        var result = await _assignmentService.DeleteAssignmentAsync(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.False);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(ErrorMessages.CannotDeleteAssignment));
+        });
+    }
+
+    [Test]
+    public async Task DeleteAssignmentAsync_ValidInput_ReturnsActionSuccess()
+    {
+        var entity = AssignmentConstants.SampleAssignment;
+
+        _assignmentRepository
+        .Setup(ar => ar.GetAsync(
+                It.IsAny<Expression<Func<Assignment, bool>>>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(entity);
+
+        var input = new DeleteAssignmentRequest
+        {
+            Id = AssignmentConstants.SampleAssignment.Id
+        };
+
+        var result = await _assignmentService.DeleteAssignmentAsync(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.Not.Null);
+
+            Assert.That(result, Is.InstanceOf<Response>());
+
+            Assert.That(result.IsSuccess, Is.True);
+
+            Assert.That(result.Message, Is.Not.Null);
+
+            Assert.That(result.Message, Is.EqualTo(Messages.ActionSuccess));
         });
     }
 }

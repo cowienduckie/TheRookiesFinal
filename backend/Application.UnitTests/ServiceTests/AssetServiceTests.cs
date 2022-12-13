@@ -262,7 +262,7 @@ public class AssetServiceTests
         var listAssignment = new List<Assignment>
         {
                 AssignmentConstants.SampleAssignment,
-                AssignmentConstants.SampleAcceptedAssignment  
+                AssignmentConstants.SampleAcceptedAssignment
         };
 
         var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
@@ -300,23 +300,13 @@ public class AssetServiceTests
     [Test]
     public async Task DeleteAssetAsync_ValidInput_ReturnsSuccessResponse()
     {
-        var listAsset = new List<Asset>
-        {
-            AssetConstants.SampleAsset1,
-            AssetConstants.SampleAsset2
-        };
-
         _assetRepository
-            .Setup(ur => ur.ListAsync(
+            .Setup(ur => ur.GetAsync(
                                 It.IsAny<Expression<Func<Asset, bool>>>(),
                                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(listAsset);
+            .ReturnsAsync(AssetConstants.SampleAsset1);
 
-        var listAssignment = new List<Assignment>
-        {
-                AssignmentConstants.SampleAssignment,
-                AssignmentConstants.SampleAssignment2
-        };
+        var listAssignment = new List<Assignment>();
 
         var assignmentRepository = new Mock<IAsyncRepository<Assignment>>();
 
@@ -324,14 +314,13 @@ public class AssetServiceTests
             .Setup(ur => ur.ListAsync(
                                 It.IsAny<Expression<Func<Assignment, bool>>>(),
                                 It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<Assignment>
-                        {
-                            It.IsAny<Assignment>()
-                        });
+            .ReturnsAsync(listAssignment);
+
+        _unitOfWork.Setup(unit => unit.AsyncRepository<Assignment>()).Returns(assignmentRepository.Object);
 
         var requestModel = new DeleteAssetRequest
         {
-            Id = new Guid("71990173-999c-45d6-b135-fc8206055154"),
+            Id = AssetConstants.SampleAsset1.Id,
         };
 
         var result = await _assetService.DeleteAssetAsync(requestModel);
