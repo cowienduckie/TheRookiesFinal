@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { approveRequestForReturning } from "../../../Apis/RequestForReturningApis";
 
 export function ManageRequestForReturningCompletePage() {
-  const { id } = useParams(); //eslint-disable-line
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loadings, setLoadings] = useState([]);
