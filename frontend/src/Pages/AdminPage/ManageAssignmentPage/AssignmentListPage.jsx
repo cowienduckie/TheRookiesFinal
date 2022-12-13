@@ -234,13 +234,15 @@ export function AssignmentListPage() {
             className="mx-1 border-gray-700 disabled:border-gray-200"
             disabled={
               record.state === ACCEPTED ||
-              record.state === WAITING_FOR_RETURNING
+              record.state === WAITING_FOR_RETURNING ||
+              record.state === DECLINED
             }
             icon={
               <EditOutlined
                 className={
                   record.state === ACCEPTED ||
-                  record.state === WAITING_FOR_RETURNING
+                  record.state === WAITING_FOR_RETURNING ||
+                  record.state === DECLINED
                     ? "align-middle text-gray-300"
                     : "align-middle text-gray-700"
                 }
@@ -269,7 +271,8 @@ export function AssignmentListPage() {
             className="ml-1 border-blue-500 disabled:border-gray-200"
             disabled={
               record.state === WAITING_FOR_ACCEPTANCE ||
-              record.state === WAITING_FOR_RETURNING
+              record.state === WAITING_FOR_RETURNING ||
+              record.state === DECLINED
             }
             onClick={() =>
               navigate(
@@ -283,7 +286,8 @@ export function AssignmentListPage() {
               <UndoOutlined
                 className={
                   record.state === WAITING_FOR_ACCEPTANCE ||
-                  record.state === WAITING_FOR_RETURNING
+                  record.state === WAITING_FOR_RETURNING ||
+                  record.state === DECLINED
                     ? "align-middle text-gray-300"
                     : "align-middle text-blue-500"
                 }
