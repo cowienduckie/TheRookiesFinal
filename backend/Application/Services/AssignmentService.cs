@@ -159,8 +159,12 @@ public class AssignmentService : BaseService, IAssignmentService
 
         assignment.State = request.State;
 
-        await _assignmentRepository.UpdateAsync(assignment);
+        if (assignment.State == AssignmentState.Declined)
+        {
+            assignment.Asset.State = AssetState.Available;
+        }
 
+        await _assignmentRepository.UpdateAsync(assignment);
         await UnitOfWork.SaveChangesAsync();
 
         return new Response(true, Messages.ActionSuccess);
