@@ -33,5 +33,7 @@ export { ReportPage } from "./ReportPage";
 
 export {
   ManageRequestForReturningPage,
-  ManageRequestForReturningListPage
+  ManageRequestForReturningListPage,
+  ManageRequestForReturningCompletePage,
+  ManageRequestForReturningCancelPage
 } from "./ManageRequestForReturningPage";

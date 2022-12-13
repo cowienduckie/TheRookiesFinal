@@ -112,6 +112,7 @@ function useLoader() {
 export function ManageRequestForReturningListPage() {
   const { pagedData, queries, loading } = useLoader();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const navigateByQueries = (queries) => {
     const queryString = queryObjectToString(queries);
@@ -218,6 +219,7 @@ export function ManageRequestForReturningListPage() {
       title: "",
       dataIndex: "",
       key: "actions",
+
       render: (_, record) => (
         <div className="flex min-w-fit flex-nowrap p-0">
           <Button
@@ -232,6 +234,14 @@ export function ManageRequestForReturningListPage() {
                 }
               />
             }
+            onClick={() =>
+              navigate(
+                `/admin/manage-returning/complete-returning/${record.id}`,
+                {
+                  state: { background: location }
+                }
+              )
+            }
           />
           <Button
             className="mx-1"
@@ -245,6 +255,14 @@ export function ManageRequestForReturningListPage() {
                     : "align-middle"
                 }
               />
+            }
+            onClick={() =>
+              navigate(
+                `/admin/manage-returning/cancel-returning/${record.id}`,
+                {
+                  state: { background: location }
+                }
+              )
             }
           />
         </div>

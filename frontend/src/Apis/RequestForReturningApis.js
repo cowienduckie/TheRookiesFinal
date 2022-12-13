@@ -10,3 +10,7 @@ export async function getRequestForReturningList(queries = "") {
 export async function createRequestForReturning(data) {
   return await callApi("post", url, data);
 }
+
+export async function approveRequestForReturning(data) {
+  return await callApi("put", url + "/approval", data);
+}
