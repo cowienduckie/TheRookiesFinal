@@ -3,7 +3,7 @@ import { FilterFilled, CloseOutlined, CheckOutlined } from "@ant-design/icons";
 import Search from "antd/es/input/Search";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getRequestForReturningList } from "../../../Apis/RequestForReturningApis";
 import { queryObjectToString } from "../../../Helpers/ApiHelper";
 import {
@@ -222,43 +222,49 @@ export function ManageRequestForReturningListPage() {
 
       render: (_, record) => (
         <div className="flex min-w-fit flex-nowrap p-0">
-          <Link
-            to={`/admin/manage-returning/complete-returning/${record.id}`}
-            state={{ background: location }}
-          >
-            <Button
-              className="mr-1 border-green-500 disabled:border-gray-200"
-              disabled={record.state === COMPLETED}
-              icon={
-                <CheckOutlined
-                  className={
-                    record.state === COMPLETED
-                      ? "align-middle text-gray-300"
-                      : "align-middle text-green-500"
-                  }
-                />
-              }
-            />
-          </Link>
-          <Link
-            to={`/admin/manage-returning/cancel-returning/${record.id}`}
-            state={{ background: location }}
-          >
-            <Button
-              className="mx-1"
-              disabled={record.state === COMPLETED}
-              danger
-              icon={
-                <CloseOutlined
-                  className={
-                    record.state === COMPLETED
-                      ? "align-middle text-gray-300"
-                      : "align-middle"
-                  }
-                />
-              }
-            />
-          </Link>
+          <Button
+            className="mr-1 border-green-500 disabled:border-gray-200"
+            disabled={record.state === COMPLETED}
+            icon={
+              <CheckOutlined
+                className={
+                  record.state === COMPLETED
+                    ? "align-middle text-gray-300"
+                    : "align-middle text-green-500"
+                }
+              />
+            }
+            onClick={() =>
+              navigate(
+                `/admin/manage-returning/complete-returning/${record.id}`,
+                {
+                  state: { background: location }
+                }
+              )
+            }
+          />
+          <Button
+            className="mx-1"
+            disabled={record.state === COMPLETED}
+            danger
+            icon={
+              <CloseOutlined
+                className={
+                  record.state === COMPLETED
+                    ? "align-middle text-gray-300"
+                    : "align-middle"
+                }
+              />
+            }
+            onClick={() =>
+              navigate(
+                `/admin/manage-returning/cancel-returning/${record.id}`,
+                {
+                  state: { background: location }
+                }
+              )
+            }
+          />
         </div>
       )
     }

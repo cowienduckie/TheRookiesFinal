@@ -1,39 +1,51 @@
 import { Button, Divider, Modal, Space } from "antd";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { approveRequestForReturning } from "../../../Apis/RequestForReturningApis";
 
 export function ManageRequestForReturningCompletePage() {
-  let { id } = useParams(); //eslint-disable-line
+  const { id } = useParams(); //eslint-disable-line
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
+
+  const handleAccept = async () => {
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
+      newLoadings[1] = true;
       return newLoadings;
     });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
+
+    await approveRequestForReturning({
+      id: id,
+      isCompleted: true
+    })
+      .then(() => {
+        setIsModalOpen(false);
+        navigate("/admin/manage-returning", { state: { isReload: true } });
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[1] = false;
+          return newLoadings;
+        });
       });
-    }, 4000);
   };
 
-  const handleDelete = async () => {
-    enterLoading();
-    setIsModalOpen(false);
-    navigate(-1);
-  };
+  // const handleDelete = async () => {
+  //   enterLoading();
+  //   setIsModalOpen(false);
+  //   navigate(-1);
+  // };
 
-  const handleOnclick = () => {
-    setIsModalOpen(false);
-    navigate(-1);
-  };
+  // const handleOnclick = () => {
+  //   setIsModalOpen(false);
+  //   navigate(-1);
+  // };
 
   const handleCancel = () => {
+    setIsModalOpen(false);
     navigate(-1);
   };
 
@@ -63,11 +75,11 @@ export function ManageRequestForReturningCompletePage() {
               danger
               className="mr-2"
               loading={loadings[0]}
-              onClick={handleDelete}
+              onClick={handleAccept}
             >
               Yes
             </Button>
-            <Button onClick={handleOnclick}>No</Button>
+            <Button onClick={handleCancel}>No</Button>
           </Space>
         </div>
       </Modal>
