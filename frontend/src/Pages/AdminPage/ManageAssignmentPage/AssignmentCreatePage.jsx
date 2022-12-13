@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import {
-  ASSIGNED_ASSET_REQUIRED,
   ASSIGNED_DATE_REQUIRED,
-  ASSIGNED_USER_REQUIRED
+  NOTE_RANGE_FROM_6_TO_255_CHARACTERS
 } from "../../../Constants/ErrorMessages";
 import { createAssignment } from "../../../Apis/AssignmentApis";
 
@@ -106,12 +105,14 @@ export function AssignmentCreatePage() {
   };
 
   const handleFormCancel = () => {
-    navigate(-1);
+    navigate("/admin/manage-assignment");
   };
 
   return (
     <>
-      <h1 className="mb-5 text-2xl font-bold text-red-600">Create New Asset</h1>
+      <h1 className="mb-5 text-2xl font-bold text-red-600">
+        Create New Assignment
+      </h1>
       <Form
         {...formLayout}
         form={form}
@@ -124,16 +125,7 @@ export function AssignmentCreatePage() {
         <Form.Item
           name="user"
           label="User"
-          rules={[
-            () => ({
-              validator(_, value) {
-                if (!!assignedUser && !!assignedUser.id) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error(ASSIGNED_USER_REQUIRED));
-              }
-            })
-          ]}
+          required
         >
           <Input.Group compact className="flex flex-row">
             <Input value={assignedUser && assignedUser.username} disabled />
@@ -149,16 +141,7 @@ export function AssignmentCreatePage() {
         <Form.Item
           name="asset"
           label="Asset"
-          rules={[
-            () => ({
-              validator(_, value) {
-                if (!!assignedAsset && !!assignedAsset.id) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error(ASSIGNED_ASSET_REQUIRED));
-              }
-            })
-          ]}
+          required
         >
           <Input.Group compact className="flex flex-row">
             <Input value={assignedAsset && assignedAsset.name} disabled />
@@ -182,18 +165,30 @@ export function AssignmentCreatePage() {
             format={(date) => date.utc().format(dateFormat)}
           />
         </Form.Item>
-        <Form.Item name="note" label="Note">
-          <Input.TextArea showCount maxLength={256} />
+        <Form.Item
+          name="note"
+          label="Note"
+          rules={[
+            {
+              min: 6,
+              max: 255,
+              message: NOTE_RANGE_FROM_6_TO_255_CHARACTERS
+            }
+          ]}
+        >
+          <Input.TextArea showCount maxLength={255} />
         </Form.Item>
         <Form.Item {...tailLayout} shouldUpdate>
           {() => (
             <div>
               <Button
-                className="mx-2"
+                className="mr-2"
                 type="primary"
                 danger
                 htmlType="submit"
                 disabled={
+                  !(!!assignedUser && !!assignedUser.id) ||
+                  !(!!assignedAsset && !!assignedAsset.id) ||
                   form.getFieldsError().filter(({ errors }) => errors.length)
                     .length > 0
                 }
@@ -201,7 +196,7 @@ export function AssignmentCreatePage() {
               >
                 Save
               </Button>
-              <Button className="mx-3" danger onClick={handleFormCancel}>
+              <Button className="ml-2" danger onClick={handleFormCancel}>
                 Cancel
               </Button>
             </div>

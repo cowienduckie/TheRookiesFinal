@@ -182,13 +182,15 @@ export function AssetListPage() {
       dataIndex: "name",
       key: NAME_ENUM,
       sorter: true,
-      defaultSortOrder: "ascend"
+      defaultSortOrder: "ascend",
+      ellipsis: true
     },
     {
       title: "Category",
       dataIndex: "category",
       key: CATEGORY_ENUM,
-      sorter: true
+      sorter: true,
+      ellipsis: true
     },
     {
       title: "State",
@@ -206,6 +208,10 @@ export function AssetListPage() {
             className="mr-2"
             icon={<EditOutlined className="align-middle" />}
           />
+          <Link
+            to={`/admin/manage-asset/delete-asset/${record.id}`}
+            state={{ background: location }}
+          >
            <Button
             className="ml-2"
             disabled={record.state === ASSIGNED}
@@ -220,6 +226,7 @@ export function AssetListPage() {
               />
             }
           />
+          </Link>
         </div>
       )
     }
