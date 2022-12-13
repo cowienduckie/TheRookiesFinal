@@ -1,6 +1,4 @@
 using System.Linq.Expressions;
-using System.Net.Http.Headers;
-using System.Xml.Linq;
 using Application.Common.Models;
 using Application.DTOs.Assets;
 using Application.DTOs.Assets.CreateAsset;
@@ -12,7 +10,6 @@ using Domain.Entities.Assignments;
 using Domain.Entities.Categories;
 using Domain.Interfaces;
 using Domain.Shared.Constants;
-using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
 using Moq;
 

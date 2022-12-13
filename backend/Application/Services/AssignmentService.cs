@@ -1,5 +1,4 @@
 using Application.Common.Models;
-using Application.DTOs.Assets;
 using Application.DTOs.Assignments.CreateAssignment;
 using Application.DTOs.Assignments.DeleteAssignment;
 using Application.DTOs.Assignments.GetAssignment;
@@ -14,7 +13,6 @@ using Domain.Entities.Users;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Infrastructure.Persistence.Interfaces;
-using Infrastructure.Persistence.Repositories;
 
 namespace Application.Services;
 
