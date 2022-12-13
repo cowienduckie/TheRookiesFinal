@@ -33,6 +33,7 @@ export {
   CreateAssetPage,
   CreateCategoryPage,
   AssignmentCreatePage,
+  AssignmentReturnPage,
   AssetListModal,
   UserListModal
 } from "./AdminPage";

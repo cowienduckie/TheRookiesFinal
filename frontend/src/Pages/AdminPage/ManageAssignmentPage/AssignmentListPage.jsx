@@ -246,7 +246,16 @@ export function AssignmentListPage() {
                 }
               />
             }
+            onClick={() => {
+              navigate(
+                `/admin/manage-assignment/delete-assignment/${record.id}`,
+                {
+                  state: { background: location }
+                }
+              );
+            }}
           />
+
           <Button
             className="ml-1 border-blue-500 disabled:border-gray-200"
             disabled={record.state === WAITING_FOR_ACCEPTANCE}

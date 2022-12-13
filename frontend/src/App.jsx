@@ -30,6 +30,7 @@ import {
   ReturnAssignmentPage,
   AssignmentDetailPage,
   AssignmentListPage,
+  AssignmentReturnPage,
   CreateAssetPage,
   CreateCategoryPage
 } from "./Pages";
@@ -114,6 +115,10 @@ function App() {
               path="/admin/manage-assignment/delete-assignment/:id"
               element={<AssignmentDeletePage />}
             ></Route>
+            <Route
+              path="/admin/manage-assignment/return-assignment/:id"
+              element={<AssignmentReturnPage />}
+            />
           </Route>
           <Route
             path="/admin/manage-returning"
@@ -189,6 +194,10 @@ function App() {
       <Route
         path="/admin/manage-assignment/:assignmentId"
         element={<AssignmentDetailPage />}
+      />
+      <Route
+        path="/admin/manage-assignment/return-assignment/:assignmentId"
+        element={<AssignmentReturnPage />}
       />
       <Route
         path="/admin/manage-assignment/create-assignment/user-list"

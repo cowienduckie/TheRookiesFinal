@@ -62,8 +62,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
     public async Task<Response<GetRequestForReturningResponse>> CreateAsync(CreateRequestForReturningRequest request)
     {
         var returnAssignment = await _assignmentRepository
-            .GetAsync(a => !a.IsDeleted &&
-                           a.Id == request.AssignmentId);
+            .GetAsync(a => !a.IsDeleted && a.Id == request.AssignmentId ); 
 
         if (returnAssignment == null)
         {
@@ -78,8 +77,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
         var userRepository = UnitOfWork.AsyncRepository<User>();
 
         var requester = await userRepository
-            .GetAsync(u => !u.IsDeleted &&
-                           u.Id == request.RequestedBy);
+            .GetAsync(u => !u.IsDeleted && u.Id == request.RequestedBy);
 
         if (requester == null)
         {
@@ -96,7 +94,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
             State = RequestForReturningState.WaitingForReturning
         };
 
-        returnAssignment.State = AssignmentState.WaitingForAcceptance;
+        returnAssignment.State = AssignmentState.WaitingForReturning;
 
         await _assignmentRepository.UpdateAsync(returnAssignment);
         await _requestForReturningRepository.AddAsync(newReturnRequest);

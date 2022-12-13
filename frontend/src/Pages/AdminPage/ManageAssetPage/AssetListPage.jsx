@@ -208,11 +208,7 @@ export function AssetListPage() {
             className="mr-2"
             icon={<EditOutlined className="align-middle" />}
           />
-          <Link
-            to={`/admin/manage-asset/delete-asset/${record.id}`}
-            state={{ background: location }}
-          >
-           <Button
+          <Button
             className="ml-2"
             disabled={record.state === ASSIGNED}
             danger
@@ -225,8 +221,12 @@ export function AssetListPage() {
                 }
               />
             }
+            onClick={() => {
+              navigate(`/admin/manage-asset/delete-asset/${record.id}`, {
+                state: { background: location }
+              });
+            }}
           />
-          </Link>
         </div>
       )
     }

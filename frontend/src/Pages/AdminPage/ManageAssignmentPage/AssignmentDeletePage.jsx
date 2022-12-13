@@ -1,31 +1,33 @@
 import { Button, Divider, Modal, Space } from "antd";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { deleteAssignmentById } from "../../../Apis/AssignmentApis";
 
 export function AssignmentDeletePage() {
   let { id } = useParams(); //eslint-disable-line
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loadings, setLoadings] = useState([]);
-  const enterLoading = (index) => {
-    setLoadings((prevLoadings) => {
-      const newLoadings = [...prevLoadings];
-      newLoadings[index] = true;
-      return newLoadings;
-    });
-    setTimeout(() => {
-      setLoadings((prevLoadings) => {
-        const newLoadings = [...prevLoadings];
-        newLoadings[index] = false;
-        return newLoadings;
-      });
-    }, 6000);
-  };
 
   const handleDelete = async () => {
-    enterLoading();
-    setIsModalOpen(false);
-    navigate(-1);
+    setLoadings((prevLoadings) => {
+      const newLoadings = [...prevLoadings];
+      newLoadings[0] = true;
+      return newLoadings;
+    });
+
+    await deleteAssignmentById({ id })
+      .then(() => {
+        setIsModalOpen(false);
+        navigate("/admin/manage-assignment", { state: { isReload: true } });
+      })
+      .finally(() => {
+        setLoadings((prevLoadings) => {
+          const newLoadings = [...prevLoadings];
+          newLoadings[0] = false;
+          return newLoadings;
+        });
+      });
   };
 
   const handleOnclick = () => {
