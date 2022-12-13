@@ -12,22 +12,22 @@ export function AssignmentDeletePage() {
   const handleDelete = async () => {
     setLoadings((prevLoadings) => {
       const newLoadings = [...prevLoadings];
-      newLoadings[1] = true;
+      newLoadings[0] = true;
       return newLoadings;
     });
-    await deleteAssignmentById({ id })
-      .then(() => {
+
+    await deleteAssignmentById({ id }).then(() => {
+      setTimeout(() => {
         setIsModalOpen(false);
         navigate("/admin/manage-assignment", { state: { isReload: true } });
-      })
-      // .finally(()=>{
-      //   setLoadings((prevLoadings) => {
-      //     const newLoadings = [...prevLoadings];
-      //     newLoadings[1] = false;
-      //     return newLoadings;
-      //   });
-      // })
-    
+      }, 1000);
+      
+      setLoadings((prevLoadings) => {
+        const newLoadings = [...prevLoadings];
+        newLoadings[0] = true;
+        return newLoadings;
+      });
+    });
   };
 
   const handleOnclick = () => {
@@ -58,7 +58,7 @@ export function AssignmentDeletePage() {
               type="primary"
               danger
               className="mr-2"
-              // loading={setLoadings}
+              loading={loadings[0]}
               onClick={handleDelete}
             >
               Delete

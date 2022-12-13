@@ -28,5 +28,5 @@ export async function respondAssignment(data) {
 }
 
 export async function deleteAssignmentById(id) {
-  return await callApiTakeSuccessWrapper("put", url + "/delete/" + id);
+  return await callApiTakeSuccessWrapper("put", `${url}/delete`, id);
 }
