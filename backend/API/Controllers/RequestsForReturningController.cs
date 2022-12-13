@@ -3,17 +3,13 @@ using Application.Common.Models;
 using Application.DTOs.RequestsForReturning.GetListRequestsForReturning;
 using Application.Queries;
 using Application.Queries.RequestsForReturning;
-using API.Attributes;
-using Application.Common.Models;
-using Application.DTOs.Assignments.CreateAssignment;
-using Application.DTOs.Assignments.GetAssignment;
 using Application.DTOs.RequestsForReturning.CreateRequestForReturning;
 using Application.DTOs.RequestsForReturning.GetRequestForReturning;
-using Application.Services;
 using Application.Services.Interfaces;
 using Domain.Shared.Constants;
 using Domain.Shared.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Application.DTOs.RequestsForReturning.ApproveRequestForReturning;
 
 namespace API.Controllers;
 
@@ -84,6 +80,34 @@ public class RequestsForReturningController : BaseController
         try
         {
             var response = await _requestForReturningService.CreateAsync(request);
+
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
+    [Authorize(UserRole.Admin)]
+    [HttpPut("approval")]
+    public async Task<ActionResult<Response>> Approve([FromBody] ApproveRequestForReturningRequest request)
+    {
+        if (CurrentUser == null)
+        {
+            return BadRequest(new Response(false, ErrorMessages.BadRequest));
+        }
+
+        request.Approver = CurrentUser;
+
+        try
+        {
+            var response = await _requestForReturningService.ApproveAsync(request);
 
             if (!response.IsSuccess)
             {
