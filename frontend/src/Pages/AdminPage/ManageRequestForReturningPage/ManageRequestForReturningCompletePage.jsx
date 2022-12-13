@@ -33,17 +33,6 @@ export function ManageRequestForReturningCompletePage() {
       });
   };
 
-  // const handleDelete = async () => {
-  //   enterLoading();
-  //   setIsModalOpen(false);
-  //   navigate(-1);
-  // };
-
-  // const handleOnclick = () => {
-  //   setIsModalOpen(false);
-  //   navigate(-1);
-  // };
-
   const handleCancel = () => {
     setIsModalOpen(false);
     navigate(-1);
@@ -74,7 +63,7 @@ export function ManageRequestForReturningCompletePage() {
               type="primary"
               danger
               className="mr-2"
-              loading={loadings[0]}
+              loading={loadings[1]}
               onClick={handleAccept}
             >
               Yes
