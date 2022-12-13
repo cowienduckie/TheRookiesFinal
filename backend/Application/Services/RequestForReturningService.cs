@@ -51,6 +51,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
         else
         {
             returningRequest.IsDeleted = true;
+            returningRequest.Assignment.State = AssignmentState.Accepted;
         }
 
         await _requestForReturningRepository.UpdateAsync(returningRequest);
