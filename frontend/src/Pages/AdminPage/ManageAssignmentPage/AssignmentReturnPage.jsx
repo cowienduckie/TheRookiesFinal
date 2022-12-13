@@ -1,9 +1,9 @@
 import { Button, Divider, Modal, Space } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import { createRequestForReturning } from "../../Apis/RequestForReturningApis";
+import { createRequestForReturning } from "../../../Apis/RequestForReturningApis";
 
-export function ReturnAssignmentPage() {
+export function AssignmentReturnPage() {
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -29,7 +29,7 @@ export function ReturnAssignmentPage() {
     await createRequestForReturning({ assignmentId: assignmentId, requestedBy: userId })
       .then(() => {
         setIsModalOpen(false);
-        navigate("/", { state: { isReload: true } });
+        navigate("/admin/manage-assignment", { state: { isReload: true } });
       })
       .finally(() => {
         setLoadings((prevLoadings) => {

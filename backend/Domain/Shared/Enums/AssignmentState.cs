@@ -9,5 +9,7 @@ public enum AssignmentState
     [Description("Accepted")]
     Accepted,
     [Description("Declined")]
-    Declined
+    Declined,
+    [Description("Waiting for returning")]
+    WaitingForReturning
 }
