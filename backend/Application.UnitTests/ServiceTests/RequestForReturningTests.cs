@@ -61,7 +61,7 @@ namespace Application.UnitTests.ServiceTests
         [Test]
         public async Task CreateAsync_ReturnUnacceptedAssignment_ReturnsBadRequest()
         {
-            var entity = AssignmentConstants.SampleAssignment;
+            var entity = AssignmentConstants.SampleAssignment2;
 
             _assignmentRepository
                     .Setup(ur => ur.GetAsync(
@@ -82,7 +82,7 @@ namespace Application.UnitTests.ServiceTests
 
             var requestModel = new CreateRequestForReturningRequest
             {
-                AssignmentId = AssignmentConstants.SampleAssignment.Id,
+                AssignmentId = AssignmentConstants.SampleAssignment2.Id,
                 RequestedBy = Constants.SampleUser.Id
             };
 
