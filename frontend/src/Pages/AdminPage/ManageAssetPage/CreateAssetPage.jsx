@@ -106,8 +106,8 @@ export function CreateAssetPage() {
   };
 
   const layout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 7 }
+    labelCol: { span: 3 },
+    wrapperCol: { span: 10 }
   };
 
   const tailLayout = {
@@ -115,14 +115,16 @@ export function CreateAssetPage() {
   };
 
   const [loadings, setLoadings] = useState([]);
-  
+
   return (
     <>
       <h1 className="mb-5 text-2xl font-bold text-red-600">Create New Asset</h1>
+      <br />
       <Form
         {...layout}
         form={form}
         name="formCreateAsset"
+        labelAlign="left"
         onFinish={onFinish}
         initialValues={{ state: STATE_AVAILABLE_ENUM }}
       >
@@ -142,7 +144,7 @@ export function CreateAssetPage() {
             }
           ]}
         >
-          <Input />
+          <Input style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -151,6 +153,7 @@ export function CreateAssetPage() {
           rules={[{ required: true, message: CATEGORY_REQUIRED }]}
         >
           <Select
+            style={{ width: "100%" }}
             name="categoryId"
             dropdownRender={(menu) => (
               <>
@@ -159,11 +162,7 @@ export function CreateAssetPage() {
                   to="/admin/manage-asset/create-category"
                   state={{ background: location }}
                 >
-                  <Button
-                    type="text"
-                    style={{ textAlign: "left" }}
-                    block
-                  >
+                  <Button type="text" style={{ textAlign: "left" }} block>
                     <em style={{ fontStyle: "normal", color: "red" }}>+ </em>
                     Add New Category
                   </Button>
@@ -194,7 +193,9 @@ export function CreateAssetPage() {
             }
           ]}
         >
-          <Input.TextArea style={{ height: 100 }}></Input.TextArea>
+          <Input.TextArea
+            style={{ height: 100, width: "100%" }}
+          ></Input.TextArea>
         </Form.Item>
 
         <Form.Item
@@ -215,7 +216,7 @@ export function CreateAssetPage() {
           className="text-red-600"
           rules={[{ required: true, message: STATE_REQUIRED }]}
         >
-          <Radio.Group>
+          <Radio.Group style={{ width: "100%" }}>
             <ConfigProvider
               theme={{
                 components: {

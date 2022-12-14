@@ -97,8 +97,8 @@ export function CreateUserPage() {
   };
 
   const layout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 7 }
+    labelCol: { span: 3 },
+    wrapperCol: { span: 10 }
   };
 
   const tailLayout = {
@@ -110,8 +110,10 @@ export function CreateUserPage() {
   return (
     <>
       <h1 className="mb-5 text-2xl font-bold text-red-600">Create New User</h1>
+      <br />
       <Form
         {...layout}
+        labelAlign="left"
         form={form}
         name="formCreateUser"
         onFinish={onFinish}
@@ -133,7 +135,7 @@ export function CreateUserPage() {
             }
           ]}
         >
-          <Input />
+          <Input style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
           name="lastName"
@@ -151,7 +153,7 @@ export function CreateUserPage() {
             }
           ]}
         >
-          <Input />
+          <Input style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -186,7 +188,7 @@ export function CreateUserPage() {
           className="text-red-600"
           rules={[{ required: true, message: GENDER_REQUIRED }]}
         >
-          <Radio.Group>
+          <Radio.Group style={{ width: "100%" }}>
             <ConfigProvider
               theme={{
                 components: {
@@ -244,7 +246,7 @@ export function CreateUserPage() {
           label="Type"
           rules={[{ required: true, message: ROLE_REQUIRED }]}
         >
-          <Select name="role">
+          <Select name="role" style={{ width: "100%" }}>
             <Option value={ROLE_ADMIN_ENUM}>Admin</Option>
             <Option value={ROLE_STAFF_ENUM}>Staff</Option>
           </Select>
