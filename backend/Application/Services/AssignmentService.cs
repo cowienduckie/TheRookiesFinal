@@ -45,7 +45,7 @@ public class AssignmentService : BaseService, IAssignmentService
 
     public async Task<Response<GetListAssignmentsResponse>> GetListAsync(GetListAssignmentsRequest request)
     {
-        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted))
+        var assignments = (await _assignmentRepository.ListAsync(a => !a.IsDeleted && a.State != AssignmentState.Returned))
             .Where(a => a.Asset.Location == request.Location)
             .AsQueryable()
             .SortByField(new[] {ModelField.AssignedDate}, request.SortQuery.SortField, request.SortQuery.SortDirection)
@@ -117,6 +117,7 @@ public class AssignmentService : BaseService, IAssignmentService
                     !a.IsDeleted &&
                     a.AssignedTo == request.CurrentUser.Id &&
                     a.State != AssignmentState.Declined &&
+                    a.State != AssignmentState.Returned &&
                     DateTime.Compare(DateTime.Today, a.AssignedDate.Date) >= 0))
             .AsQueryable()
             .SortByField(new[] {ModelField.AssignedDate}, request.SortQuery.SortField, request.SortQuery.SortDirection)
@@ -233,8 +234,9 @@ public class AssignmentService : BaseService, IAssignmentService
             return new Response(false, ErrorMessages.NotFound);
         }
 
-        if (existAssignment.State == AssignmentState.Accepted
-            || existAssignment.State == AssignmentState.WaitingForReturning)
+        if (existAssignment.State == AssignmentState.Accepted ||
+            existAssignment.State == AssignmentState.WaitingForReturning ||
+            existAssignment.State == AssignmentState.Returned)
         {
             return new Response(false, ErrorMessages.CannotDeleteAssignment);
         }
@@ -245,7 +247,8 @@ public class AssignmentService : BaseService, IAssignmentService
 
         var currentAsset = await assetRepository.GetAsync(asset => asset.Id == existAssignment.AssetId);
 
-        if (currentAsset != null && existAssignment.State == AssignmentState.WaitingForAcceptance)
+        if (currentAsset != null && 
+            existAssignment.State == AssignmentState.WaitingForAcceptance)
         {
             currentAsset.State = AssetState.Available;
             await assetRepository.UpdateAsync(currentAsset);

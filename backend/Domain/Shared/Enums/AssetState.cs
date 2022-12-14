@@ -9,9 +9,5 @@ public enum AssetState
     [Description("Not available")]
     NotAvailable,
     [Description("Assigned")]
-    Assigned,
-    [Description("Waiting for recycling")]
-    WaitingForRecycling,
-    [Description("Recycled")]
-    Recycled
+    Assigned
 }

@@ -11,5 +11,7 @@ public enum AssignmentState
     [Description("Declined")]
     Declined,
     [Description("Waiting for returning")]
-    WaitingForReturning
+    WaitingForReturning,
+    [Description("Returned")]
+    Returned
 }

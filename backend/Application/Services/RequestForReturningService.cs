@@ -45,7 +45,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
             returningRequest.State = RequestForReturningState.Completed;
             returningRequest.AcceptedBy = request.Approver.Id;
             returningRequest.ReturnDate = DateTime.UtcNow.AddHours(7).Date;
-            returningRequest.Assignment.IsDeleted = true;
+            returningRequest.Assignment.State = AssignmentState.Returned;
             returningRequest.Assignment.Asset.State = AssetState.Available;
         }
         else
