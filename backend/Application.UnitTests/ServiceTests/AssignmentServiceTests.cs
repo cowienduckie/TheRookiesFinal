@@ -188,7 +188,7 @@ public class AssignmentServiceTests
         var input = new RespondAssignmentRequest
         {
             Id = AssignmentConstants.Id,
-            State = AssignmentState.Accepted,
+            State = AssignmentState.Declined,
         };
 
         var result = await _assignmentService.RespondAssignmentAsync(input);

@@ -23,7 +23,7 @@ public static class AssignmentConstants
         AssignedBy = Constants.SampleUser.Id,
         Assigner = Constants.SampleUser,
         AssignedDate = AssignedDate,
-        State = State
+        State = State,
     };
 
     public static readonly Assignment SampleAcceptedAssignment = new()
