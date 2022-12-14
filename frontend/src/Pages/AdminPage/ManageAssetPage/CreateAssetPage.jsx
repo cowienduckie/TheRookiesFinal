@@ -74,7 +74,10 @@ export function CreateAssetPage() {
       ...values,
       name: values.name.trim(),
       categoryId: values.categoryId,
-      installedDate: dayjs(values.installedDate).add(7, "h"),
+      installedDate: dayjs(values.installedDate)
+        .add(7, "h")
+        .utcOffset(0)
+        .startOf("date"),
       state: parseInt(values.state)
     };
     setLoadings((prevLoadings) => {
@@ -206,7 +209,7 @@ export function CreateAssetPage() {
           <DatePicker
             disabledDate={disabledDate}
             style={{ width: "100%" }}
-            format={(date) => date.utc().format(dateFormat)}
+            format={dateFormat}
           />
         </Form.Item>
 
