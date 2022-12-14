@@ -72,7 +72,7 @@ public class RequestForReturningService : BaseService, IRequestForReturningServi
 
         if (returnAssignment.State != AssignmentState.Accepted)
         {
-            return new Response<GetRequestForReturningResponse>(false, ErrorMessages.BadRequest);
+            return new Response<GetRequestForReturningResponse>(false, ErrorMessages.InvalidStateReturn);
         }
 
         var userRepository = UnitOfWork.AsyncRepository<User>();
