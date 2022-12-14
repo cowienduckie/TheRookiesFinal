@@ -37,12 +37,12 @@ export function DetailedInfoUserPage() {
         footer={false}
         onCancel={onCancel}
         width={400}
-        title={
+      >
+        <div className="flex items-center justify-between">
           <h1 className="ml-4 -mt-2 text-2xl font-bold text-red-600">
             Detail User Information
           </h1>
-        }
-      >
+        </div>
         <Divider className="mb-0" />
         <div>
           <table className="-mb-3 w-full border-separate border-spacing-5">
