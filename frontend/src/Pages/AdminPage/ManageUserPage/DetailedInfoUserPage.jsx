@@ -36,15 +36,16 @@ export function DetailedInfoUserPage() {
         closable={true}
         footer={false}
         onCancel={onCancel}
-      >
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-red-600">
+        width={400}
+        title={
+          <h1 className="ml-4 -mt-2 text-2xl font-bold text-red-600">
             Detail User Information
           </h1>
-        </div>
-        <Divider />
+        }
+      >
+        <Divider className="mb-0" />
         <div>
-          <table className="ml-10 border-separate border-spacing-5">
+          <table className="-mb-3 w-full border-separate border-spacing-5">
             <tbody>
               <tr>
                 <td className="font-bold">Staff Code:</td>
@@ -52,9 +53,7 @@ export function DetailedInfoUserPage() {
               </tr>
               <tr>
                 <td className="font-bold">Full Name:</td>
-                <td className="break-all">
-                {data.fullName}
-                </td>
+                <td className="break-all">{data.fullName}</td>
               </tr>
               <tr>
                 <td className="font-bold">User Name:</td>

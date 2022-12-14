@@ -33,11 +33,11 @@ export function AssetDetailPage() {
         onCancel={onCancel}
       >
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-red-600">
+          <h1 className="ml-7 -mt-1 text-2xl font-bold text-red-600">
             Detailed Asset Information
           </h1>
         </div>
-        <Divider />
+        <Divider className="mb-0" />
         <div>
           <table className="ml-5 border-separate border-spacing-3">
             <tbody>

@@ -33,13 +33,13 @@ export function AssignmentDetailPage() {
         onCancel={onCancel}
       >
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-red-600">
+          <h1 className="ml-7 -mt-2 text-2xl font-bold text-red-600">
             Detailed Assignment Information
           </h1>
         </div>
-        <Divider />
+        <Divider className="mb-0" />
         <div>
-          <table className="ml-5 border-separate border-spacing-3">
+          <table className="ml-5 -mb-3 border-separate border-spacing-3">
             <tbody>
               <tr>
                 <td className="font-bold">Asset Code:</td>
