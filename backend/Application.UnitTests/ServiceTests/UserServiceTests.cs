@@ -25,7 +25,6 @@ public class UserServiceTests
     private static readonly Guid UserId = new();
     private Mock<IAsyncRepository<User>> _userRepository = null!;
     private Mock<IUnitOfWork> _unitOfWork = null!;
-    private Mock<UserNameHelper> _userNameHelper = null!;
     private UserService _userService = null!;
 
     [SetUp]

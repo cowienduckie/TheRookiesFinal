@@ -335,6 +335,10 @@ export function AssignmentListPage() {
               {
                 label: DECLINED,
                 value: DECLINED
+              },
+              {
+                label: WAITING_FOR_RETURNING,
+                value: WAITING_FOR_RETURNING
               }
             ]}
           />

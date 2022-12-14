@@ -128,7 +128,7 @@ public class EfContextInitializer
                 Category = pcCategory,
                 Specification = "Core i5, 16GB RAM, 256GB SSD, 512GB HDD, Windows 10",
                 InstalledDate = DateTime.Now,
-                State = AssetState.WaitingForRecycling,
+                State = AssetState.Available,
                 Location = Location.HaNoi
             });
 
