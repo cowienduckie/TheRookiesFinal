@@ -93,7 +93,7 @@ export function DisableUserPage() {
             onCancel={onCancel}
           >
             <div className=" flex content-center justify-between">
-              <h1 className="text-2xl font-bold text-red-600">
+              <h1 className="-mt-2 text-2xl font-bold text-red-600">
                 Can not disable user
               </h1>
             </div>

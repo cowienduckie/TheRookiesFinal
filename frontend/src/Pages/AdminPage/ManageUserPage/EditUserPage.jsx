@@ -61,8 +61,8 @@ export function EditUserPage() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const layout = {
-    labelCol: { span: 7 },
-    wrapperCol: { span: 7 }
+    labelCol: { span: 3 },
+    wrapperCol: { span: 10 }
   };
 
   const tailLayout = {
@@ -121,13 +121,14 @@ export function EditUserPage() {
 
   return (
     <>
-      <Form {...layout} onFinish={onFinish} form={form}>
-        <h1 className="text-2xl font-bold text-red-600">Edit User</h1>
+      <h1 className="mb-5 text-2xl font-bold text-red-600">Edit User</h1>
+      <br />
+      <Form {...layout} labelAlign="left" onFinish={onFinish} form={form}>
         <Form.Item label="First Name" name="firstName">
-          <Input disabled />
+          <Input style={{ width: "100%" }} disabled />
         </Form.Item>
         <Form.Item label="Last Name" name="lastName">
-          <Input disabled />
+          <Input style={{ width: "100%" }} disabled />
         </Form.Item>
         <Form.Item
           name="dateOfBirth"
@@ -161,7 +162,7 @@ export function EditUserPage() {
           className="text-red-600"
           rules={[{ required: true, message: GENDER_REQUIRED }]}
         >
-          <Radio.Group>
+          <Radio.Group style={{ width: "100%" }}>
             <ConfigProvider
               theme={{
                 components: {
@@ -217,7 +218,7 @@ export function EditUserPage() {
           name="role"
           rules={[{ required: true, message: ROLE_REQUIRED }]}
         >
-          <Select>
+          <Select style={{ width: "100%" }}>
             <Select.Option value={ROLE_ADMIN_ENUM}>Admin</Select.Option>
             <Select.Option value={ROLE_STAFF_ENUM}>Staff</Select.Option>
           </Select>

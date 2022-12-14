@@ -170,6 +170,7 @@ export function AssignmentListPage() {
       title: "No.",
       dataIndex: "",
       key: "sequence",
+      width:"5%",
       render: (_, record, index) => {
         return (
           <p>{pagedData.pageSize * (pagedData.pageIndex - 1) + index + 1}</p>
@@ -195,6 +196,7 @@ export function AssignmentListPage() {
       dataIndex: "assetName",
       key: ASSET_NAME_ENUM,
       sorter: true,
+      width:"15%",
       defaultSortOrder: "ascend",
       ellipsis: true
     },

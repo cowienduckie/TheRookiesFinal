@@ -10,8 +10,8 @@ import {
 import { createAssignment } from "../../../Apis/AssignmentApis";
 
 const formLayout = {
-  labelCol: { span: 7 },
-  wrapperCol: { span: 7 }
+  labelCol: { span: 3 },
+  wrapperCol: { span: 10 }
 };
 
 const tailLayout = {
@@ -113,8 +113,10 @@ export function AssignmentCreatePage() {
       <h1 className="mb-5 text-2xl font-bold text-red-600">
         Create New Assignment
       </h1>
+      <br />
       <Form
         {...formLayout}
+        labelAlign="left"
         form={form}
         name="formCreateAssignment"
         onFinish={handleFormSubmit}
@@ -122,11 +124,7 @@ export function AssignmentCreatePage() {
           assignedDate: dayjs()
         }}
       >
-        <Form.Item
-          name="user"
-          label="User"
-          required
-        >
+        <Form.Item name="user" label="User" required>
           <Input.Group compact className="flex flex-row">
             <Input value={assignedUser && assignedUser.username} disabled />
             <Button
@@ -138,11 +136,7 @@ export function AssignmentCreatePage() {
             />
           </Input.Group>
         </Form.Item>
-        <Form.Item
-          name="asset"
-          label="Asset"
-          required
-        >
+        <Form.Item name="asset" label="Asset" required>
           <Input.Group compact className="flex flex-row">
             <Input value={assignedAsset && assignedAsset.name} disabled />
             <Button
