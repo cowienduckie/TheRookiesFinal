@@ -170,7 +170,7 @@ export function AssignmentCreatePage() {
             }
           ]}
         >
-          <Input.TextArea showCount maxLength={255} />
+          <Input.TextArea style={{ height: 150 }} showCount maxLength={255} />
         </Form.Item>
         <Form.Item {...tailLayout} shouldUpdate>
           {() => (
