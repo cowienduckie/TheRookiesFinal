@@ -164,6 +164,7 @@ export function ManageRequestForReturningListPage() {
       title: "No.",
       dataIndex: "",
       key: "sequence",
+      width:"5%",
       render: (_, record, index) => {
         return (
           <p>{pagedData.pageSize * (pagedData.pageIndex - 1) + index + 1}</p>
@@ -180,6 +181,7 @@ export function ManageRequestForReturningListPage() {
       title: "Asset Name",
       dataIndex: "assetName",
       key: ASSET_NAME_ENUM,
+      width:"15%",
       sorter: true,
       defaultSortOrder: "ascend",
       ellipsis: true
@@ -187,6 +189,7 @@ export function ManageRequestForReturningListPage() {
     {
       title: "Requested By",
       dataIndex: "requestedBy",
+      width:"12%",
       key: REQUESTED_BY_ENUM,
       sorter: true,
       ellipsis: true

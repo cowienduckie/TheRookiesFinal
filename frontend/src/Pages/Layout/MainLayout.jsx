@@ -28,7 +28,7 @@ export function MainLayout() {
     { name: "Manage Asset", path: "/admin/manage-asset" },
     { name: "Manage Assignment", path: "/admin/manage-assignment" },
     {
-      name: "Manage Returning",
+      name: "Request for returning",
       path: "/admin/manage-returning"
     },
     { name: "Report", path: "/admin/report" }

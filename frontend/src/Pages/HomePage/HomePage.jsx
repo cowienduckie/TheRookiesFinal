@@ -18,7 +18,7 @@ import {
 
 function useLoader() {
   const { search, state } = useLocation();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const isReload = state && state.isReload;
 
   const [queries, setQueries] = useState({
@@ -106,10 +106,7 @@ export function HomePage() {
       key: ASSET_CODE_ENUM,
       sorter: true,
       render: (text, record) => (
-        <Link
-          to={`/assignments/${record.id}`}
-          state={{ background: location }}
-        >
+        <Link to={`/assignments/${record.id}`} state={{ background: location }}>
           <p>{text}</p>
         </Link>
       )
@@ -142,7 +139,10 @@ export function HomePage() {
           <Button
             className="mr-1"
             danger
-            disabled={record.state === ACCEPTED || record.state === WAITING_FOR_RETURNING }
+            disabled={
+              record.state === ACCEPTED ||
+              record.state === WAITING_FOR_RETURNING
+            }
             onClick={() =>
               navigate(`/assignments/accept/${record.id}`, {
                 state: { background: location }
@@ -151,7 +151,8 @@ export function HomePage() {
             icon={
               <CheckOutlined
                 className={
-                  record.state === ACCEPTED || record.state === WAITING_FOR_RETURNING
+                  record.state === ACCEPTED ||
+                  record.state === WAITING_FOR_RETURNING
                     ? "align-middle text-gray-300"
                     : "align-middle"
                 }
@@ -160,7 +161,10 @@ export function HomePage() {
           />
           <Button
             className="mx-1 border-gray-700 disabled:border-gray-200"
-            disabled={record.state === ACCEPTED || record.state === WAITING_FOR_RETURNING}
+            disabled={
+              record.state === ACCEPTED ||
+              record.state === WAITING_FOR_RETURNING
+            }
             onClick={() =>
               navigate(`/assignments/decline/${record.id}`, {
                 state: { background: location }
@@ -169,7 +173,8 @@ export function HomePage() {
             icon={
               <CloseOutlined
                 className={
-                  record.state === ACCEPTED || record.state === WAITING_FOR_RETURNING
+                  record.state === ACCEPTED ||
+                  record.state === WAITING_FOR_RETURNING
                     ? "align-middle text-gray-300"
                     : "align-middle text-gray-700"
                 }
@@ -178,7 +183,10 @@ export function HomePage() {
           />
           <Button
             className="ml-1 border-blue-500 disabled:border-gray-200"
-            disabled={record.state === WAITING_FOR_ACCEPTANCE || record.state === WAITING_FOR_RETURNING}
+            disabled={
+              record.state === WAITING_FOR_ACCEPTANCE ||
+              record.state === WAITING_FOR_RETURNING
+            }
             onClick={() =>
               navigate(`/assignments/return/${record.id}`, {
                 state: { background: location }
@@ -187,7 +195,8 @@ export function HomePage() {
             icon={
               <UndoOutlined
                 className={
-                  record.state === WAITING_FOR_ACCEPTANCE || record.state === WAITING_FOR_RETURNING
+                  record.state === WAITING_FOR_ACCEPTANCE ||
+                  record.state === WAITING_FOR_RETURNING
                     ? "align-middle text-gray-300"
                     : "align-middle text-blue-500"
                 }
